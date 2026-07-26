@@ -1,8 +1,12 @@
 # THE CREATIVE SPHERE WEBSITE
 
-## Creative Direction V2 — The Living Universe
+## Creative Direction V2.1 — The Living Universe
 
 *This document builds on the original storyline (CREATIVE_DIRECTION.md). The story is unchanged at its heart. V2 makes the universe respond, defines how motion should feel, and fills in everything the first draft left unsaid — the threshold, the navigation, the sound, the phone, the second visit, and what happens after the final click.*
+
+*V2.1 (approved 2026-07-25) folds in the upgrade pass: the Birth entrance with a light that has personality, the terraforming planet that unifies Scene Three with the client galaxy, signature constellation tricks, night-side illumination and metric-geography inside client worlds, the silence before ignition, living trade-route traffic in Impact, and a finale where the light itself is the call to action. Service names now match the company's canonical six (see COMPANY_PROFILE.md).*
+
+*V2.2 (approved 2026-07-25): the opening is now **The Ascent** — the journey begins on Earth (a night city under a dusk horizon) and the visitor's first scrolls are altitude: the newborn light climbs through cloud and thinning atmosphere into the starfield, with no cut. Rationale: it performs the company's tagline — Innovate. Create. Elevate. — gives the birth a world, and gives the arrival a payoff (the headline assembling among the stars).*
 
 ---
 
@@ -124,27 +128,35 @@ By the time the visitor chooses, the universe is ready.
 
 ---
 
-# Scene One — The Beginning
+# Scene One — The Birth & The Ascent
 
-The experience opens in complete darkness. No navigation. No logo. No text.
+The experience opens in the ordinary world: night. A dark horizon with the last band of dusk still burning on it, and below — a plain of warm city lights shimmering slightly out of focus, like a hillside view at midnight. This is where ideas actually begin: a desk, a shop, a late night.
 
-A single point of light appears — born close to where the visitor's cursor rests, as if their presence summoned it.
+No navigation. No logo. No text. A city asleep under a deep indigo sky.
 
-It pulses gently, like something breathing.
+Then, low against the horizon, dust begins to lift — embers pulled off the ground into a slow spiral. It tightens, accelerates, compresses into a point too small to hold itself —
 
-**Dynamics.** The light is curious about the cursor: it drifts toward it, softly, always a little behind. When more lights appear — one, then ten, then hundreds — each has its own tiny orbit, but all of them feel the visitor's gravity. Moving through the field parts it like water; resting sends slow ripples outward. On phones, tilting the device shifts the whole field in parallax, and a tap drops a new pulse of light into it.
+— and snaps. A flash. A ripple across the city sky.
 
-The lights gather into an elegant orbital structure — never on a timer, always eased, as if finding their places by consensus.
+The first light. Breathing. An idea has just left somebody's head.
 
-The first words condense out of particles, set *in* the space, lit by the lights around them:
+This performance plays on its own, before any scrolling — and it doubles as the loading sequence. While the birth unfolds, the universe loads backstage. No one ever waits; they watch.
+
+**Dynamics — scroll is altitude.** The visitor's first scroll doesn't move them forward. It lifts them. The light rises and the camera rises with it: the city shrinks to a glowing grid below, wisps of cloud whip downward past the camera, the indigo sky bleeds toward black, the dusk band curves away — and as the atmosphere thins, the stars arrive one by one, until sky becomes space with no cut and no seam. Space is earned by scrolling.
+
+**The light keeps its personality throughout.** It notices the cursor and startles — a tiny hop backward, like a curious animal — then drifts toward it, always a little behind. Stay still, and it comes closer to inspect you. Move suddenly, and it flinches away. Then forgives. And instead of a "scroll down" arrow, it tugs gently upward, again and again — leading the climb without a word of interface.
+
+**Arrival.** The climb levels off among the stars. The light collects stray particles as it moves and assembles the words letter by letter, writing with gathered stardust:
 
 > Every great brand begins with one idea.
 
 > We transform ideas into unforgettable experiences.
 
-The logo breathes into view. A thin thread of light points downward: the invitation to travel.
+The logo breathes into view. Then more lights are born — one, then ten, then hundreds, each with its own tiny orbit, all of them feeling the visitor's gravity — and they gather into an elegant orbital structure, never on a timer, as if finding their places by consensus.
 
-**Transition.** The camera begins to move — not the scene. The orbit grows to meet the visitor.
+On phones, the ascent answers the device's tilt, and a tap is what startles the light.
+
+**Transition.** The camera pitches gently from climbing to cruising — and the orbit grows to meet the visitor.
 
 ---
 
@@ -156,6 +168,8 @@ Inside: thousands of particles — and between them, connections.
 
 **Dynamics.** The cursor is a lantern here. Connections exist everywhere, but they *illuminate* near the visitor's presence: drift toward a cluster and its web of lines glows awake; leave, and it fades back to ember. The visitor doesn't watch strategy — they reveal it.
 
+The web thinks: pulses of light travel along the lines like signals through something alive. And the very first lines drawn trace the path the visitor's own cursor wandered during the Birth — their curiosity becomes the first strategy. No one will know why it feels personal. It just will.
+
 Scroll speed matters: glide slowly and the web feels intricate and calm; travel fast and the lines stretch into streams.
 
 > Strategy gives ideas direction.
@@ -166,27 +180,29 @@ Supporting copy — research, creativity, branding, technology — appears in th
 
 ---
 
-# Scene Three — Building the Brand
+# Scene Three — Terraforming the Brand
 
-The web assembles. Layer by layer, scroll by scroll, the particles construct something.
+The web assembles — not into an abstract structure, but into a world.
 
-The order tells the story of the craft:
+The particles build a small planet, and the visitor watches it terraform, service by service. Each of the company's six crafts is a geological age:
 
-**Brand Strategy** lays the foundation — a skeletal geometry snaps into place.
+**Brand Identity & Strategy** — a skeletal grid wraps the bare sphere: the planet gains its bones.
 
-**Graphic Design** brings identity — color blooms across surfaces for the first time in the journey.
+**Graphic & Web Design** — color floods across the continents like a sunrise, and structures of glass rise from the surface: the first color in the whole journey arrives here.
 
-**Content Creation** gives voice — glyphs and imagery flow through the structure.
+**Content Creation & Copywriting** — a rain of letterforms and imagery falls into the world and takes root: the planet gains a voice.
 
-**Web Design** builds the digital home — interfaces resolve into panels of glass.
+**Digital Marketing & Social Media** — beacons launch from the surface into orbit and begin to network: the world learns to reach outward.
 
-**Digital Marketing** gives it reach — signals arc outward.
+**Advertising & Campaigns** — signals arc from orbit toward distant space, carrying the world's name beyond itself.
 
-**SEO & Analytics** sustain it — pulses circulate like a heartbeat.
+**SEO & Digital Analytics** — a pulse begins to circle the planet like a heartbeat: the brand is alive, and measurably so.
 
-**Dynamics.** Assembly obeys physics: parts arrive with momentum and settle with a spring, never simply fading in. Scroll owns construction — scrolling back honestly disassembles, layer by layer. Hover near an unfinished layer and it shimmers with a preview of what it will become; the universe rewards curiosity.
+**Dynamics.** Terraforming obeys physics: every layer arrives with momentum and settles with a spring, never simply fading in. Scroll owns creation — scrolling back honestly unwinds the ages, layer by layer. Hover near an unfinished region and it shimmers with a preview of what it will become; the universe rewards curiosity.
 
-**Transition.** Complete, the creation holds for a beat — then exhales, separating into distinct glowing formations that drift apart into a wide field.
+**Why a planet:** two scenes from now, the visitor discovers a galaxy of client worlds — and lands there already knowing, in their bones, how each one was made. Ideas become planets. The galaxy is the proof. Theirs is next.
+
+**Transition.** The finished world holds for a beat, bright and alive — then exhales, its matter separating into distinct glowing formations that drift apart into a wide field.
 
 ---
 
@@ -198,19 +214,19 @@ Six constellations hang in a wide field — one per service — each with its ow
 
 **Dynamics.** This is the first free-look moment: dragging orbits the camera around the field. The constellations are aware of attention — the one the visitor faces leans closer, brightens, reveals its name.
 
-Approach one and it unfolds into its own world:
+Approach one and it performs its signature trick — a few seconds of theatre that *is* the service:
 
-**Brand Strategy** — orbital blueprints; frameworks drawing themselves in light.
+**Brand Identity & Strategy** — orbital blueprints; frameworks drawing themselves in light.
 
-**Graphic Design** — typography and color systems evolving in real time.
+**Graphic & Web Design** — the constellation redraws itself as evolving letterforms and color systems, then unfolds a tiny, genuinely working webpage floating in space — with one real button that responds when pressed.
 
-**Content Creation** — motion, photography, and story fragments in orbit.
+**Content Creation & Copywriting** — motion, photography, and story fragments swirling into orbit around the visitor.
 
-**Web Design** — glass interfaces assembling and responding.
+**Digital Marketing & Social Media** — a live ticker of campaign lights streaming past the camera.
 
-**Digital Marketing** — streams of campaign data flowing past the camera.
+**Advertising & Campaigns** — signals launching outward across platforms of light, each landing somewhere in the field.
 
-**SEO & Analytics** — intelligent networks of light, thinking.
+**SEO & Digital Analytics** — intelligent networks that visibly think, pulses racing each other to find faster paths.
 
 Entering is a detour: the journey waits. One gesture returns to the plaza. Visited constellations keep a warmer glow — the universe remembers.
 
@@ -222,9 +238,9 @@ Entering is a detour: the journey waits. One gesture returns to the plaza. Visit
 
 A galaxy. Scattered through it, planets — one per client. Every planet has its own atmosphere, weather of light, palette, identity.
 
-**Dynamics.** The galaxy turns slowly on its own, and the visitor can take it by the hand — drag to rotate the whole field, release and it eases back into its own rhythm. Hovering a planet slows its local time: it swells slightly, its atmosphere stirs, the client's name surfaces with one line of what was made.
+**Dynamics.** The galaxy turns slowly on its own, and the visitor can take it by the hand — drag to rotate the whole field, release and it eases back into its own rhythm. Hovering a planet slows its local time: it swells slightly, its atmosphere stirs, the client's name surfaces with one line of what was made — and the visitor's own light illuminates the planet's night side. Their attention literally lights up that world.
 
-Selecting a planet begins a cinematic descent — approach, atmosphere entry, landing. No page load. No cut.
+Selecting a planet begins a cinematic descent — approach, atmosphere entry, landing. No page load. No cut. And every entry is branded: the dive into a fruit-juice world falls through citrus-colored aurora; a digital bank's world approaches through a neon grid glowing on its dark side. The atmosphere IS the brand.
 
 Inside, the case study is a place, told in four locations:
 
@@ -234,7 +250,7 @@ Inside, the case study is a place, told in four locations:
 
 **The execution** — the world transformed.
 
-**The impact** — measured in light.
+**The impact** — measured in geography: results rise as terrain. A metric is a mountain the visitor flies over, its number etched in light at the summit — "10,000 followers" as a peak, not a bullet point.
 
 Every client world is built from the same anatomy — atmosphere, palette, terrain of content — so each feels unique, yet unmistakably part of the same universe. Leaving is a launch: the planet falls away, the galaxy returns.
 
@@ -262,6 +278,8 @@ Create.
 
 Launch.
 
+Then the oldest trick in cinema: for half a second — total stillness, total silence. The sound bed drops out entirely. Nothing moves.
+
 Then fusion. One soft-white frame — and a newborn star, steady and calm.
 
 > Grow.
@@ -280,7 +298,7 @@ Where Scene One multiplied outward, Scene Six compresses inward. The two moments
 
 This galaxy is The Creative Sphere.
 
-**Dynamics.** Satellites glide through the scene on long orbits, each carrying a statistic. As one crosses near the camera, its number accretes out of particles, holds, then releases back into light:
+**Dynamics.** The galaxy has visible traffic: small lights travel steady routes between the client planets and the bright core — work in motion, an economy of light. The agency isn't a monument; it's a working system. Where the visitor's attention rests, the passing traffic condenses into a statistic — the number accretes out of the flow, holds, then releases back into it:
 
 Projects completed.
 
@@ -300,7 +318,7 @@ The numbers are never pinned to the screen — they live in the world, and the c
 
 The universe decelerates. The sound thins to almost nothing.
 
-Particles from every corner begin the long fall home. Constellations unravel. The galaxy streams inward.
+Particles from every corner begin the long fall home. Constellations unravel. The galaxy streams inward — and the streams bend around and through the visitor's cursor on their way, the whole story passing by their presence like a river around a stone.
 
 And with them — the visitor's trail. The constellations they lit, the worlds they touched: those particles arrive last, carrying their warmer glow, and are folded into the gathering light.
 
@@ -314,9 +332,9 @@ A pause. Then:
 
 > Let's build yours.
 
-One call-to-action. Nothing flashy. Only confidence.
+The words orbit the light slowly, like a small moon of type. There is no button — **the light itself is the call to action.** Nothing flashy. Only confidence.
 
-**Dynamics.** The point of light responds to approach — hover, and it pulses a little faster, like anticipation. Press —
+**Dynamics.** The light responds to approach — hover, and it beats a little faster, like anticipation. The first thing this site showed the visitor and the last thing it offers them are the same object. Press the light —
 
 ---
 
