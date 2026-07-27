@@ -4,28 +4,31 @@ import * as THREE from 'three'
 import { easing } from "maath";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import SpiralGalaxy from "./SpiralGalaxy";
+import { StarField, NebulaHaze } from "./StarField";
 import { createGlowTexture } from "../utils/glowTexture";
 import HeroOverlay from "../ui/HeroOverlay";
 import CursorWake from "./CursorWake";
-import { setReady } from "../stores/useApp";
+import { SECTIONS, setReady, setSection, useApp } from "../stores/useApp";
 import LoaderSwirl from "./LoaderSwirl";
 import Loader from "../ui/Loader";
+import Sections from "../ui/Sections";
+import WarpStreak from "./WarpStreaks";
+import ServiceConstellation from "./ServiceConstellation";
+import PlanetField from "./PlanetField";
 
 
-function AmbientStars({ count = 700 }) {
+function AmbientStars({ count = 1400 }) {
     const glow = useMemo(() => createGlowTexture(), [])
     const positions = useMemo(() => {
         const arr = new Float32Array(count * 3)
         for (let i = 0; i < count; i++) {
-            const r = 40 + Math.random() * 60
-            const a = Math.random() * Math.PI * 2
-            const b = (Math.random() - 0.5) * Math.PI
-            arr[i * 3 + 0] = Math.cos(a) * Math.cos(b) * r
-            arr[i * 3 + 1] = Math.sin(b) * r
-            arr[i * 3 + 2] = Math.sin(a) * Math.cos(b) * r
+            arr[i * 3 + 0] = (Math.random() - 0.5) * 120
+            arr[i * 3 + 1] = (Math.random() - 0.5) * 120
+            arr[i * 3 + 2] = 20 - Math.random() * 340
         }
         return arr
     }, [count])
+
     return (
         <points>
             <bufferGeometry>
@@ -46,10 +49,42 @@ function ParallaxRig({ children }) {
     return <group ref={g} position={[0, 0, -7]}>{children}</group>
 }
 
+function WarpRig() {
+    const prevZ = useRef(5)
+    useFrame((state, delta) => {
+        const { section } = useApp.getState()
+        easing.damp(state.camera.position, 'z', 5 - section * 55, 0.55, delta)
+
+        const vel = Math.abs(prevZ.current - state.camera.position.z) / Math.max(delta, 0.001)
+        prevZ.current = state.camera.position.z
+        easing.damp(state.camera, 'fov', 45 + Math.min(vel * 0.28, 15), 0.25, delta)
+        state.camera.updateProjectionMatrix()
+    })
+    return null
+}
+
 export default function HeroPrototype() {
     useEffect(() => {
         const ceremony = new Promise((resolve) => setTimeout(resolve, 2800))
         Promise.all([document.fonts.ready, ceremony]).then(() => setReady())
+    }, [])
+
+    useEffect(() => {
+        let cooling = false
+        const onWheel = (e) => {
+            if (cooling || Math.abs(e.deltaY) < 24) return
+            const { section, phase } = useApp.getState()
+            if (phase !== 'ready') return
+            const dir = e.deltaY > 0 ? 1 : -1
+            const next = section + dir
+            if (next >= 0 && next < SECTIONS.length && next !== section) {
+                setSection(next)
+                cooling = true
+                setTimeout(() => { cooling = false }, 1500)
+            }
+        }
+        window.addEventListener('wheel', onWheel, { passive: true })
+        return () => window.removeEventListener('wheel', onWheel)
     }, [])
 
     return (
@@ -58,8 +93,14 @@ export default function HeroPrototype() {
                 <color attach="background" args={['#000004']} />
                 <ParallaxRig>
                     <AmbientStars />
+                    <StarField />
+                    <NebulaHaze />
                     <SpiralGalaxy />
+                    <WarpRig />
                 </ParallaxRig>
+                <ServiceConstellation />
+                <PlanetField />
+                <WarpStreak />
                 <CursorWake />
                 <LoaderSwirl />
                 <EffectComposer>
@@ -69,6 +110,7 @@ export default function HeroPrototype() {
             </Canvas>
             <HeroOverlay />
             <Loader />
+            <Sections />
         </div>
     )
 }

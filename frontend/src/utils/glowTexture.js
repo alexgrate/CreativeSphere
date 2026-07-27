@@ -1,17 +1,30 @@
 import * as THREE from 'three'
 
-export function createGlowTexture(size = 128) {
+function parseHexColor(color) {
+    try {
+        if (typeof color === 'string') {
+            const c = new THREE.Color(color)
+            return `${Math.round(c.r * 255)}, ${Math.round(c.g * 255)}, ${Math.round(c.b * 255)}`
+        }
+    } catch {
+        // fallback
+    }
+    return '255, 255, 255'
+}
+
+export function createGlowTexture(size = 128, color = '#ffffff') {
     const canvas = document.createElement('canvas')
     canvas.width = canvas.height = size
     
     const ctx = canvas.getContext('2d')
+    const rgb = parseHexColor(color)
     const g = ctx.createRadialGradient(
         size / 2, size / 2, 0,
         size / 2, size / 2, size / 2
     )
-    g.addColorStop(0, 'rgba(255, 255, 255, 1)')
-    g.addColorStop(0.3, 'rgba(255, 255, 255, 0.5)')
-    g.addColorStop(1, 'rgba(255, 255, 255, 0)')
+    g.addColorStop(0, `rgba(${rgb}, 1)`)
+    g.addColorStop(0.3, `rgba(${rgb}, 0.5)`)
+    g.addColorStop(1, `rgba(${rgb}, 0)`)
 
     ctx.fillStyle = g
     ctx.fillRect(0, 0, size, size)
@@ -21,7 +34,7 @@ export function createGlowTexture(size = 128) {
 
 // A tiny 4-point star glint — the shape of a real camera sparkle:
 // two thin crossing rays of light with a hot little core
-export function createStarSpriteTexture(size = 64) {
+export function createStarSpriteTexture(size = 64, color = '#ffffff') {
     const canvas = document.createElement('canvas')
     canvas.width = canvas.height = size
     const ctx = canvas.getContext('2d')

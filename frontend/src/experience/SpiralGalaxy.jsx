@@ -6,6 +6,8 @@ import { useApp } from '../stores/useApp'
 
 const COUNT = 34000
 const ARMS = 2
+const GALAXY_TINT_A = new THREE.Color('#7c8cff')
+const GALAXY_TINT_B = new THREE.Color('#ffd2a1')
 const RADIUS = 4.6
 const TWIST = 10.0          
 const THICKNESS = 0.2
@@ -50,6 +52,7 @@ const vertexShader = `
 
 const fragmentShader = `
     uniform float uReveal;
+    uniform vec3 uTint;
     varying vec3 vColor;
     varying float vTwinkle;
     void main() {
@@ -57,7 +60,9 @@ const fragmentShader = `
         float glow = smoothstep(0.3, 0.0, d);
         float core = smoothstep(0.055, 0.0, d);
         float alpha = (glow * 0.06 + core) * vTwinkle * uReveal;
-        gl_FragColor = vec4(vColor * (0.75 + 0.25 * vTwinkle), alpha);
+        vec3 color = vColor * (0.75 + 0.25 * vTwinkle);
+        color = mix(color, uTint, 0.22);
+        gl_FragColor = vec4(color, alpha);
     }
 `
 
@@ -165,6 +170,7 @@ export default function SpiralGalaxy() {
             uOrigin: { value: new THREE.Vector3() },
             uAmp: { value: 2.0 },
             uReveal: { value: 0 },
+            uTint: { value: new THREE.Color('#7c8cff') },
         }),
         []
     )
@@ -183,6 +189,9 @@ export default function SpiralGalaxy() {
             const u = mat.current.uniforms
             u.uTime.value = state.clock.elapsedTime
             u.uPixelRatio.value = state.viewport.dpr
+
+            const tintPhase = 0.5 + 0.5 * Math.sin(state.clock.elapsedTime * 0.08)
+            u.uTint.value.copy(GALAXY_TINT_A).lerp(GALAXY_TINT_B, tintPhase)
 
             const b = burst.current
             easing.damp(b, 'v', b.target, b.target === 1 ? 0.9 : 3.4, delta)

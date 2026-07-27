@@ -1,5 +1,5 @@
 import { useApp } from '../stores/useApp'
-import './Loader.css'
+import './loader.css'
 
 export default function Loader() {
   const phase = useApp((s) => s.phase)

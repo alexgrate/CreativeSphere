@@ -70,7 +70,7 @@ export default function Experience() {
 
     return (
         <>
-        <color attach="background" args={['#000000']} />
+        <color attach="background" args={['#05070f']} />
         <SkyMood />
 
         <CameraRig />
@@ -94,7 +94,7 @@ export default function Experience() {
         <CursorWake />
 
         <EffectComposer>
-            <Bloom intensity={intensity} luminanceThreshold={threshold} luminanceSmoothing={0.9} mipmapBlur />
+            <Bloom intensity={Math.max(intensity, 0.9)} luminanceThreshold={Math.min(threshold, 0.12)} luminanceSmoothing={0.9} mipmapBlur />
             <Vignette offset={0.2} darkness={0.85} />
         </EffectComposer>
         </>

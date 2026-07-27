@@ -1,11 +1,13 @@
 import './hero.css'
-import { useApp } from '../stores/useApp'
+import { SECTIONS, setSection, useApp } from '../stores/useApp'
 
 
 export default function HeroOverlay() {
     const phase = useApp((s) => s.phase)
+    const section = useApp((s) => s.section)
+
     return (
-        <div className={`hero ${phase === 'ready' ? '' : 'is-loading'}`}>
+        <div className={`hero ${phase === 'ready' ? '' : 'is-loading'} ${section > 0 ? 'is-away' : ''}`}>
             <header className='hero-top'>
                 <span className='wordmark'>THE CREATIVE-SPHERE</span>
             </header>
@@ -21,11 +23,16 @@ export default function HeroOverlay() {
             <footer className='hero-bottom'>
                 <span className='brand'>EST. NIGERIA — WORKING WORLDWIDE</span>
                 <nav className='index'>
-                    <a href="#services">SERVICES</a>
-                    <a href="#work">WORK</a>
-                    <a href="#impact">IMPACT</a>
-                    <a href="#about">ABOUT</a>
-                    <a href="#contact">CONTACT</a>
+                    {SECTIONS.slice(1).map((id, n) => (
+                        <a  
+                            key={id}
+                            href={`#${id}`}
+                            className={section === n + 1 ? 'active' : ''}
+                            onClick={(e) => { e.preventDefault(); setSection(n + 1) }}
+                        >
+                            {id.toUpperCase()}
+                        </a>
+                    ))}
                 </nav>
                 <span className='unleash-cue'>STIR THE SPHERE</span>
             </footer>
