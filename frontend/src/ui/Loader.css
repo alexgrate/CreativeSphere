@@ -1,0 +1,22 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+.loader-wordmark {
+  color: #eef0ff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  opacity: 0.9;
+  transition: opacity 0.9s ease, letter-spacing 1.4s ease;
+}
+.loader.is-done .loader-wordmark {
+  opacity: 0;
+  letter-spacing: 0.9em;
+}
