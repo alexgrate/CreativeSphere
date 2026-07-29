@@ -33,6 +33,16 @@
   color: var(--text);
 }
 
+@media (max-width: 720px) {
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+  }
+  .brand-name {
+    font-size: 16px;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;

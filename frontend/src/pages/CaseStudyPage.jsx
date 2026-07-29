@@ -1,10 +1,26 @@
 // CaseStudyPage.jsx
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
 import BrandLockup from '../ui/BrandLockup'
 import './pages.css'
 import { GALLERIES } from '../content/galleries'
+
+// each image glides in only once it has actually loaded — no pop-in
+function Shot({ src, alt, i }) {
+  const [loaded, setLoaded] = useState(false)
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      onLoad={() => setLoaded(true)}
+      className={`shot ${loaded ? 'is-loaded' : ''}`}
+      style={{ transitionDelay: `${Math.min(i * 70, 400)}ms` }}
+    />
+  )
+}
 
 export default function CaseStudyPage() {
   const { slug } = useParams()
@@ -52,7 +68,7 @@ export default function CaseStudyPage() {
                 <h2>The work</h2>
                 <div className="shot-grid">
                 {shots.map((src, n) => (
-                    <img key={src} src={src} alt={`${c.name} campaign work ${n + 1}`} loading="lazy" />
+                    <Shot key={src} src={src} alt={`${c.name} campaign work ${n + 1}`} i={n} />
                 ))}
                 </div>
             </section>

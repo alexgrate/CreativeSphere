@@ -10,8 +10,14 @@ export default function HeroOverlay() {
 
     return (
         <div className={`hero ${phase === 'ready' ? '' : 'is-loading'} ${section > 0 ? 'is-away' : ''}`}>
-            <button className="sound-pill" type="button" onClick={toggleSound}>
-                SOUND: {sound ? 'ON' : 'OFF'}
+            <button
+                className={`sound-btn ${sound ? 'on' : ''}`}
+                type="button"
+                aria-label={sound ? 'Turn sound off' : 'Turn sound on'}
+                aria-pressed={sound}
+                onClick={toggleSound}
+            >
+                <span /><span /><span /><span />
             </button>
 
             <header className='hero-top'>

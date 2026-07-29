@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { easing } from 'maath'
 import { useTexture } from '@react-three/drei'
 import { useApp } from '../stores/useApp'
+import { sfx } from '../audio/engine'
 
 const smooth = (t) => t * t * (3 - 2 * t)
 const lerp = THREE.MathUtils.lerp
@@ -20,6 +21,7 @@ function Moon() {
   const mesh = useRef()
   const light = useRef()
   const phase = useRef({ p: 0 })
+  const wasOn = useRef(false)
   const texture = useTexture('/textures/planets/moon.jpg')
 
   const mat = useMemo(
@@ -39,6 +41,10 @@ function Moon() {
 
   useFrame((state, delta) => {
     const on = useApp.getState().section === 5
+
+    // the moonrise gets a voice, once per arrival
+    if (on && !wasOn.current && useApp.getState().sound) sfx.moon()
+    wasOn.current = on
 
     easing.damp(phase.current, 'p', on ? 1 : 0, on ? 1.3 : 0.5, delta)
     const p = phase.current.p
