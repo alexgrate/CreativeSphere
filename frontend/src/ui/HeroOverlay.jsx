@@ -1,14 +1,19 @@
 import './hero.css'
-import { SECTIONS, setSection, useApp } from '../stores/useApp'
+import { SECTIONS, setSection, toggleSound, useApp } from '../stores/useApp'
 import BrandLockup from './BrandLockup'
 
 
 export default function HeroOverlay() {
     const phase = useApp((s) => s.phase)
     const section = useApp((s) => s.section)
+    const sound = useApp((s) => s.sound)
 
     return (
         <div className={`hero ${phase === 'ready' ? '' : 'is-loading'} ${section > 0 ? 'is-away' : ''}`}>
+            <button className="sound-pill" type="button" onClick={toggleSound}>
+                SOUND: {sound ? 'ON' : 'OFF'}
+            </button>
+
             <header className='hero-top'>
                 <a
                     href="/"

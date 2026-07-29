@@ -172,3 +172,30 @@
         letter-spacing: 0.2em;
     }
 }
+.sound-pill {
+    position: absolute;
+    top: 28px;
+    left: 40px;
+    pointer-events: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: inherit;
+    background: rgba(10, 14, 30, 0.4);
+    border: 1px solid rgba(160, 180, 255, 0.2);
+    border-radius: 999px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+.sound-pill:hover {
+    border-color: var(--accent-soft);
+}
+
+@media (max-width: 720px) {
+    .sound-pill {
+        top: 20px;
+        left: 20px;
+        padding: 8px 12px;
+    }
+}
