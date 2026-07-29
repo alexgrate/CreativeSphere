@@ -5,6 +5,8 @@ import { STATS } from '../content/stats'
 import { useCountUp } from '../hooks/useCountUp'
 import { Link } from 'react-router-dom'
 import './sections.css'
+import Magnetic from './Magnetic'
+import SplitWords from './SplitWords'
 
 function Stat({ s, active, delay }) {
     const n = useCountUp(s.value, active)
@@ -23,9 +25,9 @@ export default function Sections() {
 
   return (
    <>
-    <div className={`section-card ${stateFor(1)}`}>
+    <div className={`section-card ${stateFor(1)}`} inert={section !== 1}>
         <p className='kicker'>WHAT WE DO</p>
-        <h2>Services</h2>
+        <h2><SplitWords text="Services" /></h2>
         <div className="svc-grid">
             {SERVICES.map((s, i) => (
                 <article
@@ -41,7 +43,7 @@ export default function Sections() {
         </div>
     </div>
 
-    <div className={`section-card ${stateFor(2)}`}>
+    <div className={`section-card ${stateFor(2)}`} inert={section !== 2}>
         <p className="kicker">SELECTED WORK</p>
         <h2>Work</h2>
         <div className="wrk-list">
@@ -64,7 +66,7 @@ export default function Sections() {
 
         <div className="partners">
             <p className="partners-label">CLIENTS WE'VE WORKED WITH</p>
-            <div className="marquee">
+            <div className="marquee" aria-hidden="true">
                 <div className="marquee-track">
                     {[...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS].map((c, i) => (
                         <span className='marquee-logo' key={i}>
@@ -76,7 +78,7 @@ export default function Sections() {
         </div>
     </div>
 
-    <div className={`section-card ${stateFor(3)}`}> 
+    <div className={`section-card ${stateFor(3)}`} inert={section !== 3}>
         <p className="kicker">MEASURABLE RESULTS</p>
         <h2>Impact</h2>
         <div className="stat-row">
@@ -86,7 +88,7 @@ export default function Sections() {
         </div>
     </div>
 
-    <div className={`section-card ${stateFor(4)}`}> 
+    <div className={`section-card ${stateFor(4)}`} inert={section !== 4}>
         <p className="kicker">WHO WE ARE</p>
         <h2>About</h2>
         <p className="about-blurb">
@@ -105,13 +107,13 @@ export default function Sections() {
         </div>
     </div>
 
-    <div className={`section-card contact ${stateFor(5)}`}>
+    <div className={`section-card contact ${stateFor(5)}`} inert={section !== 5}>
         <p className="kicker">START SOMETHING</p>
-        <h2>Let&rsquo;s build yours.</h2>
+        <h2><SplitWords text="Let's build yours." /></h2>
         <p className="contact-line">
             Every extraordinary brand begins with a single idea. Bring us yours.
         </p>
-        <a className="cta solid" href="tel:+2349057051623">START A PROJECT</a>
+        <Magnetic><a className="cta solid" href="tel:+2349057051623">START A PROJECT</a></Magnetic>
         <div className="contact-meta">
             <a href="tel:+2349057051623">+234 905 705 1623</a>
             <span>·</span>

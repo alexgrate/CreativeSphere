@@ -1,4 +1,5 @@
 // CaseStudyPage.jsx
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
 import './pages.css'
@@ -7,6 +8,12 @@ export default function CaseStudyPage() {
   const { slug } = useParams()
   const i = CLIENTS.findIndex((c) => c.slug === slug)
   const c = CLIENTS[i]
+
+  useEffect(() => {
+    document.title = c
+      ? `${c.name} — The Creative Sphere`
+      : 'Lost in space — The Creative Sphere'
+  }, [c])
 
   if (!c) {
     return (

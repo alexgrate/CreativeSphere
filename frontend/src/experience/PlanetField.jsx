@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { easing } from 'maath'
@@ -76,6 +76,13 @@ function Planets() {
       ),
     []
   )
+
+  useEffect(() => {
+    return () => {
+      bodyMats.forEach((m) => m.dispose())
+      rimMats.forEach((m) => m.dispose())
+    }
+  }, [bodyMats, rimMats])
 
   useFrame((state, delta) => {
     const on = useApp.getState().section === 2

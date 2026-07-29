@@ -10,7 +10,6 @@
     pointer-events: none;
     user-select: none;
     transition: opacity 1.2s ease 0.4s;
-    cursor: pointer;
 }
 
 .hero.is-loading {

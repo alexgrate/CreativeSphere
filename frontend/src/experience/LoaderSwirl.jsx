@@ -72,9 +72,9 @@ export default function LoaderSwirl() {
                 const angle = s.angle + time * s.speed + rel * 2.5 * s.speed
                 const breathe = 1 + Math.sin(time * 2 + s.wobble) * 0.05
                 const radius = s.r0 * breathe + rel * s.out * 7
-                positions[i * 3 + 0] = Math.cos(angle) * radius
-                positions[i * 3 + 1] = Math.sin(angle) * radius * 0.5
-                positions[i * 3 + 2] = 0
+                positions[j * 3 + 0] = Math.cos(angle) * radius
+                positions[j * 3 + 1] = Math.sin(angle) * radius * 0.5
+                positions[j * 3 + 2] = 0
             }
         })
         geo.attributes.position.needsUpdate = true

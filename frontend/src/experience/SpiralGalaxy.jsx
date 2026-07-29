@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { easing } from 'maath'
@@ -73,6 +73,13 @@ export default function SpiralGalaxy() {
 
     const aspect = useThree((s) => s.size.width / s.size.height)
     const fit = THREE.MathUtils.clamp(aspect / 2.0, 0.45, 0.7)
+
+    // if the route changes while hovering the galaxy, un-stick the pointer cursor
+    useEffect(() => {
+        return () => {
+            document.body.style.cursor = 'auto'
+        }
+    }, [])
 
     const { positions, sizes, colors, phases, dirs } = useMemo(() => {
         const positions = new Float32Array(COUNT * 3)
@@ -199,8 +206,6 @@ export default function SpiralGalaxy() {
             u.uWave.value = b.v
 
             easing.damp(u.uReveal, 'value', useApp.getState().phase === 'ready' ? 1 : 0, 1.2, delta)
-            if (b.target === 1 && b.v > 0.92) b.target = 0
-            u.uWave.value = b.v
         }
         if (spin.current) spin.current.rotation.y += delta * 0.03
     })

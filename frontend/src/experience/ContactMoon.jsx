@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { easing } from 'maath'
@@ -24,6 +24,10 @@ function Moon() {
       }),
     [texture]
   )
+
+  useEffect(() => {
+    return () => mat.dispose()
+  }, [mat])
 
   useFrame((state, delta) => {
     const on = useApp.getState().section === 5

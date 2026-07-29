@@ -1,8 +1,13 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
 import './pages.css'
 
 export default function WorkPage() {
+  useEffect(() => {
+    document.title = 'All Work — The Creative Sphere'
+  }, [])
+
   return (
     <main className="page">
       <header className="page-top">

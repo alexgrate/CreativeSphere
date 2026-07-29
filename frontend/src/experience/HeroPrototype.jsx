@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import { easing } from "maath";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import SpiralGalaxy from "./SpiralGalaxy";
-import { StarField, NebulaHaze } from "./StarField";
+import { StarField } from "./StarField";
 import { createGlowTexture } from "../utils/glowTexture";
 import HeroOverlay from "../ui/HeroOverlay";
 import CursorWake from "./CursorWake";
@@ -15,7 +15,6 @@ import Sections from "../ui/Sections";
 import WarpStreak from "./WarpStreaks";
 import ServiceConstellation from "./ServiceConstellation";
 import PlanetField from "./PlanetField";
-import ContactLight from "./ContactLight";
 import ContactMoon from "./ContactMoon";
 import BrandSphere from "./BrandSphere";
 
@@ -68,8 +67,16 @@ function WarpRig() {
 
 export default function HeroPrototype() {
     useEffect(() => {
-        const ceremony = new Promise((resolve) => setTimeout(resolve, 2800))
-        Promise.all([document.fonts.ready, ceremony]).then(() => setReady())
+        let alive = true
+        let timer
+        const ceremony = new Promise((resolve) => { timer = setTimeout(resolve, 2800) })
+        Promise.all([document.fonts.ready, ceremony]).then(() => {
+            if (alive) setReady()
+        })
+        return () => {
+            alive = false
+            clearTimeout(timer)
+        }
     }, [])
 
     useEffect(() => {
@@ -131,12 +138,11 @@ export default function HeroPrototype() {
 
     return (
         <div style={{ position: 'fixed', inset: 0 }}>
-            <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+            <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
                 <color attach="background" args={['#000004']} />
                 <ParallaxRig>
                     <AmbientStars />
                     <StarField />
-                    <NebulaHaze />
                     <SpiralGalaxy />
                     <WarpRig />
                 </ParallaxRig>
@@ -147,7 +153,7 @@ export default function HeroPrototype() {
                 <LoaderSwirl />
                 <BrandSphere />
                 <ContactMoon />
-                <EffectComposer>
+                <EffectComposer multisampling={0}>
                     <Bloom intensity={0.55} luminanceThreshold={0.15} luminanceSmoothing={0.9} mipmapBlur />
                     <Vignette offset={0.2} darkness={0.8} />
                 </EffectComposer>

@@ -2,7 +2,6 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from 'three'
 import { easing } from "maath";
-import { useJourney } from "../stores/useJourney";
 import { createGlowTexture } from "../utils/glowTexture";
 import { TRAVEL_DISTANCE } from "./constants";
 
@@ -144,11 +143,9 @@ export function StarField() {
             u.uTint.value.copy(STAR_TINT_A).lerp(STAR_TINT_B, tintPhase)
             u2.uTint.value.copy(STAR_TINT_B).lerp(STAR_TINT_A, 1.0 - tintPhase)
 
-            const { progress } = useJourney.getState()
-            const wake = THREE.MathUtils.smoothstep(progress, 0.05, 0.14)
             const base = 0.55
-            easing.damp(u.uOpacity, 'value', base + wake * 0.5, 0.5, delta)
-            easing.damp(u2.uOpacity, 'value', base * 0.8 + wake * 0.4, 0.6, delta)
+            easing.damp(u.uOpacity, 'value', base, 0.5, delta)
+            easing.damp(u2.uOpacity, 'value', base * 0.8, 0.6, delta)
         })
 
         return (
@@ -209,10 +206,8 @@ export function StarField() {
         )
 
         useFrame((_, delta) => {
-            const { progress } = useJourney.getState()
-            const wake = THREE.MathUtils.smoothstep(progress, 0.02, 0.16)
             group.current?.children.forEach((sprite, i) => {
-                easing.damp(sprite.material, 'opacity', clouds[i].opacity * wake, 0.5, delta)
+                easing.damp(sprite.material, 'opacity', clouds[i].opacity, 0.5, delta)
             })
         })
 
