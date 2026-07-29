@@ -34,7 +34,7 @@ export default function HeroOverlay() {
                         </a>
                     ))}
                 </nav>
-                <span className='unleash-cue'>STIR THE SPHERE</span>
+                <span className='unleash-cue'>CLICK TO STIR THE SPHERE</span>
             </footer>
         </div>
     )

@@ -15,6 +15,9 @@ import Sections from "../ui/Sections";
 import WarpStreak from "./WarpStreaks";
 import ServiceConstellation from "./ServiceConstellation";
 import PlanetField from "./PlanetField";
+import ContactLight from "./ContactLight";
+import ContactMoon from "./ContactMoon";
+import BrandSphere from "./BrandSphere";
 
 
 function AmbientStars({ count = 1400 }) {
@@ -87,6 +90,45 @@ export default function HeroPrototype() {
         return () => window.removeEventListener('wheel', onWheel)
     }, [])
 
+    useEffect(() => {
+        let cooling = false
+        let startY = null
+
+        const jump = (dir) => {
+            if (cooling) return
+            const { section, phase } = useApp.getState()
+            if (phase !== 'ready') return
+            const next = section + dir
+            if (next >= 0 && next < SECTIONS.length){
+                setSection(next)
+                cooling = true
+                setTimeout(() => { cooling = false }, 1500)
+            }
+        }
+
+        const onTouchStart = (e) => { startY = e.touches[0].clientY }
+        const onTouchEnd = (e) => {
+            if (startY === null) return
+            const delta = startY - e.changedTouches[0].clientY
+            if (Math.abs(delta) > 50) jump(delta > 0 ? 1 : -1) // swipe up = travel deeper
+            startY = null
+        }
+
+        const onKey = (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') jump(1)
+            if (e.key === 'ArrowUp' || e.key === 'PageUp') jump(-1)
+        }
+
+        window.addEventListener('touchstart', onTouchStart, { passive: true })
+        window.addEventListener('touchend', onTouchEnd, { passive: true })
+        window.addEventListener('keydown', onKey)
+        return () => {
+            window.removeEventListener('touchstart', onTouchStart)
+            window.removeEventListener('touchend', onTouchEnd)
+            window.removeEventListener('keydown', onKey)
+        }
+    }, [])
+
     return (
         <div style={{ position: 'fixed', inset: 0 }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
@@ -103,6 +145,8 @@ export default function HeroPrototype() {
                 <WarpStreak />
                 <CursorWake />
                 <LoaderSwirl />
+                <BrandSphere />
+                <ContactMoon />
                 <EffectComposer>
                     <Bloom intensity={0.55} luminanceThreshold={0.15} luminanceSmoothing={0.9} mipmapBlur />
                     <Vignette offset={0.2} darkness={0.8} />

@@ -10,6 +10,7 @@
     pointer-events: none;
     user-select: none;
     transition: opacity 1.2s ease 0.4s;
+    cursor: pointer;
 }
 
 .hero.is-loading {
@@ -98,7 +99,7 @@
     width: 1px;
     height: 44px;
     margin: 10px auto 0;
-    background: linear-gradient(rgba(124, 140, 255, 0.65), rgba(124, 140, 255, 0));
+    background: linear-gradient(var(--accent-soft), rgba(17, 115, 255, 0));
 }
 
 .hero-bottom{
@@ -129,6 +130,11 @@
 }
 
 .index a:hover{
+    color: var(--accent);
+    opacity: 1;
+}
+
+.index a.active{
     color: var(--accent);
     opacity: 1;
 }

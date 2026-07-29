@@ -44,21 +44,18 @@ export default function CursorWake() {
                 const i = pool.next
                 pool.next = (pool.next + 1) % POOL
 
-                // pop NEAR the cursor path, not exactly on it — sprinkled
                 positions[i * 3 + 0] = tmp.now.x + (Math.random() - 0.5) * 0.5
                 positions[i * 3 + 1] = tmp.now.y + (Math.random() - 0.5) * 0.5
                 positions[i * 3 + 2] = tmp.now.z + (Math.random() - 0.5) * 0.3
 
-                // sparkles linger and drift, they don't spray
                 velocities[i * 3 + 0] = (tmp.now.x - tmp.prev.x) * 2.5 + (Math.random() - 0.5) * 0.4
                 velocities[i * 3 + 1] = (tmp.now.y - tmp.prev.y) * 2.5 + (Math.random() - 0.5) * 0.4
                 velocities[i * 3 + 2] = (tmp.now.z - tmp.prev.z) * 2.5 + (Math.random() - 0.5) * 0.2
 
-                // most sparkles are white, one in five is golden
                 if (Math.random() < 0.2) {
-                    tints[i * 3 + 0] = 1.0
-                    tints[i * 3 + 1] = 0.83
-                    tints[i * 3 + 2] = 0.58
+                    tints[i * 3 + 0] = 0.45
+                    tints[i * 3 + 1] = 0.65
+                    tints[i * 3 + 2] = 1.0
                 } else {
                     tints[i * 3 + 0] = 0.95
                     tints[i * 3 + 1] = 0.96
@@ -87,7 +84,6 @@ export default function CursorWake() {
             velocities[i * 3 + 1] *= DRAG
             velocities[i * 3 + 2] *= DRAG
 
-            // twinkle: each sparkle flickers on its own fast rhythm as it fades
             const shimmer = 0.65 + 0.35 * Math.sin(t * 22 + i * 2.1)
             const b = Math.max(life[i] / LIFE, 0) * shimmer
             colors[i * 3 + 0] = b * tints[i * 3 + 0]

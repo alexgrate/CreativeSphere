@@ -63,7 +63,7 @@ export default function ServiceConstellation() {
         </bufferGeometry>
         <lineBasicMaterial
           ref={lineMat}
-          color="#9fb2e8"
+          color="#4d8dff"
           transparent
           opacity={0}
           depthWrite={false}

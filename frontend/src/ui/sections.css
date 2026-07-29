@@ -31,6 +31,10 @@
     filter: blur(22px);
 }
 
+.section-card:not(.is-on) * {
+    pointer-events: none !important;
+}
+
 .section-card h2 {
   font-size: clamp(40px, 6vw, 80px);
   font-weight: 500;
@@ -47,7 +51,8 @@
     font-family: 'Space Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.45em;
-    opacity: 0.5;
+    opacity: 0.85;
+    color: var(--accent);
 }
 
 .svc-grid{
@@ -67,7 +72,12 @@
     backdrop-filter: blur(6px);
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease;
+}
+
+.svc:hover {
+    border-color: var(--accent-soft);
+    transform: translateY(-3px);
 }
 
 .section-card.is-on .svc{
@@ -114,18 +124,21 @@
 }
 
 .wrk-all {
-  pointer-events: auto;
-  margin-top: 18px;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  color: inherit;
-  text-decoration: none;
-  opacity: 0.55;
-  transition: opacity 0.3s;
+    color: var(--accent);
+    pointer-events: auto;
+    margin-top: 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.3s;
 }
-.wrk-all:hover { opacity: 1; }
 
+.wrk-all:hover { 
+    opacity: 1; 
+}
 
 .section-card.is-on .wrk{
     opacity: 1;
@@ -154,6 +167,16 @@
     opacity: 0.5;
     margin-top: 2px;
 }
+
+.wrk {
+  pointer-events: auto;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease;
+}
+.wrk:hover { background: rgba(120, 140, 255, 0.05); }
+
 
 
 .partners{
@@ -232,6 +255,135 @@
   transform: scale(1.03);
 }
 
+.stat-row {
+  display: flex;
+  gap: 48px;
+  margin-top: 34px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.section-card.is-on .stat {
+  opacity: 1;
+  transform: none;
+}
+.stat-n {
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 500;
+}
+.stat-l {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  max-width: 190px;
+}
+
+.about-blurb {
+  max-width: 580px;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: 0;
+  opacity: 0.75;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.value-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.value-chip {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid rgba(160, 180, 255, 0.2);
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.section-card.is-on .value-chip {
+  opacity: 0.7;
+  transform: none;
+}
+
+.section-card.contact.is-on {
+  transition-delay: 1.5s;
+}
+
+.contact-line {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+  opacity: 0.6;
+}
+
+.cta {
+  pointer-events: auto;
+  margin-top: 26px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: inherit;
+  text-decoration: none;
+  padding: 16px 34px;
+  border: 1px solid rgba(180, 200, 255, 0.4);
+  border-radius: 999px;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.cta:hover {
+  border-color: rgba(220, 230, 255, 0.9);
+  box-shadow: 0 0 34px rgba(150, 170, 255, 0.25), inset 0 0 18px rgba(150, 170, 255, 0.12);
+}
+
+.cta.solid {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.cta.solid:hover {
+  box-shadow: 0 0 44px var(--accent-soft);
+}
+
+.contact-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  opacity: 0.55;
+}
+
+.contact-meta a {
+  pointer-events: auto;
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-meta a:hover { opacity: 1; }
+
+
 @media (max-width: 720px) {
   .marquee-logo img {
     max-height: 1.6rem;
@@ -279,5 +431,18 @@
 
     .wrk h3{
         font-size: 13px;
+    }
+
+    .stat-row { 
+        gap: 20px 28px; 
+    }
+
+    .stat-n { 
+        font-size: 34px; 
+    }
+
+    .stat-l { 
+        font-size: 8px; 
+        max-width: 140px; 
     }
 }

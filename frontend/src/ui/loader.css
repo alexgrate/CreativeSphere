@@ -15,8 +15,10 @@
   letter-spacing: 0.5em;
   opacity: 0.9;
   transition: opacity 0.9s ease, letter-spacing 1.4s ease;
+  transform: translateY(96px);
 }
 .loader.is-done .loader-wordmark {
   opacity: 0;
   letter-spacing: 0.9em;
+  transform: translateY(96px);
 }

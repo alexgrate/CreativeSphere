@@ -66,7 +66,7 @@ export default function WarpStreak() {
                 fragmentShader={`
                     uniform float uFade;
                     void main() {
-                        gl_FragColor = vec4(0.85, 0.9, 1.2, 0.7 * uFade);
+                        gl_FragColor = vec4(0.35, 0.55, 1.0, 0.7 * uFade);
                     }
                 `}
             />
