@@ -19,6 +19,7 @@
 .hero.is-away .scroll-cue,
 .hero.is-away .unleash-cue {
     opacity: 0;
+    animation: none;
 }
 
 .scroll-cue,
