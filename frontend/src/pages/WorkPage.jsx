@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
+import BrandLockup from '../ui/BrandLockup'
 import './pages.css'
 
 export default function WorkPage() {
@@ -11,7 +12,7 @@ export default function WorkPage() {
   return (
     <main className="page">
       <header className="page-top">
-        <Link to="/" className="page-brand">THE CREATIVE-SPHERE</Link>
+        <Link to="/" className="page-brand"><BrandLockup /></Link>
         <Link to="/" className="page-back">← BACK TO THE SPHERE</Link>
       </header>
       <p className="kicker">THE ARCHIVE</p>

@@ -1,5 +1,6 @@
 import './hero.css'
 import { SECTIONS, setSection, useApp } from '../stores/useApp'
+import BrandLockup from './BrandLockup'
 
 
 export default function HeroOverlay() {
@@ -17,7 +18,7 @@ export default function HeroOverlay() {
                         setSection(0)
                     }}
                 >
-                    THE CREATIVE-SPHERE
+                    <BrandLockup />
                 </a>
             </header>
 

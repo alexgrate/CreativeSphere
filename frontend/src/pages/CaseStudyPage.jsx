@@ -2,6 +2,7 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
+import BrandLockup from '../ui/BrandLockup'
 import './pages.css'
 
 export default function CaseStudyPage() {
@@ -29,7 +30,7 @@ export default function CaseStudyPage() {
   return (
     <main className="page">
       <header className="page-top">
-        <Link to="/" className="page-brand">THE CREATIVE-SPHERE</Link>
+        <Link to="/" className="page-brand"><BrandLockup /></Link>
         <Link to="/work" className="page-back">← ALL WORK</Link>
       </header>
       <p className="kicker">{c.sector.toUpperCase()}</p>
