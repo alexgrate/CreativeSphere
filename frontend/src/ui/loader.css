@@ -6,19 +6,29 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  font-family: 'Space Grotesk', system-ui, sans-serif;
 }
-.loader-wordmark {
-  color: #eef0ff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5em;
-  opacity: 0.9;
-  transition: opacity 0.9s ease, letter-spacing 1.4s ease;
-  transform: translateY(96px);
+
+.loader-logo {
+  width: clamp(180px, 24vw, 280px);
+  height: auto;
+  opacity: 0.95;
+  animation: logo-breathe 3.2s ease-in-out infinite;
+  transition: opacity 0.9s ease, transform 1.4s ease;
 }
-.loader.is-done .loader-wordmark {
+
+@keyframes logo-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+
+.loader.is-done .loader-logo {
   opacity: 0;
-  letter-spacing: 0.9em;
-  transform: translateY(96px);
+  transform: scale(1.12);
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-logo {
+    animation: none;
+  }
 }

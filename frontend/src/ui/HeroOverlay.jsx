@@ -9,7 +9,16 @@ export default function HeroOverlay() {
     return (
         <div className={`hero ${phase === 'ready' ? '' : 'is-loading'} ${section > 0 ? 'is-away' : ''}`}>
             <header className='hero-top'>
-                <span className='wordmark'>THE CREATIVE-SPHERE</span>
+                <a
+                    href="/"
+                    className='wordmark'
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setSection(0)
+                    }}
+                >
+                    THE CREATIVE-SPHERE
+                </a>
             </header>
 
             <div className='hero-center'>

@@ -16,7 +16,7 @@ import WarpStreak from "./WarpStreaks";
 import ServiceConstellation from "./ServiceConstellation";
 import PlanetField from "./PlanetField";
 import ContactMoon from "./ContactMoon";
-import BrandSphere from "./BrandSphere";
+import { Fluid } from '@whatisjery/react-fluid-distortion'
 
 
 function AmbientStars({ count = 1400 }) {
@@ -136,6 +136,13 @@ export default function HeroPrototype() {
         }
     }, [])
 
+    const enableFluid = useMemo(
+        () =>
+            window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        []
+    )
+
     return (
         <div style={{ position: 'fixed', inset: 0 }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
@@ -151,9 +158,25 @@ export default function HeroPrototype() {
                 <WarpStreak />
                 <CursorWake />
                 <LoaderSwirl />
-                <BrandSphere />
                 <ContactMoon />
                 <EffectComposer multisampling={0}>
+                    {enableFluid && (
+                        <Fluid
+                            rainbow={false}
+                            fluidColor="#1173ff"
+                            showBackground={false}
+                            blend={0}
+                            intensity={2}
+                            force={1.2}
+                            distortion={0.6}
+                            radius={0.1}
+                            curl={6}
+                            swirl={8}
+                            velocityDissipation={1}
+                            densityDissipation={0.96}
+                            pressure={0.8}
+                        />
+                    )}
                     <Bloom intensity={0.55} luminanceThreshold={0.15} luminanceSmoothing={0.9} mipmapBlur />
                     <Vignette offset={0.2} darkness={0.8} />
                 </EffectComposer>

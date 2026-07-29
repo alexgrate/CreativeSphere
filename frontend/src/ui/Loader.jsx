@@ -5,7 +5,11 @@ export default function Loader() {
   const phase = useApp((s) => s.phase)
   return (
     <div className={`loader ${phase === 'ready' ? 'is-done' : ''}`}>
-      <span className="loader-wordmark">THE CREATIVE-SPHERE</span>
+      <img
+        className="loader-logo"
+        src="/brand/logo-full-white.png"
+        alt="The Creative Sphere"
+      />
     </div>
   )
 }

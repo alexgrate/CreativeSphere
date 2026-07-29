@@ -45,6 +45,11 @@
     letter-spacing: 0.35em;
     opacity: 0.95;
     color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+.wordmark:hover{
+    opacity: 1;
 }
 
 .hero-center{
