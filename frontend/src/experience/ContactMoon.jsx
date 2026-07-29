@@ -8,6 +8,14 @@ import { useApp } from '../stores/useApp'
 const smooth = (t) => t * t * (3 - 2 * t)
 const lerp = THREE.MathUtils.lerp
 
+function moonPhase() {
+  const synodic = 29.53058867
+  const ref = Date.UTC(2000, 0, 6, 18, 14)
+  const days = (Date.now() - ref) / 86400000
+  return (((days / synodic) % 1) + 1) % 1
+}
+
+
 function Moon() {
   const mesh = useRef()
   const light = useRef()
@@ -57,9 +65,17 @@ function Moon() {
     if (light.current) light.current.intensity = glow
   })
 
+    const sunPos = useMemo(() => {
+        const phase = moonPhase()
+        const angle = (phase - 0.5) * Math.PI * 2
+        const r = 40
+        return [Math.sin(angle) * r, 10, -278.5 + Math.cos(angle) * r]
+    }, [])
+
+
   return (
     <group>
-      <pointLight ref={light} position={[0, 7, -264]} intensity={0} decay={0} />
+      <pointLight ref={light} position={sunPos} intensity={0} decay={0} />
       <mesh ref={mesh} material={mat} position={[0, -13, -272.5]}>
         <sphereGeometry args={[7, 96, 96]} />
       </mesh>

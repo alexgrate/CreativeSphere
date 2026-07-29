@@ -20,14 +20,14 @@
   gap: 10px;
 }
 .brand-mark {
-  width: 24px;
-  height: 24px;
+  width: 38px;
+  height: 38px;
   display: block;
 }
 .brand-name {
   font-family: 'Space Grotesk', system-ui, sans-serif;
   font-weight: 700;
-  font-size: 14.5px;
+  font-size: 19px;
   letter-spacing: 0.02em;
   text-transform: lowercase;
   color: var(--text);

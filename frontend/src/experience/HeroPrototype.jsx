@@ -17,9 +17,11 @@ import ServiceConstellation from "./ServiceConstellation";
 import PlanetField from "./PlanetField";
 import ContactMoon from "./ContactMoon";
 import { Fluid } from '@whatisjery/react-fluid-distortion'
+import SkyEvents from "./SkyEvents";
+import { getMood } from "./timeOfDay";
 
 
-function AmbientStars({ count = 1400 }) {
+function AmbientStars({ count = 1400, tint = '#ffffff'}) {
     const glow = useMemo(() => createGlowTexture(), [])
     const positions = useMemo(() => {
         const arr = new Float32Array(count * 3)
@@ -36,9 +38,30 @@ function AmbientStars({ count = 1400 }) {
             <bufferGeometry>
                 <bufferAttribute attach="attributes-position" args={[positions, 3]} />
             </bufferGeometry>
-            <pointsMaterial size={0.35} sizeAttenuation map={glow} transparent opacity={0.35} depthWrite={false} blending={THREE.AdditiveBlending} />
+            <pointsMaterial size={0.35} sizeAttenuation map={glow} transparent opacity={0.35} depthWrite={false} blending={THREE.AdditiveBlending} color={tint} />
         </points>
     )
+}
+
+function MoodHaze({ color, opacity }) {
+    const glow = useMemo(() => createGlowTexture(256), [])
+    const spots = [
+        [0, -2, -40],
+        [9, 4, -140],
+        [-7, 0, -240],
+    ]
+    return spots.map((pos, i) => (
+        <sprite key={i} position={pos} scale={[170, 95, 1]}>
+            <spriteMaterial
+                map={glow}
+                color={color}
+                transparent
+                opacity={opacity}
+                depthWrite={false}
+                blending={THREE.AdditiveBlending}
+            />
+        </sprite>
+    ))
 }
 
 function ParallaxRig({ children }) {
@@ -143,18 +166,21 @@ export default function HeroPrototype() {
         []
     )
 
+    const mood = useMemo(() => getMood(), [])
+
     return (
         <div style={{ position: 'fixed', inset: 0 }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
-                <color attach="background" args={['#000004']} />
+                <color attach="background" args={[mood.bg]} />
                 <ParallaxRig>
-                    <AmbientStars />
+                    <AmbientStars tint={mood.stars} />
                     <StarField />
                     <SpiralGalaxy />
                     <WarpRig />
                 </ParallaxRig>
                 <ServiceConstellation />
                 <PlanetField />
+                <SkyEvents />
                 <WarpStreak />
                 <CursorWake />
                 <LoaderSwirl />
