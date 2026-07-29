@@ -1,4 +1,3 @@
-// CaseStudyPage.jsx
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
@@ -6,7 +5,6 @@ import BrandLockup from '../ui/BrandLockup'
 import './pages.css'
 import { GALLERIES } from '../content/galleries'
 
-// each image glides in only once it has actually loaded — no pop-in
 function Shot({ src, alt, i }) {
   const [loaded, setLoaded] = useState(false)
   return (

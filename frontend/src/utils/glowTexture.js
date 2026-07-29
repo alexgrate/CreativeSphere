@@ -7,7 +7,7 @@ function parseHexColor(color) {
             return `${Math.round(c.r * 255)}, ${Math.round(c.g * 255)}, ${Math.round(c.b * 255)}`
         }
     } catch {
-        // fallback
+
     }
     return '255, 255, 255'
 }
@@ -32,8 +32,6 @@ export function createGlowTexture(size = 128, color = '#ffffff') {
     return new THREE.CanvasTexture(canvas)
 }
 
-// A tiny 4-point star glint — the shape of a real camera sparkle:
-// two thin crossing rays of light with a hot little core
 export function createStarSpriteTexture(size = 64, color = '#ffffff') {
     const canvas = document.createElement('canvas')
     canvas.width = canvas.height = size

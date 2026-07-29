@@ -227,3 +227,21 @@
         height: 12px;
     }
 }
+
+/* the stir cue: breathes until the first unleash, then retires forever */
+.unleash-cue {
+    animation: cue-pulse 2.6s ease-in-out infinite;
+}
+.unleash-cue.is-stirred {
+    opacity: 0 !important;
+    animation: none;
+    transition: opacity 0.8s ease;
+}
+@keyframes cue-pulse {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .unleash-cue { animation: none; }
+}

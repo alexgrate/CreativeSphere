@@ -42,7 +42,6 @@ function Moon() {
   useFrame((state, delta) => {
     const on = useApp.getState().section === 5
 
-    // the moonrise gets a voice, once per arrival
     if (on && !wasOn.current && useApp.getState().sound) sfx.moon()
     wasOn.current = on
 

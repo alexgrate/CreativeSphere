@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { easing } from 'maath'
-import { useApp } from '../stores/useApp'
+import { markStirred, useApp } from '../stores/useApp'
 import { sfx } from '../audio/engine'
 
 const COUNT = 34000
@@ -186,6 +186,7 @@ export default function SpiralGalaxy() {
     const unleash = (e) => {
         e.stopPropagation()
         if (useApp.getState().sound) sfx.pop()
+        markStirred()
         if (spin.current && mat.current) {
             const local = spin.current.worldToLocal(e.point.clone())
             mat.current.uniforms.uOrigin.value.copy(local)

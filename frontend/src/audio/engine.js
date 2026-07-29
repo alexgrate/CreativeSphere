@@ -1,4 +1,3 @@
-// The universe's voice — synthesized live, no audio files.
 let ctx = null
 let master = null
 let bedGain = null
@@ -9,12 +8,11 @@ function ensureContext() {
   if (ctx) return
   ctx = new (window.AudioContext || window.webkitAudioContext)()
   master = ctx.createGain()
-  master.gain.value = 0 // born silent; enable() fades in
+  master.gain.value = 0 
   master.connect(ctx.destination)
   buildBed()
 }
 
-// one voice of the pad: an oscillator with its own level
 function voice(freq, gain, dest) {
   const o = ctx.createOscillator()
   o.type = 'sine'
@@ -25,8 +23,7 @@ function voice(freq, gain, dest) {
   o.start()
 }
 
-// The ambient bed v2: a warm detuned chord behind a soft lowpass,
-// with wandering "air" — closer to a composed pad than a test tone.
+
 function buildBed() {
   bedGain = ctx.createGain()
   bedGain.gain.value = 0.75
@@ -38,8 +35,7 @@ function buildBed() {
   bedGain.connect(warmth)
   warmth.connect(master)
 
-  // A–E–A–C#: a wide, warm spread. Each note is TWO oscillators
-  // detuned ±0.4Hz — the slow beating between them is the "chorus" richness.
+
   const chord = [
     [55, 0.4],
     [82.41, 0.16],
@@ -51,8 +47,6 @@ function buildBed() {
     voice(f + 0.4, g / 2, bedGain)
   })
 
-  // the air: soft noise through a bandpass that WANDERS slowly,
-  // so the texture never repeats
   const len = ctx.sampleRate * 2
   const buf = ctx.createBuffer(1, len, ctx.sampleRate)
   const data = buf.getChannelData(0)
@@ -76,7 +70,6 @@ function buildBed() {
   wander.connect(wanderGain).connect(bp.frequency)
   wander.start()
 
-  // the breath
   const lfo = ctx.createOscillator()
   lfo.frequency.value = 0.06
   const lfoGain = ctx.createGain()
@@ -99,8 +92,6 @@ export const sfx = {
     master.gain.setTargetAtTime(0.0001, now(), 0.4)
   },
 
-  // warp v2: an engine surge (deep sine dive) under a soft wind —
-  // it swells in instead of blasting
   warp() {
     if (!ctx) return
     const t = now()
@@ -122,7 +113,7 @@ export const sfx = {
     const buf = ctx.createBuffer(1, len, ctx.sampleRate)
     const d = buf.getChannelData(0)
     for (let i = 0; i < len; i++) {
-      const env = Math.sin((Math.PI * i) / len) // swells in, fades out
+      const env = Math.sin((Math.PI * i) / len)
       d[i] = (Math.random() * 2 - 1) * env * env
     }
     const src = ctx.createBufferSource()
@@ -137,7 +128,6 @@ export const sfx = {
     src.start(t)
   },
 
-  // the unleash: a soft descending droplet
   pop() {
     if (!ctx) return
     const t = now()
@@ -153,8 +143,6 @@ export const sfx = {
     o.stop(t + 0.6)
   },
 
-  // the moonrise: a sub-bass presence swelling up from the deep,
-  // with a faint fifth above it for mystery
   moon() {
     if (!ctx) return
     const t = now()

@@ -1,5 +1,3 @@
-/* The system cursor stays — users always know what's clickable.
-   The brand ring is a companion, not a replacement. */
 @media (hover: hover) and (pointer: fine) {
   .cursor-ring {
     position: fixed;

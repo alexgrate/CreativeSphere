@@ -7,6 +7,7 @@ export default function HeroOverlay() {
     const phase = useApp((s) => s.phase)
     const section = useApp((s) => s.section)
     const sound = useApp((s) => s.sound)
+    const stirred = useApp((s) => s.stirred)
 
     return (
         <div className={`hero ${phase === 'ready' ? '' : 'is-loading'} ${section > 0 ? 'is-away' : ''}`}>
@@ -55,7 +56,7 @@ export default function HeroOverlay() {
                         </a>
                     ))}
                 </nav>
-                <span className='unleash-cue'>CLICK TO STIR THE SPHERE</span>
+                <span className={`unleash-cue ${stirred ? 'is-stirred' : ''}`}>CLICK TO STIR THE SPHERE</span>
             </footer>
         </div>
     )

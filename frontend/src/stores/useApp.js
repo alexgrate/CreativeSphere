@@ -7,6 +7,7 @@ export const useApp = create(() => ({
     phase: 'loading',
     section: 0,
     sound: false,
+    stirred: localStorage.getItem('tcs-stirred') === '1',
 }))
 
 export const setReady = () => useApp.setState({ phase: 'ready' })
@@ -15,6 +16,11 @@ export const setSection = (i) => {
   const next = Math.min(Math.max(i, 0), SECTIONS.length - 1)
   if (next !== useApp.getState().section && useApp.getState().sound) sfx.warp()
   useApp.setState({ section: next })
+}
+
+export const markStirred = () => {
+    localStorage.setItem('tcs-stirred', '1')
+    useApp.setState({ stirred: true })
 }
 
 export const toggleSound = () => {

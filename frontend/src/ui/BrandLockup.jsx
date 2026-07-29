@@ -1,5 +1,3 @@
-// The one true brand lockup: sphere mark + lowercase name,
-// exactly like the logo. Used by every header on the site.
 export default function BrandLockup() {
   return (
     <span className="brand-lockup">
