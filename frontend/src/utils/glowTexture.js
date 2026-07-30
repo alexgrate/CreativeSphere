@@ -32,46 +32,96 @@ export function createGlowTexture(size = 128, color = '#ffffff') {
     return new THREE.CanvasTexture(canvas)
 }
 
-// A structured nebula: a random-walk cluster of soft color blobs —
-// cloudy FORM, not a flat tint. The Hubble trick, in a canvas.
-export function createNebulaTexture(size = 512, colors = ['#8a5cff', '#ff5ea8', '#4d8dff']) {
+// ——— Nebula v2: fractal-noise nebulae with filaments and dark lanes ———
+// Real nebulosity is turbulence, not blobs. We build value-noise octaves
+// (fBm), emphasize ridges into filaments, carve dark lanes with a second
+// noise field, and ramp color by density. Same math family as film VFX.
+
+function makeLattice(n) {
+    const a = new Float32Array((n + 2) * (n + 2))
+    for (let i = 0; i < a.length; i++) a[i] = Math.random()
+    return a
+}
+
+const smoothT = (t) => t * t * (3 - 2 * t)
+
+function sampleNoise(lattice, n, x, y) {
+    const gx = Math.min(x * n, n - 0.001)
+    const gy = Math.min(y * n, n - 0.001)
+    const x0 = Math.floor(gx)
+    const y0 = Math.floor(gy)
+    const fx = smoothT(gx - x0)
+    const fy = smoothT(gy - y0)
+    const w = n + 2
+    const v00 = lattice[y0 * w + x0]
+    const v10 = lattice[y0 * w + x0 + 1]
+    const v01 = lattice[(y0 + 1) * w + x0]
+    const v11 = lattice[(y0 + 1) * w + x0 + 1]
+    return (v00 * (1 - fx) + v10 * fx) * (1 - fy) + (v01 * (1 - fx) + v11 * fx) * fy
+}
+
+export function createNebulaTexture(size = 384, colors = ['#8a5cff', '#ff5ea8', '#4d8dff']) {
     const canvas = document.createElement('canvas')
     canvas.width = canvas.height = size
     const ctx = canvas.getContext('2d')
-    ctx.globalCompositeOperation = 'lighter'
+    const img = ctx.createImageData(size, size)
+    const data = img.data
 
-    let x = size / 2
-    let y = size / 2
-    const c = new THREE.Color()
-    for (let i = 0; i < 90; i++) {
-        // the cloud wanders, so it clumps like real nebulosity
-        x += (Math.random() - 0.5) * size * 0.22
-        y += (Math.random() - 0.5) * size * 0.22
-        x = Math.max(size * 0.15, Math.min(size * 0.85, x))
-        y = Math.max(size * 0.15, Math.min(size * 0.85, y))
+    // four octaves of detail + one field reserved for dark lanes
+    const octaves = [
+        [makeLattice(4), 4, 0.5],
+        [makeLattice(8), 8, 0.26],
+        [makeLattice(16), 16, 0.15],
+        [makeLattice(32), 32, 0.09],
+    ]
+    const lanes = makeLattice(7)
 
-        const r = size * (0.04 + Math.random() * 0.13)
-        c.set(colors[Math.floor(Math.random() * colors.length)])
-        c.offsetHSL((Math.random() - 0.5) * 0.06, 0, (Math.random() - 0.5) * 0.1)
-        const rgb = `${(c.r * 255) | 0}, ${(c.g * 255) | 0}, ${(c.b * 255) | 0}`
+    const cA = new THREE.Color(colors[0])
+    const cB = new THREE.Color(colors[1])
+    const cC = new THREE.Color(colors[2] ?? colors[0])
 
-        const g = ctx.createRadialGradient(x, y, 0, x, y, r)
-        g.addColorStop(0, `rgba(${rgb}, 0.1)`)
-        g.addColorStop(1, `rgba(${rgb}, 0)`)
-        ctx.fillStyle = g
-        ctx.beginPath()
-        ctx.arc(x, y, r, 0, Math.PI * 2)
-        ctx.fill()
+    for (let py = 0; py < size; py++) {
+        const v = py / size
+        for (let px = 0; px < size; px++) {
+            const u = px / size
+
+            // fBm density
+            let f = 0
+            for (const [lat, n, w] of octaves) f += w * sampleNoise(lat, n, u, v)
+
+            // ridges → filaments
+            const ridge = Math.pow(1 - Math.abs(2 * f - 1), 3)
+            let dens = Math.pow(f, 1.6) * 0.8 + ridge * 0.5
+
+            // soft radial mask, slightly irregular so the edge isn't a circle
+            const dx = u - 0.5
+            const dy = v - 0.5
+            const rad = Math.sqrt(dx * dx + dy * dy) * (2.1 + f * 0.5)
+            const mask = Math.max(0, 1 - rad)
+            let a = Math.max(0, Math.min(1, dens * mask * mask - 0.05))
+
+            // dark lanes: cold dust blocking the glow
+            const lane = sampleNoise(lanes, 7, u + 0.31, v + 0.67)
+            a *= 0.45 + 0.55 * smoothT(lane)
+
+            // color ramps with density: base hue → second hue, filaments → third
+            const t = smoothT(f)
+            let r = cA.r + (cB.r - cA.r) * t
+            let g = cA.g + (cB.g - cA.g) * t
+            let b = cA.b + (cB.b - cA.b) * t
+            r += (cC.r - r) * ridge * 0.6
+            g += (cC.g - g) * ridge * 0.6
+            b += (cC.b - b) * ridge * 0.6
+
+            const i = (py * size + px) * 4
+            data[i] = r * 255
+            data[i + 1] = g * 255
+            data[i + 2] = b * 255
+            data[i + 3] = a * 165
+        }
     }
 
-    // soft radial mask: no hard sprite edges, ever
-    ctx.globalCompositeOperation = 'destination-in'
-    const m = ctx.createRadialGradient(size / 2, size / 2, size * 0.1, size / 2, size / 2, size * 0.5)
-    m.addColorStop(0, 'rgba(0,0,0,1)')
-    m.addColorStop(1, 'rgba(0,0,0,0)')
-    ctx.fillStyle = m
-    ctx.fillRect(0, 0, size, size)
-
+    ctx.putImageData(img, 0, 0)
     return new THREE.CanvasTexture(canvas)
 }
 
