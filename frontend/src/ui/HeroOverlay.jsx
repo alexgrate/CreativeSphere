@@ -36,7 +36,7 @@ export default function HeroOverlay() {
 
             <div className='hero-center'>
                 <p className='label'>FULL-SERVICE CREATIVE &amp; DIGITAL AGENCY</p>
-                <h1 className='headline'>Innovate. Create.<br />Elevate.</h1>
+                <h1 className='headline'>Innovate. Create.<br /><em>Elevate.</em></h1>
                 <p className='subline'>TURNING IDEAS INTO POWERFUL BRANDS</p>
             </div>
 

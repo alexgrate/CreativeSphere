@@ -66,23 +66,32 @@
 
 .label{
     font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.45em;
+    font-size: 10px;
+    letter-spacing: 0.52em;
+    text-indent: 0.52em; /* re-centers letterspaced text */
     color: var(--muted);
 }
 
 .headline{
-    font-size: clamp(44px, 7vw, 96px);
-    font-weight: 500;
-    line-height: 1.05;
-    margin: 18px 0 14px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(54px, 8.5vw, 124px);
+    font-weight: 300;
+    line-height: 0.98;
+    letter-spacing: 0.005em;
+    margin: 20px 0 18px;
     text-shadow: 0 2px 34px rgba(0, 0, 4, 0.75), 0 0 12px rgba(0, 0, 4, 0.5);
+}
+.headline em{
+    font-style: italic;
+    font-weight: 400;
+    color: #f4f0ff;
 }
 
 .subline{
     font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.3em;
+    font-size: 11px;
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;
     color: var(--muted);
 }
 
