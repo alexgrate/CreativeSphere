@@ -19,6 +19,7 @@ import ContactMoon from "./ContactMoon";
 import { Fluid } from '@whatisjery/react-fluid-distortion'
 import SkyEvents from "./SkyEvents";
 import NebulaField from "./NebulaField";
+import DeepField from "./DeepField";
 import { getMood } from "./timeOfDay";
 
 
@@ -173,6 +174,7 @@ export default function HeroPrototype() {
         <div style={{ position: 'fixed', inset: 0 }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
                 <color attach="background" args={[mood.bg]} />
+                <DeepField />
                 <ParallaxRig>
                     <AmbientStars tint={mood.stars} />
                     <StarField />
