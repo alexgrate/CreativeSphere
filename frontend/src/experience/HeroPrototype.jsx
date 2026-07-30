@@ -78,7 +78,7 @@ function WarpRig() {
     const prevZ = useRef(5)
     useFrame((state, delta) => {
         const { section } = useApp.getState()
-        easing.damp(state.camera.position, 'z', 5 - section * 55, 0.55, delta)
+        easing.damp(state.camera.position, 'z', 5 - section * 55, 0.7, delta)
 
         const vel = Math.abs(prevZ.current - state.camera.position.z) / Math.max(delta, 0.001)
         prevZ.current = state.camera.position.z
@@ -113,7 +113,7 @@ export default function HeroPrototype() {
             if (next >= 0 && next < SECTIONS.length && next !== section) {
                 setSection(next)
                 cooling = true
-                setTimeout(() => { cooling = false }, 1500)
+                setTimeout(() => { cooling = false }, 1700)
             }
         }
         window.addEventListener('wheel', onWheel, { passive: true })
@@ -132,7 +132,7 @@ export default function HeroPrototype() {
             if (next >= 0 && next < SECTIONS.length){
                 setSection(next)
                 cooling = true
-                setTimeout(() => { cooling = false }, 1500)
+                setTimeout(() => { cooling = false }, 1700)
             }
         }
 
