@@ -18,6 +18,7 @@ import PlanetField from "./PlanetField";
 import ContactMoon from "./ContactMoon";
 import { Fluid } from '@whatisjery/react-fluid-distortion'
 import SkyEvents from "./SkyEvents";
+import NebulaField from "./NebulaField";
 import { getMood } from "./timeOfDay";
 
 
@@ -175,6 +176,7 @@ export default function HeroPrototype() {
                 <ParallaxRig>
                     <AmbientStars tint={mood.stars} />
                     <StarField />
+                    <NebulaField />
                     <SpiralGalaxy />
                     <WarpRig />
                 </ParallaxRig>
