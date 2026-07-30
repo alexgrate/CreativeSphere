@@ -76,6 +76,7 @@
     font-weight: 500;
     line-height: 1.05;
     margin: 18px 0 14px;
+    text-shadow: 0 2px 34px rgba(0, 0, 4, 0.75), 0 0 12px rgba(0, 0, 4, 0.5);
 }
 
 .subline{

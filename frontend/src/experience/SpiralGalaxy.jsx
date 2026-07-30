@@ -108,8 +108,8 @@ export default function SpiralGalaxy() {
                 z = Math.sin(a) * Math.cos(b) * r
 
                 c.copy(GOLD).lerp(CREAM, r / 0.5)
-                c.multiplyScalar(0.75 + Math.random() * 0.45)
-                sizes[i] = 0.6 + Math.pow(Math.random(), 5.0) * 4.0
+                c.multiplyScalar(0.45 + Math.random() * 0.3)
+                sizes[i] = 0.55 + Math.pow(Math.random(), 5.0) * 3.2
             } else if (kind < 0.22) {
                 const t = Math.random()
                 const radius = Math.sqrt(t) * RADIUS * 1.05
