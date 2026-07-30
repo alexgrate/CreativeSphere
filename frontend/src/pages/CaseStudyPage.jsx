@@ -41,10 +41,11 @@ export default function CaseStudyPage() {
   }
 
   const next = CLIENTS[(i + 1) % CLIENTS.length]
+  const prev = CLIENTS[(i - 1 + CLIENTS.length) % CLIENTS.length]
   const shots = GALLERIES[slug] ?? []
 
   return (
-    <main className="page">
+    <main className="page" key={slug}>
         <header className="page-top">
             <Link to="/" className="page-brand"><BrandLockup /></Link>
             <Link to="/work" className="page-back">← ALL WORK</Link>
@@ -77,7 +78,10 @@ export default function CaseStudyPage() {
             <p>{c.story.impact}</p>
         </section>
 
-        <Link to={`/work/${next.slug}`} className="case-next">NEXT — {next.name} →</Link>
+        <nav className="case-nav">
+            <Link to={`/work/${prev.slug}`} className="case-next">← {prev.name}</Link>
+            <Link to={`/work/${next.slug}`} className="case-next">{next.name} →</Link>
+        </nav>
     </main>
   )
 }
