@@ -36,7 +36,12 @@ export default function HeroOverlay() {
 
             <div className='hero-center'>
                 <p className='label'>FULL-SERVICE CREATIVE &amp; DIGITAL AGENCY</p>
-                <h1 className='headline'>Innovate. Create.<br /><em>Elevate.</em></h1>
+                <h1 className='headline'>
+                    <span className="hw hw-1"><span className="hw-in">Innovate.</span></span>{' '}
+                    <span className="hw hw-2"><span className="hw-in">Create.</span></span>
+                    <br />
+                    <span className="hw hw-3"><span className="hw-in"><em>Elevate.</em></span></span>
+                </h1>
                 <p className='subline'>TURNING IDEAS INTO POWERFUL BRANDS</p>
             </div>
 

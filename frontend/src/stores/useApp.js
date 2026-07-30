@@ -6,6 +6,7 @@ export const SECTIONS = ['hero', 'services', 'work', 'impact', 'about', 'contact
 export const useApp = create(() => ({
     phase: 'loading',
     section: 0,
+    hoverService: -1,
     sound: false,
     stirred: localStorage.getItem('tcs-stirred') === '1',
 }))
@@ -29,3 +30,5 @@ export const toggleSound = () => {
     if (on) sfx.enable()
     else sfx.disable()
 }
+
+export const setHoverService = (i) => useApp.setState({ hoverService: i })

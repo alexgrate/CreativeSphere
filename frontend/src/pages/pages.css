@@ -141,3 +141,61 @@
 .case-nav .case-next {
   margin-top: 0;
 }
+
+/* ——— page headers join the same voice ——— */
+.page h1 {
+  font-family: 'Poppins', 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  background: linear-gradient(100deg, #eef2ff 8%, #9db9ff 32%, #4d8dff 52%, #b06bff 74%, #eef2ff 96%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ink-flow-p 9s linear infinite;
+  filter: drop-shadow(0 2px 18px rgba(0, 0, 4, 0.8));
+}
+@keyframes ink-flow-p {
+  to { background-position: 240% 0; }
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding-top: 24px;
+    padding-bottom: 80px;
+  }
+  .page h1 {
+    font-size: 38px;
+  }
+  .page-top {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 44px;
+  }
+  .row-tag {
+    display: none;
+  }
+  .page-row {
+    gap: 12px;
+    padding: 16px 4px;
+  }
+  .page-row h3 {
+    font-size: 16px;
+  }
+  .case-block {
+    margin-top: 40px;
+  }
+  .case-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 50px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page h1 {
+    animation: none;
+  }
+}

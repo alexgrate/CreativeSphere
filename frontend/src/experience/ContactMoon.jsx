@@ -16,7 +16,6 @@ function moonPhase() {
   return (((days / synodic) % 1) + 1) % 1
 }
 
-
 function Moon() {
   const mesh = useRef()
   const light = useRef()
@@ -76,7 +75,6 @@ function Moon() {
         const r = 40
         return [Math.sin(angle) * r, 10, -278.5 + Math.cos(angle) * r]
     }, [])
-
 
   return (
     <group>

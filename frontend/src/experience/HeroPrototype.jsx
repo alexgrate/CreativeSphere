@@ -19,7 +19,6 @@ import ContactMoon from "./ContactMoon";
 import { Fluid } from '@whatisjery/react-fluid-distortion'
 import SkyEvents from "./SkyEvents";
 import NebulaField from "./NebulaField";
-import DeepField from "./DeepField";
 import { getMood } from "./timeOfDay";
 
 
@@ -80,7 +79,7 @@ function WarpRig() {
     const prevZ = useRef(5)
     useFrame((state, delta) => {
         const { section } = useApp.getState()
-        easing.damp(state.camera.position, 'z', 5 - section * 55, 0.85, delta)
+        easing.damp(state.camera.position, 'z', 5 - section * 55, 1.3, delta)
 
         const vel = Math.abs(prevZ.current - state.camera.position.z) / Math.max(delta, 0.001)
         prevZ.current = state.camera.position.z
@@ -115,7 +114,7 @@ export default function HeroPrototype() {
             if (next >= 0 && next < SECTIONS.length && next !== section) {
                 setSection(next)
                 cooling = true
-                setTimeout(() => { cooling = false }, 2000)
+                setTimeout(() => { cooling = false }, 2300)
             }
         }
         window.addEventListener('wheel', onWheel, { passive: true })
@@ -134,7 +133,7 @@ export default function HeroPrototype() {
             if (next >= 0 && next < SECTIONS.length){
                 setSection(next)
                 cooling = true
-                setTimeout(() => { cooling = false }, 2000)
+                setTimeout(() => { cooling = false }, 2300)
             }
         }
 
@@ -142,7 +141,7 @@ export default function HeroPrototype() {
         const onTouchEnd = (e) => {
             if (startY === null) return
             const delta = startY - e.changedTouches[0].clientY
-            if (Math.abs(delta) > 50) jump(delta > 0 ? 1 : -1) // swipe up = travel deeper
+            if (Math.abs(delta) > 50) jump(delta > 0 ? 1 : -1)
             startY = null
         }
 
@@ -174,7 +173,6 @@ export default function HeroPrototype() {
         <div style={{ position: 'fixed', inset: 0 }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
                 <color attach="background" args={[mood.bg]} />
-                <DeepField />
                 <ParallaxRig>
                     <AmbientStars tint={mood.stars} />
                     <StarField />

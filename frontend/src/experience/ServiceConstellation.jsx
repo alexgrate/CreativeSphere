@@ -108,12 +108,23 @@ export default function ServiceConstellation() {
   const ringMatB = useRef()
 
   useFrame((state, delta) => {
-    const on = useApp.getState().section === 1
+    const { section, hoverService } = useApp.getState()
+    const on = section === 1
     const t = state.clock.elapsedTime
 
     if (spin.current) {
-      spin.current.rotation.y += delta * 0.09
-      spin.current.rotation.x = Math.sin(t * 0.2) * 0.12
+      if (hoverService >= 0) {
+        const p = nodes[majors[hoverService]]
+        const targetY = -Math.atan2(p.x, p.z)
+        const targetX = Math.atan2(p.y, Math.sqrt(p.x * p.x + p.z * p.z))
+        const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a))
+        const k = 1 - Math.exp(-delta * 5)
+        spin.current.rotation.y += wrap(targetY - spin.current.rotation.y) * k
+        spin.current.rotation.x += wrap(targetX - spin.current.rotation.x) * k
+      } else {
+        spin.current.rotation.y += delta * 0.09
+        spin.current.rotation.x = Math.sin(t * 0.2) * 0.12
+      }
     }
     if (ringA.current) ringA.current.rotation.z += delta * 0.05
     if (ringB.current) ringB.current.rotation.z -= delta * 0.04
@@ -139,7 +150,6 @@ export default function ServiceConstellation() {
       geo.attributes.position.needsUpdate = true
     }
 
-    // visibility + the six services breathing (and flashing on delivery)
     if (minorMat.current) easing.damp(minorMat.current, 'opacity', on ? 0.7 : 0, 0.6, delta)
     if (lineMat.current) easing.damp(lineMat.current, 'opacity', on ? 0.16 : 0, 0.6, delta)
     if (pulseMat.current) easing.damp(pulseMat.current, 'opacity', on ? 0.9 : 0, 0.6, delta)
@@ -148,8 +158,13 @@ export default function ServiceConstellation() {
     majorRefs.current.forEach((sprite, k) => {
       if (!sprite) return
       flash[k] *= Math.exp(-delta * 3)
-      easing.damp(sprite.material, 'opacity', on ? 0.95 : 0, 0.6, delta)
-      const breath = 0.5 * (1 + Math.sin(t * 1.3 + k * 1.9) * 0.14) + flash[k] * 0.24
+      const chosen = hoverService === k
+      const dimmed = hoverService >= 0 && !chosen
+      easing.damp(sprite.material, 'opacity', on ? (dimmed ? 0.4 : 0.95) : 0, 0.6, delta)
+      const breath =
+        0.5 * (1 + Math.sin(t * 1.3 + k * 1.9) * 0.14) +
+        flash[k] * 0.24 +
+        (chosen ? 0.45 : 0)
       sprite.scale.set(breath, breath, 1)
     })
   })

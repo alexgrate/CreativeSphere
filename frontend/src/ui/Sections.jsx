@@ -1,4 +1,5 @@
-import { useApp } from '../stores/useApp'
+import { useRef } from 'react'
+import { setHoverService, useApp } from '../stores/useApp'
 import { SERVICES } from '../content/services'
 import { CLIENTS } from '../content/clients'
 import { STATS } from '../content/stats'
@@ -7,6 +8,51 @@ import { Link } from 'react-router-dom'
 import './sections.css'
 import Magnetic from './Magnetic'
 import SplitWords from './SplitWords'
+
+
+function ServiceCard({ s, i }) {
+    const ref = useRef()
+
+    const onMove = (e) => {
+        const r = ref.current.getBoundingClientRect()
+        const x = (e.clientX - r.left) / r.width
+        const y = (e.clientY - r.top) / r.height
+        ref.current.style.setProperty('--mx', `${x * 100}%`)
+        ref.current.style.setProperty('--my', `${y * 100}%`)
+        ref.current.style.setProperty('--rx', `${(0.5 - y) * 9}deg`)
+        ref.current.style.setProperty('--ry', `${(x - 0.5) * 11}deg`)
+    }
+    const onEnter = () => setHoverService(i)
+    const onLeave = () => {
+        ref.current.style.setProperty('--rx', '0deg')
+        ref.current.style.setProperty('--ry', '0deg')
+        setHoverService(-1)
+    }
+
+    return (
+        <article
+            ref={ref}
+            className={`svc svc--${s.theme}`}
+            style={{ transitionDelay: `${0.45 + i * 0.08}s` }}
+            onPointerEnter={onEnter}
+            onPointerMove={onMove}
+            onPointerLeave={onLeave}
+        >
+            <span className="svc-ghost">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.name}</h3>
+            <p>{s.line}</p>
+            <div className="svc-tags">
+                {s.tags.map((t) => (
+                    <span key={t}>{t}</span>
+                ))}
+            </div>
+            <span className="svc-arrow">↗</span>
+            <span className="svc-spot" />
+        </article>
+    )
+}
+
+const VALUES = ['Creativity', 'Innovation', 'Excellence', 'Collaboration', 'Integrity']
 
 function Stat({ s, active, delay }) {
     const n = useCountUp(s.value, active)
@@ -30,15 +76,7 @@ export default function Sections() {
         <h2><SplitWords text="Services" /></h2>
         <div className="svc-grid">
             {SERVICES.map((s, i) => (
-                <article
-                    className='svc'
-                    key={s.name}
-                    style={{ transitionDelay: `${0.45 + i * 0.08}s`}}
-                >
-                    <span className='svc-n'>{String(i + 1).padStart(2, '0')}</span>
-                    <h3>{s.name}</h3>
-                    <p>{s.line}</p>
-                </article>
+                <ServiceCard key={s.name} s={s} i={i} />
             ))}
         </div>
     </div>
@@ -62,7 +100,7 @@ export default function Sections() {
                 </article>
             ))}
         </div>
-        <Link className="wrk-all" to="/work">ALL WORK →</Link>
+        <Magnetic><Link className="cta solid" to="/work">ALL WORK →</Link></Magnetic>
 
         <div className="partners">
             <p className="partners-label">CLIENTS WE'VE WORKED WITH</p>
@@ -90,20 +128,42 @@ export default function Sections() {
 
     <div className={`section-card ${stateFor(4)}`} inert={section !== 4}>
         <p className="kicker">WHO WE ARE</p>
-        <h2>About</h2>
-        <p className="about-blurb">
-            The Creative-Sphere is a full-service creative and digital agency
-            dedicated to transforming ideas into powerful brands. We pair
-            cutting-edge creativity with data-driven strategy — design,
-            storytelling and technology working as one — so every brand we
-            touch stands out in a competitive market.
+        <h2><SplitWords text="About" /></h2>
+        <p className="about-statement">
+            We turn <em>ideas</em> into<br /><em>powerful brands.</em>
         </p>
-        <div className="value-row">
-            {['Creativity', 'Innovation', 'Excellence', 'Collaboration', 'Integrity'].map((v, i) => (
-                <span className="value-chip" key={v} style={{ transitionDelay: `${0.5 + i * 0.07}s` }}>
-                    {v}
-                </span>
-            ))}
+        <div className="about-grid">
+            <div className="about-col">
+                <h4>THE STUDIO</h4>
+                <p>
+                    The Creative-Sphere is a full-service creative and digital
+                    agency based in Nigeria, working worldwide. From FMCG giants
+                    to fintech startups, we build brands that get noticed — and
+                    remembered.
+                </p>
+            </div>
+            <div className="about-col">
+                <h4>THE APPROACH</h4>
+                <p>
+                    Strategy first, craft always. Design, storytelling and
+                    technology working as one team — measured by real results,
+                    not applause.
+                </p>
+            </div>
+        </div>
+        <div className="value-ticker" aria-hidden="true">
+            <div className="value-track">
+                {[...VALUES, ...VALUES].map((v, i) => (
+                    <span key={i}>{v}<i>✦</i></span>
+                ))}
+            </div>
+        </div>
+        <div className="about-facts">
+            <span>EST. NIGERIA</span>
+            <span>·</span>
+            <span>SIX DISCIPLINES</span>
+            <span>·</span>
+            <span>WORKING WORLDWIDE</span>
         </div>
     </div>
 
@@ -114,10 +174,25 @@ export default function Sections() {
             Every extraordinary brand begins with a single idea. Bring us yours.
         </p>
         <Magnetic><a className="cta solid" href="tel:+2349057051623">START A PROJECT</a></Magnetic>
-        <div className="contact-meta">
-            <a href="tel:+2349057051623">+234 905 705 1623</a>
-            <span>·</span>
-            <a href="https://instagram.com/Inthecrativesphere" target="_blank" rel="noreferrer">INSTAGRAM</a>
+        <div className="contact-links">
+            <Magnetic>
+                <a className="contact-chip chip-phone" href="tel:+2349057051623">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    <span>+234 905 705 1623</span>
+                </a>
+            </Magnetic>
+            <Magnetic>
+                <a className="contact-chip chip-ig" href="https://instagram.com/Inthecrativesphere" target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                    </svg>
+                    <span>@inthecrativesphere</span>
+                </a>
+            </Magnetic>
         </div>
     </div>
 

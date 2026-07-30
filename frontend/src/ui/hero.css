@@ -163,7 +163,9 @@
     }
 
     .index{
-        gap: 18px;
+        gap: 14px;
+        flex-wrap: wrap;
+        row-gap: 8px;
     }
 
     .brand, .unleash-cue{
@@ -173,6 +175,8 @@
     .hero-bottom{
         display: flex;
         justify-content: center;
+        font-size: 9px;
+        letter-spacing: 0.18em;
     }
 
     .label{
@@ -257,4 +261,123 @@
 
 @media (prefers-reduced-motion: reduce) {
     .unleash-cue { animation: none; }
+}
+
+/* ——— the incantation: the headline performs its own meaning ——— */
+
+/* each word lives in a slot it can rise out of */
+.hw {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+}
+.hw-in {
+    display: inline-block;
+    transform: translateY(112%);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0.88;
+    animation: word-turn 6.6s ease-in-out infinite;
+}
+.hw-2 .hw-in { animation-delay: 2.2s; }
+.hw-3 .hw-in { animation-delay: 4.4s; }
+
+/* entrance: the words arrive one after another when the loader releases */
+.hero:not(.is-loading) .hw-1 .hw-in { transform: none; transition-delay: 0.15s; }
+.hero:not(.is-loading) .hw-2 .hw-in { transform: none; transition-delay: 0.34s; }
+.hero:not(.is-loading) .hw-3 .hw-in { transform: none; transition-delay: 0.54s; }
+
+/* the eternal cycle: each word takes the light in turn —
+   innovate, then create, then elevate, forever */
+@keyframes word-turn {
+    0%, 30%, 100% {
+        opacity: 0.88;
+        translate: 0 0;
+        text-shadow: 0 2px 34px rgba(0, 0, 4, 0.75), 0 0 12px rgba(0, 0, 4, 0.5);
+    }
+    12% {
+        opacity: 1;
+        translate: 0 -6px;
+        text-shadow: 0 0 38px rgba(17, 115, 255, 0.4), 0 2px 34px rgba(0, 0, 4, 0.75);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hw-in {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ——— headline v3: HEAVY. Syne ExtraBold, poured gradient ink ——— */
+.headline {
+    font-family: 'Poppins', 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: clamp(44px, 7.2vw, 106px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    text-shadow: none;
+    filter: drop-shadow(0 2px 22px rgba(0, 0, 4, 0.85));
+}
+.headline em {
+    font-family: inherit;
+    font-style: normal;
+    font-weight: inherit;
+    font-size: 1em;
+    color: inherit;
+}
+
+/* the ink: white → brand blue → violet, flowing through the letters */
+.hw-in {
+    background: linear-gradient(100deg, #eef2ff 8%, #9db9ff 32%, #4d8dff 52%, #b06bff 74%, #eef2ff 96%);
+    background-size: 240% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: word-turn 6.6s ease-in-out infinite, ink-flow 9s linear infinite;
+}
+@keyframes ink-flow {
+    to { background-position: 240% 0; }
+}
+
+/* the cycle, re-lit for clipped text (glow via filter, not text-shadow) */
+@keyframes word-turn {
+    0%, 30%, 100% {
+        opacity: 0.85;
+        translate: 0 0;
+        filter: none;
+    }
+    12% {
+        opacity: 1;
+        translate: 0 -7px;
+        filter: drop-shadow(0 0 24px rgba(77, 141, 255, 0.6));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hw-in { animation: ink-flow 0s; opacity: 1; }
+}
+
+/* short viewports (landscape phones): keep the hero inside the frame */
+@media (max-height: 560px) {
+    .headline {
+        font-size: clamp(28px, 9vh, 72px);
+        margin: 10px 0 8px;
+    }
+    .scroll-cue {
+        margin-bottom: 8px;
+    }
+    .scroll-cue::after {
+        height: 20px;
+        margin-top: 6px;
+    }
+    .brand,
+    .unleash-cue {
+        display: none;
+    }
+    .hero-bottom {
+        display: flex;
+        justify-content: center;
+    }
 }
