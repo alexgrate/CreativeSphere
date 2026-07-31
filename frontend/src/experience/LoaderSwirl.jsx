@@ -18,7 +18,9 @@ const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5
 export default function LoaderSwirl() {
     const points = useRef()
     const mat = useRef()
-    const release = useRef({ v: 0 })
+    // when the app mounts already ready (return visit) the swirl starts
+    // fully released instead of flashing and dissipating
+    const release = useRef({ v: useApp.getState().phase === 'ready' ? 1 : 0 })
     const glow = useMemo(() => createGlowTexture(), [])
 
     const specks = useMemo(

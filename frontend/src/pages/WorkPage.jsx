@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
 import BrandLockup from '../ui/BrandLockup'
+import FadeLink from '../ui/FadeLink'
 import './pages.css'
 
 const PAGE_SIZE = 6
@@ -16,8 +17,8 @@ export default function WorkPage() {
   return (
     <main className="page">
       <header className="page-top">
-        <Link to="/" className="page-brand"><BrandLockup /></Link>
-        <Link to="/" className="page-back">← BACK TO THE SPHERE</Link>
+        <FadeLink to="/" className="page-brand"><BrandLockup /></FadeLink>
+        <FadeLink to="/" className="page-back">← BACK TO THE SPHERE</FadeLink>
       </header>
       <p className="kicker">THE ARCHIVE</p>
       <h1>All Work</h1>

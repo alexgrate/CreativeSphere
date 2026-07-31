@@ -1,4 +1,5 @@
 import { useMemo, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from 'three'
 import { easing } from "maath";
@@ -90,12 +91,21 @@ function WarpRig() {
 }
 
 export default function HeroPrototype() {
+    const { pathname } = useLocation()
+    const onSphere = pathname === '/'
+    const onSphereRef = useRef(onSphere)
+    onSphereRef.current = onSphere
+
     useEffect(() => {
+        if (useApp.getState().phase === 'ready') return
         let alive = true
         let timer
         const ceremony = new Promise((resolve) => { timer = setTimeout(resolve, 2800) })
         Promise.all([document.fonts.ready, ceremony]).then(() => {
-            if (alive) setReady()
+            if (alive) {
+                setReady()
+                sessionStorage.setItem('tcs-entered', '1')
+            }
         })
         return () => {
             alive = false
@@ -106,6 +116,7 @@ export default function HeroPrototype() {
     useEffect(() => {
         let cooling = false
         const onWheel = (e) => {
+            if (!onSphereRef.current) return
             if (cooling || Math.abs(e.deltaY) < 24) return
             const { section, phase } = useApp.getState()
             if (phase !== 'ready') return
@@ -126,7 +137,7 @@ export default function HeroPrototype() {
         let startY = null
 
         const jump = (dir) => {
-            if (cooling) return
+            if (!onSphereRef.current || cooling) return
             const { section, phase } = useApp.getState()
             if (phase !== 'ready') return
             const next = section + dir
@@ -170,8 +181,8 @@ export default function HeroPrototype() {
     const mood = useMemo(() => getMood(), [])
 
     return (
-        <div style={{ position: 'fixed', inset: 0 }}>
-            <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
+        <div style={{ position: 'fixed', inset: 0 }} inert={!onSphere}>
+            <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]} frameloop={onSphere ? 'always' : 'never'}>
                 <color attach="background" args={[mood.bg]} />
                 <ParallaxRig>
                     <AmbientStars tint={mood.stars} />
@@ -210,7 +221,7 @@ export default function HeroPrototype() {
                 </EffectComposer>
             </Canvas>
             <HeroOverlay />
-            <Loader />
+            {onSphere && <Loader />}
             <Sections />
         </div>
     )

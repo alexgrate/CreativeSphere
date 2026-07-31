@@ -12,8 +12,10 @@ export default function App() {
       <ScrollToTop />
       <div className="grain" />
       <Cursor />
+      {/* the sphere never unmounts — pages overlay it, so returning is instant */}
+      <HeroPrototype />
       <Routes>
-        <Route path="/" element={<HeroPrototype />} />
+        <Route path="/" element={null} />
         <Route path="/work" element={<WorkPage />} />
         <Route path="/work/:slug" element={<CaseStudyPage />} />
         <Route path="*" element={<NotFound />} />

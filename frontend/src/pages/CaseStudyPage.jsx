@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { CLIENTS } from '../content/clients'
 import BrandLockup from '../ui/BrandLockup'
+import FadeLink from '../ui/FadeLink'
 import './pages.css'
 import { GALLERIES } from '../content/galleries'
 
@@ -47,8 +48,8 @@ export default function CaseStudyPage() {
   return (
     <main className="page" key={slug}>
         <header className="page-top">
-            <Link to="/" className="page-brand"><BrandLockup /></Link>
-            <Link to="/work" className="page-back">← ALL WORK</Link>
+            <FadeLink to="/" className="page-brand"><BrandLockup /></FadeLink>
+            <FadeLink to="/work" className="page-back">← ALL WORK</FadeLink>
         </header>
         <p className="kicker">{c.sector.toUpperCase()}</p>
         <h1>{c.name}</h1>

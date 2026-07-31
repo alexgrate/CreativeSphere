@@ -1,4 +1,6 @@
 .page {
+  position: relative;
+  z-index: 40;
   min-height: 100vh;
   padding: 32px clamp(20px, 6vw, 80px) 120px;
   background:
@@ -6,6 +8,15 @@
     #05070f;
   color: #eef2ff;
   font-family: 'Space Grotesk', system-ui, sans-serif;
+  animation: page-in 0.45s ease both;
+  transition: opacity 0.24s ease;
+}
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.page.is-leaving {
+  opacity: 0;
 }
 .page-top {
   display: flex;
@@ -315,7 +326,8 @@
   .page h1 {
     animation: none;
   }
-  .page-row {
+  .page-row,
+  .page {
     animation: none;
   }
 }

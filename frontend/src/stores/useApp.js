@@ -4,7 +4,9 @@ import { sfx } from "../audio/engine";
 export const SECTIONS = ['hero', 'services', 'work', 'impact', 'about', 'contact']
 
 export const useApp = create(() => ({
-    phase: 'loading',
+    // the loading ceremony greets each session once — returning from
+    // /work (same session) starts ready, so the sphere is simply there
+    phase: sessionStorage.getItem('tcs-entered') === '1' ? 'ready' : 'loading',
     section: 0,
     hoverService: -1,
     sound: false,

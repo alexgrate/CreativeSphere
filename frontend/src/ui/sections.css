@@ -35,6 +35,12 @@
     pointer-events: none !important;
 }
 
+/* never let the flex column squeeze children — a compressed .partners
+   clips its logo chips against overflow: hidden */
+.section-card > * {
+    flex-shrink: 0;
+}
+
 .section-card h2 {
   font-size: clamp(40px, 6vw, 80px);
   font-weight: 500;
@@ -712,13 +718,14 @@
     /* the cards are fixed and unscrollable — keep content clear of the
        header lockup above and the section nav below */
     .section-card{
-        padding: 76px 14px 92px;
+        padding: 68px 14px 84px;
+        gap: 10px;
     }
 
     .svc-grid{
         grid-template-columns: 1fr;
         gap: 10px;
-        margin-top: 16px;
+        margin-top: 12px;
     }
 
     .svc p,
@@ -772,16 +779,30 @@
     }
 
     .wrk-list{
-        margin-top: 14px;
+        margin-top: 8px;
     }
 
     .cta{
-        margin-top: 16px;
-        padding: 12px 26px;
+        margin-top: 14px;
+        padding: 11px 24px;
     }
 
     .partners{
-        margin-top: 14px;
+        margin-top: 10px;
+        padding: 10px 0;
+    }
+
+    .partners-label{
+        margin-bottom: 6px;
+    }
+
+    .marquee-logo{
+        padding: 6px 12px;
+    }
+
+    .marquee-logo img{
+        max-height: 1.3rem;
+        max-width: 70px;
     }
 
     .stat-row{
@@ -1178,7 +1199,7 @@
 /* mobile safety for the new headers + about statement */
 @media (max-width: 600px) {
   .section-card h2 {
-    font-size: 32px;
+    font-size: 28px;
   }
   .about-statement {
     font-size: 26px;
