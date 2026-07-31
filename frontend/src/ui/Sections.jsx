@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { setHoverService, useApp } from '../stores/useApp'
 import { SERVICES } from '../content/services'
 import { CLIENTS } from '../content/clients'
+import { GALLERIES } from '../content/galleries'
 import { STATS } from '../content/stats'
 import { useCountUp } from '../hooks/useCountUp'
 import { Link } from 'react-router-dom'
@@ -66,8 +67,23 @@ function Stat({ s, active, delay }) {
 
 export default function Sections() {
   const section = useApp((s) => s.section)
-  const stateFor = (id) => 
+  const stateFor = (id) =>
     id === section ? 'is-on' : id < section ? 'is-past' : 'is-ahead'
+
+  const [peek, setPeek] = useState(null)
+  const peekRef = useRef()
+  const onWorkMove = (e) => {
+    const el = peekRef.current
+    if (!el) return
+    el.style.transform = `translate(${e.clientX + 28}px, ${e.clientY - 84}px)`
+  }
+
+  useEffect(() => {
+    CLIENTS.forEach((c) => {
+      const src = GALLERIES[c.slug]?.[0]
+      if (src) new Image().src = src
+    })
+  }, [])
 
   return (
    <>
@@ -84,21 +100,31 @@ export default function Sections() {
     <div className={`section-card ${stateFor(2)}`} inert={section !== 2}>
         <p className="kicker">SELECTED WORK</p>
         <h2>Work</h2>
-        <div className="wrk-list">
+        <div className="wrk-list" onPointerMove={onWorkMove} onPointerLeave={() => setPeek(null)}>
             {CLIENTS.map((c, i) => (
-                <article
+                <Link
+                    to={`/work/${c.slug}`}
                     className='wrk'
-                    key={c.name}
-                    style={{ transitionDelay: `${0.45 + i * 0.07}s` }}
+                    key={c.slug}
+                    style={{ '--c': c.color, '--d': `${0.45 + i * 0.07}s` }}
+                    onPointerEnter={() => setPeek(GALLERIES[c.slug]?.[0] ?? null)}
+                    onPointerLeave={() => setPeek(null)}
                 >
                     <span className="wrk-n">{String(i + 1).padStart(2, '0')}</span>
-                    <div>
+                    <div className="wrk-main">
                         <h3>{c.name}</h3>
                         <p>{c.line}</p>
                     </div>
                     <span className='wrk-tag'>{c.sector}</span>
-                </article>
+                    <span className='wrk-arrow' aria-hidden="true">↗</span>
+                </Link>
             ))}
+            <div
+                className={`wrk-preview ${peek ? 'is-vis' : ''}`}
+                ref={peekRef}
+                aria-hidden="true"
+                style={{ backgroundImage: peek ? `url(${peek})` : 'none' }}
+            />
         </div>
         <Magnetic><Link className="cta solid" to="/work">ALL WORK →</Link></Magnetic>
 
