@@ -1,0 +1,36 @@
+import { create } from "zustand";
+import { sfx } from "../audio/engine";
+
+export const SECTIONS = ['hero', 'services', 'work', 'impact', 'about', 'contact']
+
+export const useApp = create(() => ({
+    // the loading ceremony greets each session once — returning from
+    // /work (same session) starts ready, so the sphere is simply there
+    phase: sessionStorage.getItem('tcs-entered') === '1' ? 'ready' : 'loading',
+    section: 0,
+    hoverService: -1,
+    sound: false,
+    stirred: localStorage.getItem('tcs-stirred') === '1',
+}))
+
+export const setReady = () => useApp.setState({ phase: 'ready' })
+
+export const setSection = (i) => {
+  const next = Math.min(Math.max(i, 0), SECTIONS.length - 1)
+  if (next !== useApp.getState().section && useApp.getState().sound) sfx.warp()
+  useApp.setState({ section: next })
+}
+
+export const markStirred = () => {
+    localStorage.setItem('tcs-stirred', '1')
+    useApp.setState({ stirred: true })
+}
+
+export const toggleSound = () => {
+    const on = !useApp.getState().sound
+    useApp.setState({ sound: on })
+    if (on) sfx.enable()
+    else sfx.disable()
+}
+
+export const setHoverService = (i) => useApp.setState({ hoverService: i })

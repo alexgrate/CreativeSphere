@@ -1,0 +1,26 @@
+@media (hover: hover) and (pointer: fine) {
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    pointer-events: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 1px solid rgba(17, 115, 255, 0.5);
+    transition: width 0.3s ease, height 0.3s ease, margin 0.3s ease, border-color 0.3s;
+  }
+  .cursor-ring.is-hot {
+    width: 56px;
+    height: 56px;
+    margin: -28px 0 0 -28px;
+    border-color: rgba(17, 115, 255, 0.9);
+  }
+}
+@media (hover: none) {
+  .cursor-ring {
+    display: none;
+  }
+}
