@@ -1,87 +1,64 @@
 import { useEffect, useState, useRef } from "react"
-import gsap from "gsap"
-import ScrollTrigger from "gsap/ScrollTrigger"
-import { lockScroll } from "../hooks/useSmoothScroll"
+import { HERO_SLIDES } from "../content/site"
 
+const AUTO_MS = 6000
 
 export default function Hero() {
-    const [open, setOpen] = useState(false)
-    const wordRef = useRef(null)
+    const [active, setActive] = useState(0)
+    const railRef = useRef(null)
 
     useEffect(() => {
-        document.body.style.overflow = open ? 'hidden' : ''
-        lockScroll(open)
-        const onKey = (e) => { if (e.key === 'Escape') setOpen(false)}
-        window.addEventListener('keydown', onKey)
-        return () => window.removeEventListener('keydown', onKey)
-    }, [open])
+        const t = setInterval(() => setActive(a => (a + 1) % HERO_SLIDES.length), AUTO_MS)
+        return () => clearInterval(t)
+    }, [active])
 
     useEffect(() => {
-        const el = wordRef.current
-        const anim = gsap.to(el, {
-            filter: 'blur(16px)',
-            opacity: 0.15,
-            scale: 1.04,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: el,
-                start: 'top 65%',
-                end: 'bottom 15%',
-                scrub: 0.6,
-            },
-        })
-        return () => { anim.scrollTrigger?.kill(); anim.kill() }
-    }, [])
-
+        const rail = railRef.current
+        const card = rail?.children[active]
+        if (rail && card) rail.scrollTo({ left: card.offsetLeft, behavior: 'smooth' })
+    }, [active])
 
     return (
-        <>
-            <section className="hero">
+        <section className="hero">
+            {HERO_SLIDES.map((s, i) => (
+                <div key={s.id} className={`hero-bg ${i === active ? 'is-on' : ''}`}
+                    style={{ backgroundImage: `url(${s.img})` }} aria-hidden="true" />
+            ))}
+            <div className="hero-scrim" aria-hidden="true" />
+
+            <div className="hero-inner">
                 <div className="hero-left">
-                    <div className="hero-statement">
-                        <p>We are a creative agency.</p>
-                        <p>Through strategy, design and storytelling, we turn ideas into powerful brands.</p>
+                    <span className="hero-label">FULL-SERVICE CREATIVE &amp; DIGITAL AGENCY</span>
+                    <h1>We give brands gravity.</h1>
+                    <p className="hero-copy">
+                        Loud is easy. Being the thing people turn toward takes strategy,
+                        design and story working together. We build that.
+                    </p>
+                    <div className="hero-buttons">
+                        <a href="/start" className="hero-btn hero-btn-primary">Start a project</a>
+                        <a href="/work" className="hero-btn hero-btn-secondary">Explore the work</a>
                     </div>
-                    <span className="hero-cue">SCROLL DOWN<br />AND LEARN MORE</span>
                 </div>
-
-                <div className="hero-right">
-                    <div className="reel-meta">
-                        <span className="reel-label">SEE SHOWREEL</span>
-                        <span className="reel-time">00:01:32</span>
-                    </div>
-                    <button className="sphere" onClick={() => setOpen(true)} aria-label="Play showreel with sound">
-                        <video className="sphere-vid" autoPlay muted loop playsInline preload="auto" poster="/reel-poster.jpg">
-                            <source src="/reel-loop.webm" type="video/webm" />
-                            <source src="/reel-loop.mp4" type="video/mp4" />
-                        </video>
-
-                        <svg className="sphere-ring" viewBox="0 0 200 200" aria-hidden="true">
-                            <defs>
-                                <path id="ring" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"  />
-                            </defs>
-                            <text><textPath href="#ring">SHOWREEL · 00:01:32 · WATCH IN FULL · SHOWREEL · 00:01:32 · WATCH IN FULL ·</textPath></text>
-                        </svg>
-
-                        <span className="sphere-cta">WATCH ↗</span>
-                    </button>
-                </div>
-            </section>
-
-            <div className="wordmark" ref={wordRef}>
-                <svg viewBox="0 0 1000 118" width="100%" aria-hidden="true">
-                    <text x="500" y="100" textAnchor="middle" textLength="1000" lengthAdjust="spacingAndGlyphs">
-                        CREATIVESPHERE
-                    </text>
-                </svg>
             </div>
 
-            {open && (
-                <div className="reel-full" role="dialog" aria-modal="true" aria-label="Showreel">
-                    <button className="reel-close" onClick={() => setOpen(false)} aria-label="Close">✕</button>
-                    <video className="reel-full-vid" src="/reel-full.mp4" autoPlay controls playsInline />
+            <div className="hero-rail" aria-label="Featured work">
+                <div className="hero-prog" aria-hidden="true">
+                    <span>{String(active + 1).padStart(2, '0')}</span>
+                    <i><b style={{ width: `${((active + 1) / HERO_SLIDES.length) * 100}%` }} /></i>
+                    <span>{String(HERO_SLIDES.length).padStart(2, '0')}</span>
                 </div>
-            )}
-        </>
+                <div className="hero-thumbs" ref={railRef}>
+                    {HERO_SLIDES.map((s, i) => (
+                        <button key={s.id}
+                                className={`hero-thumb ${i === active ? 'is-active' : ''}`}
+                                onClick={() => setActive(i)}
+                                aria-label={`Show ${s.name}`}>
+                            <img src={s.img} alt="" />
+                            <span className="ht-meta"><strong>{s.name}</strong><em>{s.tag}</em></span>
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </section>
     )
 }
