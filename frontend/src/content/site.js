@@ -1,9 +1,9 @@
 export const HERO_SLIDES = [
-  { id: 'chi', name: 'CHI Nigeria', tag: 'FMCG · Lagos', img: '/heo/hero 2-05.webp' },
-  { id: 'vfd', name: 'VFD / Vbank', tag: 'Banking', img: '/heo/hero 2-06.webp' },
+  { id: 'chi', name: 'CHI Nigeria', tag: 'FMCG · Lagos', img: '/hero/chi.webp' },
+  { id: 'vfd', name: 'VFD / Vbank', tag: 'Banking', img: '/hero/vfd.webp' },
   { id: 'dash', name: 'Dash MFB', tag: 'Fintech', img: '/heo/hero 2-02.webp' },
-  { id: 'aurora', name: 'Acacia', tag: 'Lifestyle', img: '/heo/hero acacia.webp' },
-  { id: 'prudential', name: 'Prudential Zenith', tag: 'Insurance', img: '/heo/hero 2-04.webp' },
+  { id: 'aurora', name: 'Acacia', tag: 'Lifestyle', img: '/hero/aurora.webp' },
+  { id: 'prudential', name: 'Prudential Zenith', tag: 'Insurance', img: '/hero/prudential.webp' },
 ]
 
 export const IMPACT = [

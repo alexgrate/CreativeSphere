@@ -14,6 +14,14 @@
   --accent-dark: #0A5FD6;  
   --accent-lift: #5B9DFF;  
   --muted: #6b6b70;
+
+  --ftr-h: 520px;
+}
+
+/* must live OUTSIDE @layer components — an unlayered :root beats a
+   layered one, so a mobile override inside the layer would never win */
+@media (max-width: 960px) {
+  :root { --ftr-h: 420px; }
 }
 
 @layer base {
@@ -69,6 +77,7 @@
   }
 
   .hdr-nav a {
+    position: relative;
     font-size: 14px;
     font-weight: 500;
     color: var(--ink);
@@ -79,6 +88,37 @@
 
   .hdr-nav a:hover {
     opacity: 1;
+  }
+
+  /* the sweep: a line that wipes in from the left and out to the right.
+     Swapping transform-origin on hover is what makes the exit continue
+     in the same direction instead of retracting backwards. */
+  .sweep::after,
+  .hdr-nav a::after,
+  .ftr-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .sweep:hover::after,
+  .hdr-nav a:hover::after,
+  .ftr-links a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sweep::after,
+    .hdr-nav a::after,
+    .ftr-links a::after { transition: none; }
   }
 
   .hdr-cta {
@@ -213,6 +253,16 @@
     margin-inline: auto;
     min-height: 100vh;
     padding: 0 14px;
+    position: relative;
+    z-index: 1;
+    background: var(--bg);
+  }
+
+  /* a real element, not a margin — margins collapse against the body and
+     the reveal space silently disappears */
+  .ftr-spacer {
+    height: var(--ftr-h);
+    pointer-events: none;
   }
 
   .hero {
@@ -870,7 +920,6 @@
     flex-wrap: wrap;
   }
 
-  /* returning home is the action here — primary tier, so blue */
   .nf-btn {
     display: inline-flex;
     align-items: center;
@@ -912,7 +961,79 @@
     word-break: break-all;
   }
 
+  /* FOOTER */
+
+  .ftr {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    height: var(--ftr-h, 520px);
+    background: var(--ink);
+    color: #fff;
+    padding: 56px 48px 34px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .ftr-mark{
+    margin-bottom: auto;
+  }
+
+  .ftr-mark text{
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 130px;
+    fill: #fff;
+  }
+
+  .ftr-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 56px;
+  }
+
+  .ftr-line {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .ftr-links {
+    display: flex;
+    gap: 34px;
+    flex-wrap: wrap;
+  }
+
+  .ftr-links a {
+    position: relative;
+    font-family: 'Martian Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .ftr-links a:hover { color: var(--accent-lift); }
+
+  .ftr-copy {
+    margin-top: 44px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
   @media (max-width: 960px) {
+    :root { --ftr-h: 420px; }
+
     .hero {
       padding: 48px 24px 150px;
       height: calc(100svh - 88px);
@@ -1018,6 +1139,12 @@
     .studio-portrait img{
       height: clamp(280px, 62vw, 380px);
     }
+
+    .ftr { padding: 40px 24px 26px; }
+    .ftr-row { flex-direction: column; align-items: flex-start; gap: 22px; margin-top: 36px; }
+    .ftr-links { gap: 18px; }
+    .ftr-copy { margin-top: 28px; }
+
   }
 
   @media (max-width: 639px) {

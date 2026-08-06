@@ -7,6 +7,7 @@ import Formats from './ui/Formats'
 import Studio from './ui/Studio'
 import StartProject from './ui/StartProject'
 import NotFound from './ui/NotFound'
+import Footer from './ui/Footer'
 
 function Home() {
   useSmoothScroll()
@@ -20,6 +21,8 @@ function Home() {
         <Studio />
         <StartProject />
       </main>
+      <div className="ftr-spacer" aria-hidden="true" />
+      <Footer />
     </>
   )
 }
