@@ -1449,8 +1449,8 @@
          being a fixed number: 100svh is the *small* viewport (bars visible),
          which is the conservative one. 455px = the panel's fixed overhead
          (384px of padding + head + ruler) plus the 64px header, plus slack. */
-      --detail-h: clamp(180px, calc(100vh - 455px), 340px);
-      --detail-h: clamp(180px, calc(100svh - 455px), 340px);
+      --detail-h: clamp(260px, calc(100vh - 455px), 340px);
+      --detail-h: clamp(260px, calc(100svh - 455px), 340px);
       padding: 40px 0 32px;
       border-radius: 16px;
     }
@@ -1471,7 +1471,11 @@
     }
     .tl-img {
       flex: 1 1 auto;
-      min-height: 0;          /* absorbs the slack, however little is left */
+      /* absorbs the slack — but never below this. An image squeezed to a
+         sliver reads as a rendering bug, and hiding it outright (which this
+         used to do) is worse. If the floor makes the panel too tall to pin,
+         the fit check drops to the scrollable rail instead. */
+      min-height: 64px;
       aspect-ratio: auto;
       max-width: 240px;
       margin-top: 16px;
@@ -1479,8 +1483,14 @@
   }
 
   /* short phones — claw back another ~90px so the pin is still possible */
-  @media (max-width: 960px) and (max-height: 700px) {
-    .tl { padding: 28px 0 24px; }
+  @media (max-width: 960px) and (max-height: 740px) {
+    /* this block's overhead is 312px, not the 384px of the block above, so
+       it needs its own constant: 312 + the 64px header + slack */
+    .tl {
+      --detail-h: clamp(235px, calc(100vh - 384px), 340px);
+      --detail-h: clamp(235px, calc(100svh - 384px), 340px);
+      padding: 28px 0 24px;
+    }
     .tl-head { margin-bottom: 20px; gap: 16px; }
     .tl-head h2 { font-size: 1.65rem; }
     .tl-nav button { width: 36px; height: 36px; }
@@ -1488,8 +1498,6 @@
     .tl-ticks { --tick-max: 34px; }
     .tl-year { font-size: 2.2rem; }
     .tl-body { font-size: 14.5px; line-height: 1.55; }
-    /* nothing left to give it — the copy is what matters at this height */
-    .tl-img { display: none; }
   }
 
   @media (max-width: 639px) {
