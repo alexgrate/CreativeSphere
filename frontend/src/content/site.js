@@ -1,9 +1,9 @@
 export const HERO_SLIDES = [
-  { id: 'chi', name: 'CHI Nigeria', tag: 'FMCG · Lagos', img: '/hero/chi.jpg' },
-  { id: 'vfd', name: 'VFD / Vbank', tag: 'Banking', img: '/hero/vfd.jpg' },
-  { id: 'dash', name: 'Dash MFB', tag: 'Fintech', img: '/hero/dash.jpg' },
-  { id: 'aurora', name: 'Aurora', tag: 'Lifestyle', img: '/hero/aurora.jpg' },
-  { id: 'prudential', name: 'Prudential Zenith', tag: 'Insurance', img: '/hero/prudential.jpg' },
+  { id: 'chi', name: 'CHI Nigeria', tag: 'FMCG · Lagos', img: '/heo/hero 2-05.webp' },
+  { id: 'vfd', name: 'VFD / Vbank', tag: 'Banking', img: '/heo/hero 2-06.webp' },
+  { id: 'dash', name: 'Dash MFB', tag: 'Fintech', img: '/heo/hero 2-02.webp' },
+  { id: 'aurora', name: 'Acacia', tag: 'Lifestyle', img: '/heo/hero acacia.webp' },
+  { id: 'prudential', name: 'Prudential Zenith', tag: 'Insurance', img: '/heo/hero 2-04.webp' },
 ]
 
 export const IMPACT = [
@@ -23,4 +23,23 @@ export const IMPACT = [
     id: 'industries', value: 8, suffix: '', label: 'Industries served',
     detail: 'FMCG, banking, fintech, insurance, energy, lifestyle, logistics, art — the method carries across all of them.',
   },
+]
+
+export const FORMATS = [
+  { id: 'chi',        img: '/hero/chi.jpg',        alt: 'CHI Nigeria campaign' },
+  { id: 'vfd',        img: '/hero/vfd.jpg',        alt: 'VFD / Vbank social' },
+  { id: 'dash',       img: '/hero/dash.jpg',       alt: 'Dash MFB identity' },
+  { id: 'aurora',     img: '/hero/aurora.jpg',     alt: 'Aurora brand management' },
+  { id: 'prudential', img: '/hero/prudential.jpg', alt: 'Prudential Zenith community' },
+]
+
+export const CTA_LOGOS = [
+  { src: '/logos/chi.webp',        size: 133, x: 10, y: -4,  rot: -8 },
+  { src: '/logos/vfd.webp',        size: 85,  x: 27, y: 42,  rot: 6 },
+  { src: '/logos/dash.jpg',        size: 78,  x: 4,  y: 62,  rot: -5 },
+  { src: '/logos/aurora.webp',     size: 74,  x: 22, y: 78,  rot: 9 },
+  { src: '/logos/prudential.webp', size: 133, x: 78, y: 6,   rot: 7 },
+  { src: '/logos/esvolt.webp',     size: 149, x: 86, y: 46,  rot: -6 },
+  { src: '/logos/acacia-solicitors.svg', size: 78, x: 70, y: 40, rot: -10 },
+  { src: '/logos/chi.webp',        size: 78,  x: 73, y: 76,  rot: 5 },
 ]

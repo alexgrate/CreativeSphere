@@ -1,0 +1,32 @@
+import { CTA_LOGOS } from "../content/site"
+
+export default function StartProject() {
+    return (
+        <section className="cta">
+            {CTA_LOGOS.map((l, n) => (
+                <span
+                    key={n}
+                    className="cta-chip"
+                    aria-hidden="true"
+                    style={{
+                        '--s': `${l.size}px`,
+                        '--x': `${l.x}%`,
+                        '--y': `${l.y}%`,
+                        '--r': `${l.rot}deg`,
+                    }}
+                >
+                    <img src={l.src} alt="" loading="lazy" />
+                </span>
+            ))}
+
+            <div className="cta-inner">
+                <h2>Start your project</h2>
+                <p>
+                    Let&rsquo;s build. Every standout brand begins with one conversation.
+                    Tell us where you want to be, and we&rsquo;ll show you how to get there.
+                </p>
+                <a href="/start" className="cta-btn">Let&rsquo;s talk</a>
+            </div>
+        </section>
+    )
+}

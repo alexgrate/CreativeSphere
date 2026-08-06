@@ -22,7 +22,7 @@ export default function Hero() {
         <section className="hero">
             {HERO_SLIDES.map((s, i) => (
                 <div key={s.id} className={`hero-bg ${i === active ? 'is-on' : ''}`}
-                    style={{ backgroundImage: `url(${s.img})` }} aria-hidden="true" />
+                    style={{ backgroundImage: `url("${encodeURI(s.img)}")` }} aria-hidden="true" />
             ))}
             <div className="hero-scrim" aria-hidden="true" />
 
@@ -35,7 +35,7 @@ export default function Hero() {
                         design and story working together. We build that.
                     </p>
                     <div className="hero-buttons">
-                        <a href="/start" className="hero-btn hero-btn-primary">Start a project</a>
+                        <a href="/start" className="hero-btn hero-btn-primary">Let&rsquo;s talk</a>
                         <a href="/work" className="hero-btn hero-btn-secondary">Explore the work</a>
                     </div>
                 </div>
