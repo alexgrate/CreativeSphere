@@ -1004,12 +1004,19 @@
 
   .ftr-mark{
     margin-bottom: auto;
+    overflow: hidden;          
   }
 
-  .ftr-mark text{
+  .ftr-word {
+    display: inline-block;
     font-family: 'Bricolage Grotesque', system-ui, sans-serif;
     font-weight: 700;
-    font-size: 130px;
+    font-stretch: 75%;
+    font-variation-settings: 'wdth' 75;
+    white-space: nowrap;
+    line-height: 0.78;     
+    letter-spacing: -0.005em;
+    font-size: 12.5vw;
   }
 
   .ftr-row{

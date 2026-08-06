@@ -19,7 +19,8 @@ export function useReveal() {
                 ),
             })
 
-            gsap.utils.toArray('.spark').forEach((el) => {
+
+            gsap.utils.toArray('.spark:not(.ftr-word)').forEach((el) => {
                 const tl = gsap.timeline({
                     scrollTrigger: {
                         trigger: el,
@@ -41,12 +42,12 @@ export function useReveal() {
                 )
             })
 
-            const wm = document.querySelector('#ftrSpark')
+            const wm = document.querySelector('.ftr-word')
             if (wm) {
                 gsap.fromTo(wm,
-                    { attr: { gradientTransform: 'translate(-1 0)' } },
+                    { backgroundPosition: '100% 0' },
                     {
-                        attr: { gradientTransform: 'translate(1.2 0)' },
+                        backgroundPosition: '0% 0',
                         duration: 2.6,
                         ease: 'power2.inOut',
                         scrollTrigger: {
