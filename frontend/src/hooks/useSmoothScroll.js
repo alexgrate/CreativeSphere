@@ -28,6 +28,13 @@ export function useSmoothScroll() {
     }, [])
 }
 
+/* Lenis owns the scroll position, so window.scrollTo would fight it —
+   route programmatic jumps through the instance when there is one. */
+export function scrollToY(y, duration = 0.9) {
+    if (lenisRef) lenisRef.scrollTo(y, { duration })
+    else window.scrollTo({ top: y, behavior: 'smooth' })
+}
+
 export function lockScroll(locked) {
     if (locked) lenisRef?.stop()
     else lenisRef?.start()

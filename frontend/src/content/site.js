@@ -64,3 +64,19 @@ export const ABOUT_IMPACT = [
   { id: 'brands',      value: 9,    suffix: '+', label: 'Brands transformed',
     detail: 'From CHI and Prudential Zenith to Dash MFB and Esvolt.' },
 ]
+
+
+export const TIMELINE = [
+  { year: 2019, title: 'The studio opens',
+    body: 'The Creative Sphere is founded in Lagos as a full-service creative and digital agency, built around one team covering strategy, design and story.',
+    img: '/timeline/2019.webp' },
+  { year: 2021, title: 'FMCG at national scale',
+    body: 'Campaign work for CHI Limited — Chivita and Capri-Sonne — takes the studio into national retail activation and multi-format content.',
+    img: '/timeline/2021.webp' },
+  { year: 2023, title: 'Banking and fintech practice',
+    body: 'VFD Microfinance Bank and Dash MFB bring the studio into financial services, where brand trust and social growth have to work together.',
+    img: '/timeline/2023.webp' },
+  { year: 2025, title: 'Eight industries deep',
+    body: 'From insurance to clean energy to art, the studio now works across eight sectors with nine brands transformed.',
+    img: '/timeline/2025.webp' },
+]
