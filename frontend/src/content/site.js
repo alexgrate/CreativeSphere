@@ -26,10 +26,10 @@ export const IMPACT = [
 ]
 
 export const FORMATS = [
-  { id: 'chi',        img: '/hero/chi.jpg',        alt: 'CHI Nigeria campaign' },
-  { id: 'vfd',        img: '/hero/vfd.jpg',        alt: 'VFD / Vbank social' },
-  { id: 'dash',       img: '/hero/dash.jpg',       alt: 'Dash MFB identity' },
-  { id: 'aurora',     img: '/hero/aurora.jpg',     alt: 'Aurora brand management' },
+  { id: 'chi', img: '/format/vbank.webp', alt: 'VFD / Vbank social' },
+  { id: 'vfd', img: '/hero/vfd.jpg', alt: 'CHI Nigeria campaign' },
+  { id: 'dash', img: '/hero/dash.jpg', alt: 'Dash MFB identity' },
+  { id: 'aurora', img: '/hero/aurora.jpg', alt: 'Aurora brand management' },
   { id: 'prudential', img: '/hero/prudential.jpg', alt: 'Prudential Zenith community' },
 ]
 
