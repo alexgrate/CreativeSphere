@@ -9,6 +9,7 @@ import StartProject from './ui/StartProject'
 import NotFound from './ui/NotFound'
 import Footer from './ui/Footer'
 import { useReveal } from './hooks/useReveal'
+import AboutPage from './pages/AboutPage'
 
 function Home() {
   useSmoothScroll()
@@ -34,6 +35,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path='/about' element={<AboutPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

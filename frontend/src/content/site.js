@@ -33,6 +33,16 @@ export const FORMATS = [
   { id: 'prudential', img: '/hero/prudential.jpg', alt: 'Prudential Zenith community' },
 ]
 
+export const LOGOS = [
+  { name: 'CHI Nigeria',            src: '/logos/chi.webp' },
+  { name: 'VFD / Vbank',            src: '/logos/vfd.webp' },
+  { name: 'Dash MFB',               src: '/logos/dash.jpg' },
+  { name: 'Aurora',                 src: '/logos/aurora.webp' },
+  { name: 'Prudential Zenith Life', src: '/logos/prudential.webp' },
+  { name: 'ESVolt',                 src: '/logos/esvolt.webp' },
+  { name: 'Acacia Solicitors',      src: '/logos/acacia-solicitors.svg' },
+]
+
 export const CTA_LOGOS = [
   { src: '/logos/chi.webp',        size: 133, x: 10, y: -4,  rot: -8 },
   { src: '/logos/vfd.webp',        size: 85,  x: 27, y: 42,  rot: 6 },
@@ -42,4 +52,15 @@ export const CTA_LOGOS = [
   { src: '/logos/esvolt.webp',     size: 149, x: 86, y: 46,  rot: -6 },
   { src: '/logos/acacia-solicitors.svg', size: 78, x: 70, y: 40, rot: -10 },
   { src: '/logos/chi.webp',        size: 78,  x: 73, y: 76,  rot: 5 },
+]
+
+export const ABOUT_IMPACT = [
+  { id: 'founded',     value: 2019, suffix: '',  label: 'Founded in Lagos', plain: true,
+    detail: 'Six years building brands for Nigerian companies with international ambitions.' },
+  { id: 'disciplines', value: 6,    suffix: '',  label: 'Disciplines under one roof',
+    detail: 'Strategy, identity, content, social, advertising and analytics — one team, no handoffs.' },
+  { id: 'industries',  value: 8,    suffix: '',  label: 'Industries served',
+    detail: 'FMCG, banking, fintech, insurance, energy, lifestyle, logistics and art.' },
+  { id: 'brands',      value: 9,    suffix: '+', label: 'Brands transformed',
+    detail: 'From CHI and Prudential Zenith to Dash MFB and Esvolt.' },
 ]

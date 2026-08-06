@@ -18,8 +18,6 @@
   --ftr-h: 520px;
 }
 
-/* must live OUTSIDE @layer components — an unlayered :root beats a
-   layered one, so a mobile override inside the layer would never win */
 @media (max-width: 960px) {
   :root { --ftr-h: 420px; }
 }
@@ -43,9 +41,6 @@
 }
 
 @layer components {
-
-  /* a soft blue halo around a bright core — reads as light travelling
-     through the letters rather than a flat stripe crossing them */
   .spark {
     background-image: linear-gradient(100deg,
       var(--ink) 0%,
@@ -126,9 +121,6 @@
     opacity: 1;
   }
 
-  /* the sweep: a line that wipes in from the left and out to the right.
-     Swapping transform-origin on hover is what makes the exit continue
-     in the same direction instead of retracting backwards. */
   .sweep::after,
   .hdr-nav a::after,
   .ftr-links a::after {
@@ -294,8 +286,6 @@
     background: var(--bg);
   }
 
-  /* a real element, not a margin — margins collapse against the body and
-     the reveal space silently disappears */
   .ftr-spacer {
     height: var(--ftr-h);
     pointer-events: none;
@@ -865,8 +855,6 @@
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: grayscale(1);
-    opacity: 0.85;
   }
 
   .cta-inner{
@@ -1068,6 +1056,88 @@
     color: rgba(255, 255, 255, 0.45);
   }
 
+  .abt { padding: 40px 0 0; }
+
+  .abt-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.1rem, 5vw, 4.2rem);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    margin-bottom: 22px;
+  }
+
+  .abt-frame {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 12rem);
+    min-height: 420px;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .abt-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: bottom center;
+    display: block;
+    transition: transform 1.3s ease-in-out;
+  }
+  .abt-frame:hover img { transform: scale(1.1); }
+
+  .abt-marquee {
+    position: absolute;
+    left: 50%;
+    bottom: 34px;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: min(760px, 78%);
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+
+    /* draggable: grab cursor, hidden scrollbar, no native snap-back */
+    cursor: grab;
+    overflow-x: auto;
+    scrollbar-width: none;
+    touch-action: pan-y;
+  }
+  .abt-marquee::-webkit-scrollbar { display: none; }
+  .abt-marquee:active,
+  .abt-marquee.is-dragging { cursor: grabbing; }
+
+  /* holding the strip stops the auto-scroll so your drag has authority */
+  .abt-marquee.is-dragging .abt-track { animation-play-state: paused; }
+
+  .abt-track {
+    display: flex;
+    align-items: center;
+    gap: 46px;
+    width: max-content;
+    animation: abt-slide 28s linear infinite;
+  }
+  .abt-track img {
+    height: 26px;
+    width: auto;
+    flex: 0 0 auto;
+    /* client logos keep their own colour — they're proof, not decoration */
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  @keyframes abt-slide {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .abt-track { animation: none; }
+    .abt-frame img { transition: none; }
+  }
+
+
   @media (max-width: 960px) {
     :root { --ftr-h: 420px; }
 
@@ -1181,6 +1251,16 @@
     .ftr-row { flex-direction: column; align-items: flex-start; gap: 22px; margin-top: 36px; }
     .ftr-links { gap: 18px; }
     .ftr-copy { margin-top: 28px; }
+
+    .abt { padding-top: 24px; }
+    .abt-title { margin-bottom: 16px; }
+    .abt-frame {
+      height: 480px;         
+      border-radius: 20px;
+    }
+    .abt-marquee { width: 86%; bottom: 22px; }
+    .abt-track { gap: 28px; }
+    .abt-track img { height: 18px; }
 
   }
 
