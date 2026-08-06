@@ -20,12 +20,12 @@ export default function StartProject() {
             ))}
 
             <div className="cta-inner">
-                <h2>Start your project</h2>
-                <p>
+                <h2 className="spark">Start your project</h2>
+                <p data-reveal>
                     Let&rsquo;s build. Every standout brand begins with one conversation.
                     Tell us where you want to be, and we&rsquo;ll show you how to get there.
                 </p>
-                <a href="/start" className="cta-btn">Let&rsquo;s talk</a>
+                <a href="/start" className="cta-btn" data-reveal>Let&rsquo;s talk</a>
             </div>
         </section>
     )

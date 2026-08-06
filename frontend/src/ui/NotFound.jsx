@@ -11,7 +11,7 @@ export default function NotFound() {
             <main className="shell">
                 <section className="nf">
                     <span className="nf-code">404</span>
-                    <h1>This page is still in the studio.</h1>
+                    <h1 className="spark">This page is still in the studio.</h1>
                     <p>
                         We&rsquo;re building it. In the meantime, everything worth
                         seeing lives on the homepage &mdash; the work, the numbers

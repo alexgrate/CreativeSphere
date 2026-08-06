@@ -23,13 +23,13 @@ export default function Formats() {
     return (
         <section className="fmt">
             <div className="fmt-copy">
-                <span className="fmt-eyebrow">Campaigns &amp; brand</span>
-                <h2>Global formats.<br />Local brands.</h2>
-                <p>
+                <span className="fmt-eyebrow" data-reveal>Campaigns &amp; brand</span>
+                <h2 className="spark">Global formats.<br />Local brands.</h2>
+                <p data-reveal>
                     Campaign systems, identity and content strategy for some of
                     Nigeria&rsquo;s most recognised brands.
                 </p>
-                <a href="/work" className="fmt-btn">See all campaigns</a>
+                <a href="/work" className="fmt-btn" data-reveal>See all campaigns</a>
             </div>
 
             <div className="fmt-stage">

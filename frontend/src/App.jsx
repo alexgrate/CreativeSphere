@@ -8,9 +8,11 @@ import Studio from './ui/Studio'
 import StartProject from './ui/StartProject'
 import NotFound from './ui/NotFound'
 import Footer from './ui/Footer'
+import { useReveal } from './hooks/useReveal'
 
 function Home() {
   useSmoothScroll()
+  useReveal()
   return (
     <>
       <Header />

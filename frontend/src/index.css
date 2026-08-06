@@ -44,6 +44,42 @@
 
 @layer components {
 
+  /* a soft blue halo around a bright core — reads as light travelling
+     through the letters rather than a flat stripe crossing them */
+  .spark {
+    background-image: linear-gradient(100deg,
+      var(--ink) 0%,
+      var(--ink) 34%,
+      #2F86FF 43%,
+      var(--accent) 47%,
+      #8CC4FF 50%,
+      var(--accent) 53%,
+      #2F86FF 57%,
+      var(--ink) 66%,
+      var(--ink) 100%);
+    background-size: 300% 100%;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    will-change: background-position, filter;
+  }
+
+  .spark--light {
+    background-image: linear-gradient(100deg,
+      #fff 0%,
+      #fff 34%,
+      #7FB6FF 43%,
+      var(--accent-lift) 47%,
+      #CFE4FF 50%,
+      var(--accent-lift) 53%,
+      #7FB6FF 57%,
+      #fff 66%,
+      #fff 100%);
+  }
+
   .site-header {
     position: sticky;
     top: 0;
@@ -986,7 +1022,8 @@
     font-family: 'Bricolage Grotesque', system-ui, sans-serif;
     font-weight: 700;
     font-size: 130px;
-    fill: #fff;
+    /* no fill here — the SVG gradient supplies it, and a CSS fill
+       would override the attribute and kill the spark */
   }
 
   .ftr-row{

@@ -9,7 +9,12 @@ let lenisRef = null
 
 export function useSmoothScroll() {
     useEffect(() => {
-        const lenis = new Lenis({ duration: 1.1, smoothWheel: true })
+        const lenis = new Lenis({ 
+            lerp: 0.085,
+            wheelMultiplier: 0.9,
+            smoothWheel: true,
+            syncTouch: false,
+        })
         lenisRef = lenis
         lenis.on('scroll', ScrollTrigger.update)
         const tick = (time) => lenis.raf(time * 1000)
