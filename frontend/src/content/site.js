@@ -148,3 +148,32 @@ export const CAPABILITIES = [
     items: ['Paid media', 'Influencer marketing', 'Community management', 'Search & discovery', 'Analytics & reporting'],
   },
 ]
+
+// How we work, told as a sell rather than a scoreboard. The stats still live
+// on /about, where studio facts belong.
+export const APPROACH = [
+  {
+    id: 'understand', n: '01', title: 'Understand',
+    lead: 'We start with the business, not the brief.',
+    body: 'Before anything gets designed we learn how you actually make money, who you are really competing with, and what your audience already believes. Most briefs describe a symptom. We go looking for the cause.',
+    img: '/approach/01.webp',
+  },
+  {
+    id: 'position', n: '02', title: 'Position',
+    lead: 'A brand people can repeat back to you.',
+    body: 'Positioning, message and tone, decided together and written down. If your team cannot repeat it in one sentence, neither can your market — so we keep working until it is that short.',
+    img: '/approach/02.webp',
+  },
+  {
+    id: 'make', n: '03', title: 'Make',
+    lead: 'Six disciplines under one roof.',
+    body: 'Identity, content, film, social and advertising built by one team that shares a brief. Nothing gets handed between agencies, so nothing arrives diluted or three weeks late.',
+    img: '/approach/03.webp',
+  },
+  {
+    id: 'grow', n: '04', title: 'Grow',
+    lead: 'We stay for the part that counts.',
+    body: 'The work goes out, we watch what it moves, and we change what is not working. We took one bank from roughly 100 followers to over 10,000 in nine months by staying in the room after launch.',
+    img: '/approach/04.webp',
+  },
+]

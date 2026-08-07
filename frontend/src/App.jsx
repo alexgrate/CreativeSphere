@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './ui/Header'
 import Hero from './ui/Hero'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
-import Impact from './ui/Impact'
+import Approach from './ui/Approach'
 import Formats from './ui/Formats'
 import Studio from './ui/Studio'
 import StartProject from './ui/StartProject'
@@ -22,7 +22,7 @@ function Home() {
       <Header />
       <main className="shell">
         <Hero />
-        <Impact />
+        <Approach />
         <Formats />
         <Studio />
         <StartProject />

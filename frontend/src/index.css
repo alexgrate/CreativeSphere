@@ -757,34 +757,33 @@ html.is-menu body {
 
   .studio {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 40px;
-    min-height: 586px;
     margin-top: 14px;
-    padding: 64px 0 0 64px;
+    padding: 72px 0 0;
     border-radius: 24px;
     overflow: hidden;
-    background: linear-gradient(100deg, #fff 0%, #f2f2f4 46%, #d9d9de 100%);
+    background: linear-gradient(120deg, #ffffff 0%, #f3f3f5 48%, #e2e2e7 100%);
   }
 
-  .studio-copy{
-    padding-bottom: 64px;
+  /* copy sits above the shot: heading left, the supporting column right */
+  .studio-top {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    align-items: end;
+    gap: 48px;
+    padding: 0 64px 56px;
   }
 
-  .studio-copy h2{
+  .studio-top h2 {
     font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-    font-size: clamp(2.3rem, 3.9vw, 4rem);
+    font-size: clamp(2.3rem, 4.2vw, 4.2rem);
     font-weight: 500;
-    line-height: 1.04;
-    letter-spacing: -0.03em;
+    line-height: 1.02;
+    letter-spacing: -0.032em;
   }
 
-  .studio-copy p{
-    margin-top: 24px;
+  .studio-aside p {
     max-width: 34em;
-    font-size: clamp(16px, 1.3vw, 20px);
+    font-size: clamp(16px, 1.2vw, 18.5px);
     line-height: 1.65;
     color: #4b4d54;
   }
@@ -792,59 +791,58 @@ html.is-menu body {
   .studio-actions {
     display: flex;
     align-items: center;
-    gap: 28px;
-    margin-top: 38px;
+    gap: 26px;
+    margin-top: 32px;
     flex-wrap: wrap;
   }
 
   .studio-btn {
-    padding: 15px 26px;
-    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    height: 52px;
+    padding: 0 28px;
+    border-radius: 999px;
     background: var(--ink);
     color: #fff;
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+    transition: background 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  .studio-btn:hover { background: var(--accent); transform: translateY(-2px); }
 
-  .studio-btn:hover{
-    transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
-  }
-
-  .studio-link{
+  .studio-link {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
     font-size: 15px;
     font-weight: 600;
     color: var(--ink);
     text-decoration: none;
   }
+  .studio-link svg { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+  .studio-link:hover svg { transform: translateX(5px); }
 
-  .studio-link svg{
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .studio-link:hover svg{
-    transform: translateX(6px);
-  }
-
-  .studio-portrait{
-    align-self: end;
-    justify-self: end;
-    width: min(672px, 100%);
-    padding-right: 46px;
-  }
-
-  .studio-portrait img{
+  /* full-bleed band inside the panel; aspect-ratio keeps the wordmark on the
+     wall intact instead of cover cropping straight through it */
+  .studio-shot {
     width: 100%;
-    height: 493px;
+    overflow: hidden;
+  }
+  .studio-shot img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1800 / 704;
     object-fit: cover;
-    object-position: top center;
-    display: block
-    ;
+    object-position: center;
+    display: block;
+    transform: scale(1.02);
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .studio:hover .studio-shot img { transform: scale(1); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .studio-shot img, .studio-btn, .studio-link svg { transition: none; }
   }
 
   .cta{
@@ -1685,6 +1683,138 @@ html.is-menu body {
     .ct-btn, .ct-btn svg, .ct-field input, .ct-field textarea { transition: none; }
   }
 
+
+  /* APPROACH — leftcoast/consulting card behaviour: the card lifts on hover
+     while an image panel opens from zero height and the image inside un-zooms
+     from 1.15 to 1. Theirs: h-130 card, rounded-3xl, scale-107, duration-700. */
+  .apr { padding: 104px 48px 96px; }
+
+  .apr-head {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 56px;
+  }
+
+  .apr-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  .apr-lead {
+    max-width: 34em;
+    font-size: 17px;
+    line-height: 1.62;
+    color: #3d3f45;
+  }
+
+  .apr-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .apr-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 520px;
+    padding: 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(11, 11, 14, 0.05);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.7s ease;
+  }
+  .apr-card:hover,
+  .apr-card.is-open {
+    transform: scale(1.05);
+    box-shadow: 0 24px 60px -22px rgba(11, 11, 14, 0.35);
+  }
+
+  .apr-n {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(3rem, 4.4vw, 4.4rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  /* the panel carries the whole reveal: zero height until you reach it */
+  .apr-media {
+    height: 0;
+    margin-top: 16px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--bg);
+    transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .apr-card:hover .apr-media,
+  .apr-card.is-open .apr-media { height: 190px; }
+
+  .apr-media img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.15);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .apr-card:hover .apr-media img,
+  .apr-card.is-open .apr-media img { transform: scale(1); }
+
+  .apr-body {
+    margin-top: 16px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #4b4d54;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .apr-card:hover .apr-body,
+  .apr-card.is-open .apr-body {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.14s;
+  }
+
+  /* pinned to the bottom, so the number and the title bracket the card */
+  .apr-foot { margin-top: auto; }
+  .apr-foot svg { color: var(--accent); }
+
+  .apr-foot h3 {
+    margin-top: 14px;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(1.5rem, 2vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+
+  .apr-sub {
+    margin-top: 6px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apr-card, .apr-media, .apr-media img, .apr-body { transition: none; }
+  }
+
+  /* two up, then one — four 520px cards need real width */
+  @media (max-width: 1100px) {
+    .apr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .apr-head { grid-template-columns: 1fr; gap: 20px; align-items: start; }
+  }
+
   /* CAPABILITIES — four centred columns, auto-fit so they reflow to 2 then 1 */
   .cap { padding: 40px 48px 90px; }
 
@@ -2132,27 +2262,22 @@ html.is-menu body {
     .fmt-slot--big { flex: 1 1 100%; }
     .fmt-nav { display: none; }
 
-    .studio{
-      grid-template-columns: 1fr;
-      gap: 0;
-      min-height: 0;
-      padding: 48px 24px 0;
+    .studio {
+      padding: 48px 0 0;
       border-radius: 16px;
     }
 
-    .studio-copy{
-      padding-bottom: 36px;
+    /* one column, and the shot goes taller so a 2.56:1 frame still reads
+       on a narrow screen */
+    .studio-top {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 22px;
+      padding: 0 24px 36px;
     }
-
-    .studio-portrait{
-      padding-right: 0;
-      justify-self: center;
-      width: 100%;
-    }
-
-    .studio-portrait img{
-      height: clamp(280px, 62vw, 380px);
-    }
+    .studio-actions { gap: 18px; margin-top: 26px; }
+    .studio-btn { height: 48px; padding: 0 24px; font-size: 14px; }
+    .studio-shot img { aspect-ratio: 16 / 11; }
 
     .ftr { padding: 40px 24px 26px; }
     .ftr-row { flex-direction: column; align-items: flex-start; gap: 22px; margin-top: 36px; }
@@ -2201,6 +2326,18 @@ html.is-menu body {
     .ct-offices { margin-top: 44px; gap: 30px; }
     .ct-field textarea { min-height: 150px; }
     .ct-btn { width: 100%; justify-content: center; }
+
+    .apr { padding: 64px 24px 72px; }
+    .apr-head { margin-bottom: 34px; }
+    .apr-lead { font-size: 16px; }
+    .apr-grid { grid-template-columns: 1fr; gap: 16px; }
+    /* no hover on touch, so the panel is open by default and the card is short */
+    .apr-card { height: auto; padding: 18px; }
+    .apr-media { height: 176px; margin-top: 14px; }
+    .apr-media img { height: 176px; transform: none; }
+    .apr-body { opacity: 1; transform: none; }
+    .apr-card:hover, .apr-card.is-open { transform: none; }
+    .apr-foot { margin-top: 18px; }
 
     .cap { padding: 24px 24px 64px; }
     .cap-title { margin-bottom: 44px; }
