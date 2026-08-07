@@ -80,3 +80,71 @@ export const TIMELINE = [
     body: 'From insurance to clean energy to art, the studio now works across eight sectors with nine brands transformed.',
     img: '/timeline/2025.webp' },
 ]
+
+export const SERVICES = [
+  { id: 'strategy',  title: 'Brand strategy',     img: '/svc/1.webp' },
+  { id: 'identity',  title: 'Identity & design',  img: '/svc/2.webp' },
+  { id: 'content',   title: 'Content production', img: '/svc/3.webp' },
+  { id: 'social',    title: 'Social media',       img: '/svc/4.webp' },
+  { id: 'ads',       title: 'Advertising',        img: '/svc/5.webp' },
+  { id: 'analytics', title: 'Analytics & growth', img: '/svc/6.webp' },
+]
+
+export const GALLERY = [
+  { src: '/gallery/01.webp', alt: 'CHI Nigeria campaign' },
+  { src: '/gallery/02.webp', alt: 'The Creative Sphere team' },
+  { src: '/gallery/03.webp', alt: 'Chivita retail activation' },
+  { src: '/gallery/04.webp', alt: 'Prudential Zenith community' },
+  { src: '/gallery/05.webp', alt: 'ESVolt clean energy' },
+  { src: '/gallery/06.webp', alt: 'Inside the studio' },
+  { src: '/gallery/07.webp', alt: 'VFD / Vbank brand work' },
+  { src: '/gallery/08.webp', alt: 'Aurora lifestyle' },
+  { src: '/gallery/09.webp', alt: 'Acacia Solicitors identity' },
+]
+
+// the "that's not all" accordion — the work that surrounds the six disciplines
+export const EXTRAS = [
+  {
+    id: 'influencer', title: 'Influencer campaigns',
+    body: 'One coordinated push — fifty nano-influencers briefed, scheduled and managed as a single campaign voice, so the message lands the same way whoever is saying it.',
+  },
+  {
+    id: 'community', title: 'Community management',
+    body: 'Day-to-day custody of the comment section, the DMs and the replies. We handled community for Prudential Zenith, where tone under pressure is the whole job.',
+  },
+  {
+    id: 'activation', title: 'Retail & experiential activation',
+    body: 'Campaign work for CHI Limited — Chivita and Capri-Sonne — took us into national retail activation, turning a brand idea into something people meet in person.',
+  },
+  {
+    id: 'production', title: 'Photography & video production',
+    body: 'Shoots planned around the edit and the platform, not the other way round. One production run feeds the campaign film, the cutdowns and the stills.',
+  },
+  {
+    id: 'management', title: 'Brand management',
+    body: 'Ongoing custody of a brand once the identity is built — guardrails, asset libraries and the judgement calls that keep it consistent as it grows.',
+  },
+  {
+    id: 'growth', title: 'Social growth & reporting',
+    body: 'We took VFD Bank’s X account from roughly 100 followers to over 10,000 in nine months, and reported on what actually moved rather than what looked good.',
+  },
+]
+
+export const CAPABILITIES = [
+  {
+    id: 'strategy', title: 'Strategy',
+    items: ['Brand positioning', 'Market research', 'Messaging frameworks', 'Campaign planning', 'Content strategy'],
+  },
+  {
+    id: 'design', title: 'Design',
+    items: ['Visual identity', 'Logo systems', 'Packaging', 'Brand guidelines', 'Art direction'],
+  },
+  {
+    id: 'content', title: 'Content',
+    items: ['Photography', 'Video production', 'Motion graphics', 'Copywriting', 'Social assets'],
+  },
+  {
+    id: 'growth', title: 'Growth',
+    items: ['Paid media', 'Influencer marketing', 'Community management', 'Search & discovery', 'Analytics & reporting'],
+  },
+]

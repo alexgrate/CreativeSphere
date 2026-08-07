@@ -1003,9 +1003,22 @@
   }
 
   .ftr-mark{
+    position: relative;        /* the liquid canvas anchors to this */
     margin-bottom: auto;
-    overflow: hidden;          
+    cursor: pointer;           /* it reacts to you — say so */
   }
+
+  /* the canvas overlays the real text and only takes over once it is painting;
+     the wave needs vertical room, hence the negative top set in JS */
+  .ftr-liquid {
+    position: absolute;
+    left: 0;
+    pointer-events: none;
+  }
+
+  /* kept in the DOM: GSAP still sweeps its background-position and the canvas
+     reads that value to place the spark. visibility, not display. */
+  .ftr-word.is-quiet { visibility: hidden; }
 
   .ftr-word {
     display: inline-block;
@@ -1139,14 +1152,8 @@
   }
 
     .tl {
-    /* bump this if TIMELINE grows — it keeps every era on screen at once on
-       desktop, so the track has nothing to travel and nothing gets clipped */
     --cols: 4;
-    /* one knob for column width — the ruler, the ticks and the detail all key
-       off it, so they can never drift apart. 76px = shell padding + gutter. */
     --col: clamp(300px, calc((min(100vw, 1800px) - 76px) / var(--cols)), 440px);
-    /* the detail area is a fixed reservation: the panel gets pinned, and a
-       pinned box that changes height mid-scroll tears the layout */
     --detail-h: 370px;
     background: var(--panel);
     border-radius: 24px;
@@ -1183,9 +1190,6 @@
   }
   .tl-nav button:hover { background: var(--accent); transform: translateY(-2px); }
 
-  /* Default is a plain scrollable rail — that's the honest fallback when the
-     panel is too tall to pin, when JS hasn't run, or under reduced motion.
-     The pin only takes over once Timeline.jsx confirms it fits. */
   .tl-rail {
     overflow-x: auto;
     scrollbar-width: none;
@@ -1197,7 +1201,6 @@
   .tl-rail::-webkit-scrollbar { display: none; }
   .tl-item { scroll-snap-align: start; }
 
-  /* pinned: page scroll drives the track, so the rail must not scroll itself */
   .tl.is-pinned .tl-rail {
     overflow: hidden;
     scroll-snap-type: none;
@@ -1257,8 +1260,6 @@
     justify-content: space-between;
     height: var(--tick-max);
     margin-top: auto;
-    /* pull back over .tl-top's gutter so the trace starts at the rule and
-       ends exactly where the next column's begins — one unbroken ruler */
     margin-left: -26px;
     padding-left: 26px;
     width: var(--col);
@@ -1279,8 +1280,6 @@
     background: var(--accent);
   }
 
-  /* every column reserves the same detail height, so the pinned panel is a
-     constant size no matter which year is open */
   .tl-detail {
     height: var(--detail-h);
     opacity: 0;
@@ -1320,6 +1319,362 @@
   @media (prefers-reduced-motion: reduce) {
     .tl-ticks span { transition: none; transition-delay: 0s; }
     .tl-detail { transition: none; }
+  }
+
+  .gal {
+    overflow: hidden;
+    margin: 96px -14px;
+  }
+
+  .gal-strip {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .gal-item {
+    flex: 0 0 auto;
+    height: 375px;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .gal-item img {
+    display: block;
+    height: 100%;
+    width: auto;     
+    object-fit: cover;
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gal { overflow-x: auto; scrollbar-width: none; }
+    .gal::-webkit-scrollbar { display: none; }
+  }
+
+
+
+  /* CAPABILITIES — four centred columns, auto-fit so they reflow to 2 then 1 */
+  .cap { padding: 40px 48px 90px; }
+
+  .cap-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.6rem, 6vw, 4.8rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    text-align: center;
+    margin-bottom: 76px;
+  }
+
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 62px 53px;
+    max-width: 1360px;
+    margin-inline: auto;
+  }
+
+  .cap-col { text-align: center; }
+
+  .cap-head {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin-bottom: 26px;
+  }
+
+  .cap-list { list-style: none; }
+
+  .cap-list li {
+    font-size: 16px;
+    line-height: 1.55;
+    color: #5a5c63;
+    padding: 7px 0;
+  }
+
+  /* auto-fit lands on 3 here, which orphans the fourth column — force 2x2 */
+  @media (min-width: 640px) and (max-width: 1150px) {
+    .cap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  /* CTA panel */
+  .cta2 { padding: 0 48px 96px; }
+
+  .cta2-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 28px 40px;
+    background: var(--panel);
+    border-radius: 20px;
+    padding: 62px 64px;
+    max-width: 1360px;
+    margin-inline: auto;
+  }
+
+  .cta2-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  /* all the icons occupy the same cell; only the active one is painted */
+  .cta2-icon {
+    position: relative;
+    width: 74px;
+    height: 74px;
+    justify-self: end;
+    color: var(--accent);
+  }
+  .cta2-icon svg {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    opacity: 0;
+    transform: scale(0.72) rotate(-12deg);
+    transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cta2-icon svg.is-on { opacity: 1; transform: none; }
+
+  .cta2-note {
+    align-self: end;
+    font-size: 16px;
+    color: var(--muted);
+  }
+
+  .cta2-btn {
+    align-self: end;
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 26px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.3s ease;
+  }
+  .cta2-btn svg { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+  .cta2-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(13, 114, 255, 0.3);
+  }
+  .cta2-btn:hover svg { transform: translateX(4px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta2-icon svg, .cta2-btn, .cta2-btn svg { transition: none; }
+  }
+
+  /* ACCORDION — "that's not all". Multi-open, like the reference: opening one
+     never closes another. Reveal uses grid-template-rows 0fr -> 1fr because
+     height:auto can't be transitioned. */
+  .acc {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 64px;
+    align-items: start;
+    padding: 40px 48px 110px;
+  }
+
+  .acc-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.4rem, 5.4vw, 4.6rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  .acc-lead {
+    margin-top: 44px;
+    font-size: 17px;
+    color: #3d3f45;
+  }
+
+  .acc-list { list-style: none; }
+
+  .acc-item { border-bottom: 1px solid var(--line); }
+
+  .acc-head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 26px 4px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+  }
+
+  .acc-mark { flex: 0 0 auto; color: var(--accent); }
+
+  .acc-label {
+    flex: 1 1 auto;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* one plus, rotated into a cross — no second icon to swap in */
+  .acc-sign {
+    flex: 0 0 auto;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+  }
+  .acc-item.is-open .acc-sign { transform: rotate(45deg); color: var(--accent); }
+
+  .acc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .acc-item.is-open .acc-body { grid-template-rows: 1fr; }
+
+  .acc-body-inner {
+    min-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .acc-item.is-open .acc-body-inner { opacity: 1; transition: opacity 0.45s ease 0.12s; }
+
+  .acc-body-inner p {
+    padding: 0 48px 30px 34px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: #4b4d54;
+    max-width: 46em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .acc-body, .acc-body-inner, .acc-sign { transition: none; }
+  }
+
+  /* SERVICELIST */
+
+  .svc { padding: 56px 48px 96px; }
+
+  .svc-head,
+  .svc-body {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .svc-head { margin-bottom: 92px; }
+
+  .svc-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.8rem, 7vw, 6.4rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .svc-lead {
+    display: flex;
+    gap: 14px;
+    margin-top: 40px;
+    max-width: 34em;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #3d3f45;
+  }
+  .svc-lead svg { flex: 0 0 auto; margin-top: 4px; color: var(--muted); }
+
+  .svc-stat { display: flex; flex-direction: column; }
+
+  .svc-stat-label { font-size: 16px; color: var(--muted); }
+
+  .svc-stat-value {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(3.6rem, 8vw, 7rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-top: 6px;
+  }
+
+  .svc-stat-note {
+    margin-top: 14px;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .svc-note {
+    font-size: 16.5px;
+    line-height: 1.62;
+    color: #4b4d54;
+    padding-top: 8px;
+  }
+
+  .svc-list {
+    position: relative;       
+    border-top: 1px solid var(--line);
+  }
+
+  .svc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 26px 24px;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.35s ease;
+  }
+  .svc-row.is-active { background: rgba(0, 0, 0, 0.03); }
+
+  .svc-name {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(1.15rem, 2vw, 1.6rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  
+
+  
+
+  .svc-preview {
+    position: absolute;
+    top: 0; left: 0;
+    width: 240px;
+    height: 263px;
+    z-index: 2;
+    pointer-events: none;        
+    opacity: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    will-change: transform, opacity;
+  }
+  .svc-preview img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .svc-preview img.is-on { opacity: 1; }
+
+  @media (hover: none) {
+    .svc-preview { display: none; }
   }
 
 
@@ -1450,26 +1805,17 @@
 
     .tl {
       --col: 78vw;
-      /* The panel can only be pinned if it fits the viewport, and a phone's
-         usable height is nothing like its CSS height once the browser chrome
-         is showing. So the detail area takes whatever is left over instead of
-         being a fixed number: 100svh is the *small* viewport (bars visible),
-         which is the conservative one. 455px = the panel's fixed overhead
-         (384px of padding + head + ruler) plus the 64px header, plus slack. */
       --detail-h: clamp(260px, calc(100vh - 455px), 340px);
       --detail-h: clamp(260px, calc(100svh - 455px), 340px);
       padding: 40px 0 32px;
       border-radius: 16px;
     }
     .tl-head { padding: 0 24px; margin-bottom: 28px; }
-    /* arrows STAY on mobile — they're the only visible way to jump a year */
     .tl-nav button { width: 40px; height: 40px; }
     .tl-rail { padding-left: 24px; scroll-padding-left: 24px; }
     .tl-top { min-height: 150px; padding-left: 18px; }
     .tl-ticks { --tick-max: 44px; margin-left: -18px; padding-left: 18px; }
 
-    /* the image absorbs whatever height the copy leaves behind, so the detail
-       block always lands exactly on its reservation */
     .tl-detail-in {
       display: flex;
       flex-direction: column;
@@ -1478,21 +1824,44 @@
     }
     .tl-img {
       flex: 1 1 auto;
-      /* absorbs the slack — but never below this. An image squeezed to a
-         sliver reads as a rendering bug, and hiding it outright (which this
-         used to do) is worse. If the floor makes the panel too tall to pin,
-         the fit check drops to the scrollable rail instead. */
       min-height: 64px;
       aspect-ratio: auto;
       max-width: 240px;
       margin-top: 16px;
     }
+
+    .cap { padding: 24px 24px 64px; }
+    .cap-title { margin-bottom: 44px; }
+    .cap-grid { gap: 44px 28px; }
+    .cap-head { font-size: 1.2rem; margin-bottom: 18px; }
+    .cap-list li { font-size: 15px; padding: 6px 0; }
+
+    .cta2 { padding: 0 24px 72px; }
+    /* one column: heading, icon, note, button stack in reading order */
+    .cta2-inner { grid-template-columns: 1fr; gap: 24px; padding: 36px 26px; border-radius: 16px; }
+    .cta2-icon { justify-self: start; width: 56px; height: 56px; order: -1; }
+    .cta2-btn { justify-self: start; }
+
+    .acc { grid-template-columns: 1fr; gap: 32px; padding: 24px 24px 72px; }
+    .acc-lead { margin-top: 20px; font-size: 16px; }
+    .acc-head { padding: 20px 2px; gap: 12px; }
+    .acc-body-inner p { padding: 0 8px 24px 30px; font-size: 15.5px; }
+
+    .gal { margin: 60px -14px; }
+    .gal-item { height: 240px; border-radius: 10px; }
+
+    .svc { padding: 32px 24px 64px; }
+    .svc-head,
+    .svc-body { grid-template-columns: 1fr; gap: 40px; }
+    .svc-head { margin-bottom: 52px; }
+    .svc-lead { margin-top: 26px; font-size: 16px; }
+    .svc-row { padding: 20px 8px; gap: 14px; }
+    .svc-name { gap: 12px; }
+    .svc-note { padding-top: 0; font-size: 15.5px; }
+
   }
 
-  /* short phones — claw back another ~90px so the pin is still possible */
   @media (max-width: 960px) and (max-height: 740px) {
-    /* this block's overhead is 312px, not the 384px of the block above, so
-       it needs its own constant: 312 + the 64px header + slack */
     .tl {
       --detail-h: clamp(235px, calc(100vh - 384px), 340px);
       --detail-h: clamp(235px, calc(100svh - 384px), 340px);
@@ -1510,7 +1879,6 @@
   @media (max-width: 639px) {
     .tl { --col: 86vw; }
 
-    /* side-by-side squeezes the heading to two words a line — stack instead */
     .tl-head {
       flex-direction: column;
       align-items: flex-start;
