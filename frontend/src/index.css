@@ -22,6 +22,15 @@
   :root { --ftr-h: 420px; }
 }
 
+/* Loader scroll lock. Unlayered on purpose: layered rules lose to unlayered
+   ones, and this must win. <html> as well as <body> — body alone is not enough. */
+html.is-loading,
+html.is-loading body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 @layer base {
 
   * {
@@ -1365,7 +1374,10 @@
     display: grid;
     place-items: center;
     background: transparent;      /* the slats are the ground */
-    pointer-events: none;
+    /* it must swallow input, not pass it through — with pointer-events:none
+       the page behind stayed scrollable and clickable during load */
+    pointer-events: auto;
+    touch-action: none;
   }
 
   .ld-curtain { position: absolute; inset: 0; }

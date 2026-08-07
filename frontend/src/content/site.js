@@ -1,7 +1,7 @@
 export const HERO_SLIDES = [
   { id: 'chi', name: 'CHI Nigeria', tag: 'FMCG · Lagos', img: '/hero/chi.webp' },
   { id: 'vfd', name: 'VFD / Vbank', tag: 'Banking', img: '/hero/vfd.webp' },
-  { id: 'dash', name: 'Dash MFB', tag: 'Fintech', img: '/heo/hero 2-02.webp' },
+  { id: 'dash', name: 'Dash MFB', tag: 'Fintech', img: '/hero/esvolt.webp' },
   { id: 'aurora', name: 'Acacia', tag: 'Lifestyle', img: '/hero/aurora.webp' },
   { id: 'prudential', name: 'Prudential Zenith', tag: 'Insurance', img: '/hero/prudential.webp' },
 ]
