@@ -1,0 +1,10 @@
+reel.mp4 / reel.webm / poster.webp — PLACEHOLDER
+
+Source:  https://coverr.co  ("audio recording studio", slug coverr-audio-recording-studio-1475)
+Licence: Coverr free licence — free for commercial use, no attribution required.
+         Verify at https://coverr.co/license before launch.
+
+Processing: letterbox cropped (1920x1012 -> 1920x800), scaled to 1280 wide,
+ping-ponged (forward + reversed) so the ~10s clip loops without a hard cut.
+
+Swap in the real Creative Sphere showreel and delete this file.
