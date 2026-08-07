@@ -7,6 +7,7 @@ import Formats from './ui/Formats'
 import Studio from './ui/Studio'
 import StartProject from './ui/StartProject'
 import NotFound from './ui/NotFound'
+import Loader from './ui/Loader'
 import Footer from './ui/Footer'
 import { useReveal } from './hooks/useReveal'
 import AboutPage from './pages/AboutPage'
@@ -35,6 +36,7 @@ function Home() {
 export default function App() {
   return (
     <BrowserRouter>
+      <Loader />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path='/about' element={<AboutPage />} />

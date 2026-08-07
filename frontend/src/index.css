@@ -1356,6 +1356,152 @@
 
 
 
+
+  /* LOADER — ink curtain, counts to 100, then lifts away slat by slat */
+  .ld {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: transparent;      /* the slats are the ground */
+    pointer-events: none;
+  }
+
+  .ld-curtain { position: absolute; inset: 0; }
+
+  .ld-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* +1px so sub-pixel rounding can't open hairline gaps between slats */
+    width: calc(100% / 5 + 1px);
+    left: calc(var(--i) * 100% / 5);
+    background: var(--ink);
+    transform: translateY(0);
+    transition: transform 0.86s cubic-bezier(0.76, 0, 0.24, 1);
+    transition-delay: calc(var(--i) * 70ms);
+  }
+  /* lift from the far side back, so the eye travels with it */
+  .ld.is-out .ld-panel { transform: translateY(-101%); }
+
+  .ld-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  .ld.is-out .ld-inner {
+    opacity: 0;
+    transform: translateY(-18px) scale(1.04);
+  }
+
+  .ld-logo {
+    /* the -trim asset is 334x145 of actual ink. The untrimmed 500x500 one is
+       mostly transparent padding and opens a huge gap under the mark. */
+    width: min(300px, 62vw);
+    height: auto;
+    display: block;
+    animation: ldIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes ldIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .ld-rule {
+    display: block;
+    width: min(300px, 62vw);
+    height: 1px;
+    background: rgba(255, 255, 255, 0.16);
+    overflow: hidden;
+  }
+  .ld-rule i {
+    display: block;
+    height: 100%;
+    background: var(--accent-lift);
+    transform-origin: left center;
+    transition: transform 0.3s ease-out;
+  }
+
+  .ld-count {
+    display: flex;
+    align-items: baseline;
+    color: #fff;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.6rem, 7vw, 4rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    animation: ldIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+
+  /* the window each digit strip slides behind */
+  .ld-digit {
+    display: block;
+    height: 1em;
+    overflow: hidden;
+  }
+  .ld-roll {
+    display: block;
+    transition: transform var(--spd, 0.5s) cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ld-roll b {
+    display: block;
+    height: 1em;
+    font-weight: inherit;
+  }
+
+  .ld-pct {
+    margin-left: 8px;
+    font-size: 0.36em;
+    color: var(--accent-lift);
+  }
+
+  .ld-tag {
+    position: absolute;
+    z-index: 1;
+    bottom: 34px;
+    /* .ld is a grid with place-items:center, which re-aligns abspos children
+       inside their grid area — left:50%+translate lands off-centre. Span the
+       full width and centre the text instead. */
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    white-space: nowrap;
+    animation: ldIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.24s both;
+    transition: opacity 0.35s ease;
+  }
+  .ld.is-out .ld-tag { opacity: 0; }
+
+  .ld-sr {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 639px) {
+    .ld-inner { gap: 22px; }
+    .ld-tag { font-size: 9px; letter-spacing: 0.16em; bottom: 26px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ld-panel, .ld-inner, .ld-roll, .ld-rule i, .ld-tag { transition: none; }
+    .ld-logo, .ld-count, .ld-tag { animation: none; }
+  }
+
   /* CONTACT */
   .ct {
     display: grid;
