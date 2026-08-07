@@ -25,7 +25,7 @@ export default function StartProject() {
                     Let&rsquo;s build. Every standout brand begins with one conversation.
                     Tell us where you want to be, and we&rsquo;ll show you how to get there.
                 </p>
-                <a href="/start" className="cta-btn" data-reveal>Let&rsquo;s talk</a>
+                <a href="/contact" className="cta-btn" data-reveal>Let&rsquo;s talk</a>
             </div>
         </section>
     )

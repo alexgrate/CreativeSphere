@@ -28,7 +28,7 @@ export default function Header() {
                     <a href="/services">Services</a>
                 </nav>
 
-                <a href="/start" className="hdr-cta hidden lg:inline-flex">
+                <a href="/contact" className="hdr-cta hidden lg:inline-flex">
                     Let&rsquo;s talk
                 </a>
 
@@ -55,7 +55,7 @@ export default function Header() {
                     <a href="/about">About</a>
                     <a href="/work">Work</a>
                     <a href="/services">Services</a>
-                    <a href="/start" className="mob-cta">Let&rsquo;s talk</a>
+                    <a href="/contact" className="mob-cta">Let&rsquo;s talk</a>
                 </nav>
             </div>
         </>

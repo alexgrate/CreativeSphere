@@ -1355,6 +1355,164 @@
 
 
 
+
+  /* CONTACT */
+  .ct {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 64px;
+    align-items: start;
+    padding: 48px 48px 110px;
+  }
+
+  .ct-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .ct-lead {
+    margin-top: 32px;
+    max-width: 32em;
+    font-size: 17px;
+    line-height: 1.62;
+    color: #3d3f45;
+  }
+  .ct-lead a { color: var(--accent); text-decoration: none; }
+  .ct-lead a:hover { text-decoration: underline; }
+
+  .ct-offices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    margin-top: 84px;
+  }
+
+  .ct-office svg { color: var(--accent); margin-bottom: 18px; }
+
+  .ct-city {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  /* live state, not decoration — red when the studio is shut */
+  .ct-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #d9534f;
+    transition: background 0.3s ease;
+  }
+  .ct-dot.is-open { background: #34c759; }
+
+  .ct-sr {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ct-org { margin-top: 14px; font-weight: 600; }
+
+  .ct-meta {
+    margin-top: 10px;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .ct-meta a { color: inherit; text-decoration: none; }
+  .ct-meta a:hover { color: var(--accent); }
+
+  /* form */
+  .ct-rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 24px;
+  }
+
+  .ct-field { display: flex; flex-direction: column; grid-column: 1 / -1; }
+  .ct-field.is-half { grid-column: auto; }
+
+  .ct-field label {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .ct-field label i { color: var(--accent); font-style: normal; }
+
+  .ct-field input,
+  .ct-field textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 16px;         /* under 16px iOS zooms the page on focus */
+    color: var(--ink);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .ct-field textarea { resize: vertical; min-height: 190px; }
+
+  .ct-field input:focus,
+  .ct-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(13, 114, 255, 0.15);
+  }
+
+  .ct-field .has-error { border-color: #d9534f; }
+
+  .ct-err { margin-top: 8px; font-size: 13.5px; color: #d9534f; }
+
+  .ct-count { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+
+  .ct-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding: 17px 30px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.3s ease;
+  }
+  .ct-btn svg { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+  .ct-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(13, 114, 255, 0.3);
+  }
+  .ct-btn:hover svg { transform: translateX(4px); }
+
+  .ct-status { margin-top: 14px; font-size: 15px; color: var(--muted); }
+
+  /* two inputs across stops being readable well before the layout stacks */
+  @media (max-width: 560px) {
+    .ct-rows { grid-template-columns: 1fr; }
+    .ct-field.is-half { grid-column: 1 / -1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ct-btn, .ct-btn svg, .ct-field input, .ct-field textarea { transition: none; }
+  }
+
   /* CAPABILITIES — four centred columns, auto-fit so they reflow to 2 then 1 */
   .cap { padding: 40px 48px 90px; }
 
@@ -1829,6 +1987,12 @@
       max-width: 240px;
       margin-top: 16px;
     }
+
+    .ct { grid-template-columns: 1fr; gap: 44px; padding: 28px 24px 72px; }
+    .ct-lead { margin-top: 22px; font-size: 16px; }
+    .ct-offices { margin-top: 44px; gap: 30px; }
+    .ct-field textarea { min-height: 150px; }
+    .ct-btn { width: 100%; justify-content: center; }
 
     .cap { padding: 24px 24px 64px; }
     .cap-title { margin-bottom: 44px; }

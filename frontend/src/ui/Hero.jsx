@@ -35,7 +35,7 @@ export default function Hero() {
                         design and story working together. We build that.
                     </p>
                     <div className="hero-buttons">
-                        <a href="/start" className="hero-btn hero-btn-primary">Let&rsquo;s talk</a>
+                        <a href="/contact" className="hero-btn hero-btn-primary">Let&rsquo;s talk</a>
                         <a href="/work" className="hero-btn hero-btn-secondary">Explore the work</a>
                     </div>
                 </div>

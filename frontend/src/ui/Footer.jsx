@@ -2,26 +2,17 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 
 const WORDMARK = 'thecreativesphere'
 
-// A ripple centred on the pointer, not a wave across the whole word — only the
-// part you're touching moves. Columns get pushed up and down, which reads as
-// water; whole-width row displacement just reads as a wobble.
-const AMP_RATIO = 0.11       // vertical travel as a fraction of the text height
-const REACH = 0.26           // ripple radius as a fraction of the mark's width
-const COL = 2                // device px per column — lower is smoother, costlier
+const AMP_RATIO = 0.11       
+const REACH = 0.26          
+const COL = 2              
 
 export default function Footer() {
     const markRef = useRef(null)
     const wordRef = useRef(null)
     const canvasRef = useRef(null)
-    // only hide the real text once the canvas is actually painting
     const [liquid, setLiquid] = useState(false)
 
-    /* The wordmark used to be SVG <text> with textLength + lengthAdjust, which
-       WebKit measures against the fallback font and never re-fits once the real
-       one loads — the word overflowed its 1000-unit viewBox and got cropped at
-       both ends on iOS. This measures the rendered text instead and sets a
-       font-size that fills the footer exactly. The condensed look now comes
-       from the font's own wdth axis, so the glyphs are real, not squashed. */
+
     const fit = useCallback(() => {
         const box = markRef.current
         const el = wordRef.current
@@ -75,8 +66,6 @@ export default function Footer() {
         let raf = 0, alive = true
         let dpr = 1, W = 0, H = 0, PAD = 0, amp = 0, textH = 0, reach = 0
         let lastSweep = -1
-        // where the ripple is centred, and where it's heading — eased so the
-        // water follows the cursor instead of teleporting with it
         let px = 0, pxTarget = 0
 
         const readText = () => {

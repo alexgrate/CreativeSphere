@@ -26,7 +26,7 @@ export default function CTA() {
 
                 <p className="cta2-note">Get in touch with The Creative Sphere.</p>
 
-                <a href="/start" className="cta2-btn">
+                <a href="/contact" className="cta2-btn">
                     Contact us
                     <ArrowRight size={18} strokeWidth={1.8} aria-hidden="true" />
                 </a>
