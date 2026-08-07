@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
 
@@ -20,10 +20,49 @@ const SPARK = [
 export default function Hero() {
     const secRef = useRef(null)
     const sparkRef = useRef(null)
+    const videoRef = useRef(null)
+
+    /* iOS will not honour the autoplay attribute on its own. It needs muted set
+       as a property, playsinline, and an explicit play() — and it still refuses
+       in Low Power Mode, so the last resort is to start on the first touch. */
+    useEffect(() => {
+        const v = videoRef.current
+        if (!v) return
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+        v.muted = true
+        v.defaultMuted = true
+        v.playsInline = true
+
+        let done = false
+        const tryPlay = () => {
+            if (done || !v.paused) return
+            v.play().then(() => { done = true }).catch(() => { /* blocked; wait for a tap */ })
+        }
+        tryPlay()
+        v.addEventListener('loadeddata', tryPlay)
+        v.addEventListener('canplay', tryPlay)
+
+        const onGesture = () => { tryPlay(); }
+        document.addEventListener('touchstart', onGesture, { passive: true })
+        document.addEventListener('click', onGesture)
+        // Safari also suspends playback when the tab is hidden and doesn't
+        // always resume it
+        const onVis = () => { if (!document.hidden) tryPlay() }
+        document.addEventListener('visibilitychange', onVis)
+
+        return () => {
+            v.removeEventListener('loadeddata', tryPlay)
+            v.removeEventListener('canplay', tryPlay)
+            document.removeEventListener('touchstart', onGesture)
+            document.removeEventListener('click', onGesture)
+            document.removeEventListener('visibilitychange', onVis)
+        }
+    }, [])
 
     useLayoutEffect(() => {
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        if (reduce) document.querySelector('.hero-media video')?.pause()
+        if (reduce) videoRef.current?.pause()
 
         const ctx = gsap.context(() => {
             // dash each path by its own length, then run the offsets to zero in
@@ -88,7 +127,16 @@ export default function Hero() {
     return (
         <section className="hero" ref={secRef}>
             <div className="hero-media" aria-hidden="true">
-                <video autoPlay muted loop playsInline preload="metadata" poster="/video/poster.webp">
+                <video
+                    ref={videoRef}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    disablePictureInPicture
+                    preload="auto"
+                    poster="/video/poster.webp"
+                >
                     <source src="/video/reel.webm" type="video/webm" />
                     <source src="/video/reel.mp4" type="video/mp4" />
                 </video>

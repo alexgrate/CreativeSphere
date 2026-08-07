@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
-import { HERO_SLIDES } from "../content/site"
 import { lockScroll } from "../hooks/useSmoothScroll"
 
 const SEEN = 'tcs:loaded'
 
+/* Exactly what the first screen paints. This drifted once already: it was
+   still waiting on a hero slide image after the hero became a video, so the
+   number tracked an asset that was never rendered. */
 const CRITICAL = [
-    '/brand/logo-full-white-trim.png',
-    HERO_SLIDES[0].img,      
+    '/brand/logo-full-white-trim.png',   // the crest wordmark
+    '/brand/logo-mark-white-trim.png',   // the crest mark
+    '/video/poster.webp',                // first frame behind the video
 ]
 
 const MIN_MS = 1100    
@@ -56,10 +59,27 @@ export default function Loader() {
             im.src = src
         }
 
-        const assetsDone = () => ready >= CRITICAL.length && fontsDone
+        // the hero is a video now, so "loaded" has to include it having enough
+        // data to paint — otherwise the curtain lifts onto a blank frame
+        let videoReady = false
+        const watchVideo = () => {
+            const v = document.querySelector('.hero-media video')
+            if (!v) return setTimeout(watchVideo, 120)
+            if (v.readyState >= 2) { videoReady = true; return }
+            const ok = () => { videoReady = true }
+            v.addEventListener('loadeddata', ok, { once: true })
+            v.addEventListener('canplay', ok, { once: true })
+            // a hero-less page (or a video that never loads) must not stall us
+            setTimeout(ok, 3500)
+        }
+        if (document.querySelector('.hero') || true) watchVideo()
+
+        const assetsDone = () => ready >= CRITICAL.length && fontsDone && videoReady
 
         const readTarget = () => {
-            const real = (ready / CRITICAL.length) * 0.78 + (fontsDone ? 0.22 : 0)
+            const real = (ready / CRITICAL.length) * 0.6
+                       + (fontsDone ? 0.2 : 0)
+                       + (videoReady ? 0.2 : 0)
 
             const creep = 0.9 * (1 - Math.exp(-(performance.now() - t0) / 2600))
             return Math.max(real, creep)
