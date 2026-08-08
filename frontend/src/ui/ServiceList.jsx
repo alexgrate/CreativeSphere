@@ -94,6 +94,12 @@ export default function ServiceList() {
                 key={s.id}
                 onPointerEnter={() => setActive(i)}
               >
+
+                <figure className="svc-shot" aria-hidden="true">
+                  <img src={s.img} alt="" loading="lazy" />
+                  <span className="svc-idx">{String(i + 1).padStart(2, '0')}</span>
+                </figure>
+
                 <span className="svc-name">
                   <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
                   {s.title}
