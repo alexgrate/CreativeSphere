@@ -1,10 +1,3 @@
-export const HERO_SLIDES = [
-  { id: 'chi', name: 'CHI Nigeria', tag: 'FMCG · Lagos', img: '/hero/chi.webp' },
-  { id: 'vfd', name: 'VFD / Vbank', tag: 'Banking', img: '/hero/vfd.webp' },
-  { id: 'dash', name: 'Dash MFB', tag: 'Fintech', img: '/hero/esvolt.webp' },
-  { id: 'aurora', name: 'Acacia', tag: 'Lifestyle', img: '/hero/aurora.webp' },
-  { id: 'prudential', name: 'Prudential Zenith', tag: 'Insurance', img: '/hero/prudential.webp' },
-]
 
 export const IMPACT = [
   {
@@ -25,17 +18,14 @@ export const IMPACT = [
   },
 ]
 
-/* The four /hero/*.jpg entries here pointed at a directory that was deleted when
-   the hero became a video, so the carousel was rendering four broken frames.
-   Repointed at existing work imagery; alts are generic because these are stand-ins
-   — swap for the real per-client format shots when they land. */
 export const FORMATS = [
-  { id: 'vbank',      img: '/format/vbank.webp', alt: 'VFD / Vbank social campaign' },
-  { id: 'campaign',   img: '/gallery/01.webp',   alt: 'Campaign film still' },
-  { id: 'identity',   img: '/gallery/06.webp',   alt: 'Brand identity applied in print' },
-  { id: 'social',     img: '/gallery/09.webp',   alt: 'Social-first content set' },
-  { id: 'activation', img: '/gallery/04.webp',   alt: 'Retail activation photography' },
+  { id: 'campaign', img: '/format/1-campaign.webp', alt: 'Campaign film in production' },
+  { id: 'system',   img: '/format/2-system.webp',   alt: 'Campaign frames laid out as a system' },
+  { id: 'identity', img: '/format/3-identity.webp', alt: 'Printed identity, stacked and checked' },
+  { id: 'social',   img: '/format/4-social.webp',   alt: 'Social content being filmed' },
+  { id: 'product',  img: '/format/5-product.webp',  alt: 'Packaging shot in the studio' },
 ]
+
 
 export const LOGOS = [
   { name: 'CHI Nigeria',            src: '/logos/chi.webp' },
@@ -90,16 +80,17 @@ export const SERVICES = [
 ]
 
 export const GALLERY = [
-  { src: '/gallery/01.webp', alt: 'CHI Nigeria campaign' },
-  { src: '/gallery/02.webp', alt: 'The Creative Sphere team' },
-  { src: '/gallery/03.webp', alt: 'Chivita retail activation' },
-  { src: '/gallery/04.webp', alt: 'Prudential Zenith community' },
-  { src: '/gallery/05.webp', alt: 'ESVolt clean energy' },
-  { src: '/gallery/06.webp', alt: 'Inside the studio' },
-  { src: '/gallery/07.webp', alt: 'VFD / Vbank brand work' },
-  { src: '/gallery/08.webp', alt: 'Aurora lifestyle' },
-  { src: '/gallery/09.webp', alt: 'Acacia Solicitors identity' },
+  { src: '/gallery/01.webp', alt: 'On location with the crew' },
+  { src: '/gallery/02.webp', alt: 'Reviewing materials in the studio' },
+  { src: '/gallery/03.webp', alt: 'Shooting social content' },
+  { src: '/gallery/04.webp', alt: 'In the print studio' },
+  { src: '/gallery/05.webp', alt: 'Product and packaging still life' },
+  { src: '/gallery/06.webp', alt: 'The studio floor' },
+  { src: '/gallery/07.webp', alt: 'Lettering and craft on the desk' },
+  { src: '/gallery/08.webp', alt: 'Two designers going through prints' },
+  { src: '/gallery/09.webp', alt: 'Typography and layout reference' },
 ]
+
 
 export const EXTRAS = [
   {
@@ -153,25 +144,25 @@ export const APPROACH = [
     id: 'understand', n: '01', title: 'Understand',
     lead: 'We start with the business, not the brief.',
     body: 'Before anything gets designed we learn how you actually make money, who you are really competing with, and what your audience already believes. Most briefs describe a symptom. We go looking for the cause.',
-    img: '/approach/01.webp',
+    img: '/approach/01.webp', alt: 'Discovery session at the whiteboard',
   },
   {
     id: 'position', n: '02', title: 'Position',
     lead: 'A brand people can repeat back to you.',
     body: 'Positioning, message and tone, decided together and written down. If your team cannot repeat it in one sentence, neither can your market — so we keep working until it is that short.',
-    img: '/approach/02.webp',
+    img: '/approach/02.webp', alt: 'Positioning worked out on a wall of notes',
   },
   {
     id: 'make', n: '03', title: 'Make',
     lead: 'Six disciplines under one roof.',
     body: 'Identity, content, film, social and advertising built by one team that shares a brief. Nothing gets handed between agencies, so nothing arrives diluted or three weeks late.',
-    img: '/approach/03.webp',
+    img: '/approach/03.webp', alt: 'A campaign being shot on set',
   },
   {
     id: 'grow', n: '04', title: 'Grow',
     lead: 'We stay for the part that counts.',
     body: 'The work goes out, we watch what it moves, and we change what is not working. We took one bank from roughly 100 followers to over 10,000 in nine months by staying in the room after launch.',
-    img: '/approach/04.webp',
+    img: '/approach/04.webp', alt: 'Performance data reviewed after launch',
   },
 ]
 

@@ -91,8 +91,6 @@ export default function Header() {
                             aria-current={path === l.href ? 'page' : undefined}
                             aria-label={l.label}
                         >
-                            {/* one span per letter so they can be staggered on
-                                hover; the label above keeps it readable to AT */}
                             {[...l.label].map((ch, i) => (
                                 <span key={i} style={{ '--i': i }} aria-hidden="true">{ch}</span>
                             ))}
@@ -115,7 +113,6 @@ export default function Header() {
                         <LiIcon />
                     </a>
                     <a className="hb-cta" href="/contact" aria-label={CTA_LABEL}>
-                        {/* the label runs as a marquee inside the pill */}
                         <span className="hb-cta-win" aria-hidden="true">
                             <span className="hb-cta-track">
                                 {Array.from({ length: CTA_REPEATS }, (_, i) => (

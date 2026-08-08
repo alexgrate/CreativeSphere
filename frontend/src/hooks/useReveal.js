@@ -4,10 +4,7 @@ import ScrollTrigger from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
-/* Hand-tagging data-reveal only ever covered 11 small text nodes on the home
-   page, so the cards and headings — the things you actually watch — never moved.
-   These selectors cover the blocks that matter; data-reveal still works for
-   one-offs. The hero is deliberately absent: it runs its own load sequence. */
+
 const TARGETS = [
     '[data-reveal]',
     '.apr-title', '.apr-lead', '.apr-card',
@@ -30,20 +27,10 @@ export function useReveal() {
 
         const ctx = gsap.context(() => {
             const targets = gsap.utils.toArray(TARGETS)
-
-            /* Only hide what is genuinely below the fold. Anything already on
-               screen stays visible, which removes the stranded-element problem
-               by construction: an element that was never hidden cannot be left
-               invisible when its trigger is crossed without a scroll event. */
             const LINE = () => window.innerHeight * 0.92
             const hidden = targets.filter((el) => el.getBoundingClientRect().top > LINE())
             gsap.set(hidden, { opacity: 0, y: 56 })
 
-            /* Safety for a refresh that lands past an element's line (the loader
-               dispatches one when it lifts). Runs on refresh only — doing this
-               per scroll frame re-fires the tween with overwrite and restarts
-               the fade, which pinned elements at zero until they left the top
-               of the screen. */
             const settle = () => {
                 const late = hidden.filter((el) => {
                     const r = el.getBoundingClientRect()
@@ -55,8 +42,6 @@ export function useReveal() {
             reveal.cleanup = () => ScrollTrigger.removeEventListener('refresh', settle)
 
             ScrollTrigger.batch(hidden, {
-                // earlier than the old 88% so the motion happens while the
-                // element is arriving, not after it has settled mid-screen
                 start: 'top 95%',
                 onEnter: (batch) => gsap.to(batch, {
                     y: 0,
@@ -66,8 +51,6 @@ export function useReveal() {
                     stagger: { each: 0.09, from: 'start' },
                     overwrite: true,
                 }),
-                // anything already past the trigger when we refresh (e.g. a
-                // reload part-way down the page) must not stay invisible
                 onEnterBack: (batch) => gsap.to(batch, {
                     y: 0, opacity: 1, duration: 0.6, ease: 'power2.out', overwrite: true,
                 }),
@@ -94,8 +77,6 @@ export function useReveal() {
                 )
             })
 
-            // .ftr is position:fixed, so it never moves relative to the
-            // viewport and can't trigger anything — the spacer stands in for it
             const wm = document.querySelector('.ftr-word')
             if (wm) {
                 gsap.fromTo(wm,

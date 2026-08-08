@@ -164,8 +164,6 @@ export default function Footer() {
 
             px += (pxTarget - px) * 0.14
 
-            // everything outside the ripple is untouched — one blit for the
-            // whole word, then only the band under the cursor is redrawn
             ctx.setTransform(1, 0, 0, 1, 0, 0)
             ctx.clearRect(0, 0, cv.width, cv.height)
             ctx.drawImage(atlas, 0, 0)
@@ -178,16 +176,13 @@ export default function Footer() {
                 ctx.clearRect(x0, 0, x1 - x0, cv.height)
                 const a = amp * k
                 for (let x = x0; x < x1; x += COL) {
-                    const d = (x + COL / 2 - cx) / dpr        // signed distance in CSS px
+                    const d = (x + COL / 2 - cx) / dpr      
                     const nd = Math.abs(d) / reach
                     if (nd >= 1) continue
-                    // cos² falls to zero at the rim, so the band rejoins the
-                    // still text with no seam
+
                     const fall = Math.cos(nd * Math.PI / 2) ** 2
-                    // vertical only. Displacing columns sideways as well pulls
-                    // neighbours apart and combs 1px gaps through the letters.
+
                     const dy = a * fall * Math.sin(Math.abs(d) * 0.030 - t * 4.2)
-                    // +1 so consecutive columns overlap and can't leave a seam
                     ctx.drawImage(
                         atlas, x, 0, COL + 1, cv.height,
                         x, dy * dpr, COL + 1, cv.height
@@ -207,8 +202,6 @@ export default function Footer() {
         const leave = () => { want = 0; kick() }
         const press = (e) => { at(e); px = pxTarget; pulse = 0.9; kick() }   // tap too
 
-        // GSAP writes background-position inline, so this fires exactly when the
-        // spark moves — no polling the computed style every frame
         const mo = new MutationObserver(() => { dirty = true; kick() })
 
         const start = () => {
@@ -225,7 +218,6 @@ export default function Footer() {
             return true
         }
 
-        // wait for the webfont, or the atlas bakes in the fallback's shapes
         let retry = 0
         const boot = () => {
             if (!alive) return

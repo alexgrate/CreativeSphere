@@ -10,7 +10,6 @@ const ICONS = {
 }
 
 export default function Approach() {
-    // touch has no hover, so a tap opens a card there instead
     const [open, setOpen] = useState(null)
 
     return (
@@ -34,11 +33,8 @@ export default function Approach() {
                         >
                             <span className="apr-n">{a.n}.</span>
 
-                            {/* collapsed to nothing until you reach it; the image
-                                un-zooms as the panel opens, which is what stops it
-                                looking like a box appearing */}
                             <div className="apr-media" aria-hidden="true">
-                                <img src={a.img} alt="" loading="lazy" />
+                                <img src={a.img} alt={a.alt} loading="lazy" />
                             </div>
 
                             <p className="apr-body">{a.body}</p>

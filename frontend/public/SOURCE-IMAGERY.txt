@@ -1,0 +1,50 @@
+PLACEHOLDER IMAGERY — what belongs in each slot
+================================================
+Every picture on the home and services pages used to be a client campaign key
+visual, a product pack shot, or a screenshot of a client's Twitter profile with
+the logo baked in. None of them described the slot they sat in, so there was no
+way to read the design brief off the page.
+
+They are now stand-ins chosen to show a designer WHAT KIND of image goes where.
+Swap each for real Creative Sphere work. The studio photograph
+(team/creativespace.webp) and the client logos in /logos are the real thing and
+were left alone.
+
+HOME — Approach, the four steps (640x420)
+  01  Understand   discovery session at a whiteboard            Pexels 3862370
+  02  Position     the message worked out on a wall of notes    Pexels 17724740
+  03  Make         a campaign being shot on set                 Pexels 8088386
+  04  Grow         performance data reviewed after launch       Pexels 12969403
+
+HOME — Formats carousel, one per campaign format (1000x966)
+  1   campaign film in production                               Pexels 36287813
+  2   campaign frames laid out as a system                      Pexels 9909066
+  3   printed identity, stacked and checked                     Pexels 10897656
+  4   social content being filmed                               Pexels 7676399
+  5   packaging shot in the studio                              Pexels 25466531
+
+SERVICES — one hover preview per discipline (840x921)
+  1   Brand strategy        strategy session                    Pexels 17724731
+  2   Identity & design     colour and type specification       Pexels 37663439
+  3   Content production    on set                              Pexels 8089653
+  4   Social media          filming vertical content            Pexels 13929353
+  5   Advertising           outdoor billboards, Lagos           Pexels 33644177
+  6   Analytics & growth    campaign performance data           Pexels 106344
+
+SERVICES — drifting gallery, a spread of the studio's world (sizes preserved)
+  01 on location with the crew        19224452   06 the studio floor        1170412
+  02 reviewing materials              6580562    07 lettering and craft     4348288
+  03 shooting social content          8993879    08 going through prints    36765659
+  04 in the print studio              6620972    09 typography reference    13618542
+  05 product and packaging still life 8015485
+
+HERO — video/reel.mp4 + poster.webp are a Coverr placeholder; see video/SOURCE.txt.
+ABOUT — see about/SOURCE.txt and timeline/SOURCE.txt.
+
+Licence: all Pexels Licence — free for commercial use, no attribution required.
+Processing: centre/focus crop to each slot's exact size, Pillow WebP q80.
+
+Deleted with this pass, all client key visuals that nothing should have shown:
+  public/hero/*.webp (6 files, orphaned when the hero became a video)
+  public/format/vbank.webp (a screenshot of the VFD Twitter profile)
+  public/hero-06.webp (a Chivita product visual used as the About hero)
