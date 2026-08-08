@@ -25,12 +25,16 @@ export const IMPACT = [
   },
 ]
 
+/* The four /hero/*.jpg entries here pointed at a directory that was deleted when
+   the hero became a video, so the carousel was rendering four broken frames.
+   Repointed at existing work imagery; alts are generic because these are stand-ins
+   — swap for the real per-client format shots when they land. */
 export const FORMATS = [
-  { id: 'chi', img: '/format/vbank.webp', alt: 'VFD / Vbank social' },
-  { id: 'vfd', img: '/hero/vfd.jpg', alt: 'CHI Nigeria campaign' },
-  { id: 'dash', img: '/hero/dash.jpg', alt: 'Dash MFB identity' },
-  { id: 'aurora', img: '/hero/aurora.jpg', alt: 'Aurora brand management' },
-  { id: 'prudential', img: '/hero/prudential.jpg', alt: 'Prudential Zenith community' },
+  { id: 'vbank',      img: '/format/vbank.webp', alt: 'VFD / Vbank social campaign' },
+  { id: 'campaign',   img: '/gallery/01.webp',   alt: 'Campaign film still' },
+  { id: 'identity',   img: '/gallery/06.webp',   alt: 'Brand identity applied in print' },
+  { id: 'social',     img: '/gallery/09.webp',   alt: 'Social-first content set' },
+  { id: 'activation', img: '/gallery/04.webp',   alt: 'Retail activation photography' },
 ]
 
 export const LOGOS = [
@@ -54,32 +58,27 @@ export const CTA_LOGOS = [
   { src: '/logos/chi.webp',        size: 78,  x: 73, y: 76,  rot: 5 },
 ]
 
-export const ABOUT_IMPACT = [
-  { id: 'founded',     value: 2019, suffix: '',  label: 'Founded in Lagos', plain: true,
-    detail: 'Six years building brands for Nigerian companies with international ambitions.' },
-  { id: 'disciplines', value: 6,    suffix: '',  label: 'Disciplines under one roof',
-    detail: 'Strategy, identity, content, social, advertising and analytics — one team, no handoffs.' },
-  { id: 'industries',  value: 8,    suffix: '',  label: 'Industries served',
-    detail: 'FMCG, banking, fintech, insurance, energy, lifestyle, logistics and art.' },
-  { id: 'brands',      value: 9,    suffix: '+', label: 'Brands transformed',
-    detail: 'From CHI and Prudential Zenith to Dash MFB and Esvolt.' },
-]
 
 
 export const TIMELINE = [
-  { year: 2019, title: 'The studio opens',
-    body: 'The Creative Sphere is founded in Lagos as a full-service creative and digital agency, built around one team covering strategy, design and story.',
-    img: '/timeline/2019.webp' },
-  { year: 2021, title: 'FMCG at national scale',
-    body: 'Campaign work for CHI Limited — Chivita and Capri-Sonne — takes the studio into national retail activation and multi-format content.',
-    img: '/timeline/2021.webp' },
-  { year: 2023, title: 'Banking and fintech practice',
-    body: 'VFD Microfinance Bank and Dash MFB bring the studio into financial services, where brand trust and social growth have to work together.',
-    img: '/timeline/2023.webp' },
-  { year: 2025, title: 'Eight industries deep',
-    body: 'From insurance to clean energy to art, the studio now works across eight sectors with nine brands transformed.',
-    img: '/timeline/2025.webp' },
+  { year: 2019, title: 'One room in Lagos',
+    body: 'The Creative Sphere opens with a small team and a single idea: strategy, design and story in one room instead of three agencies.',
+    img: '/timeline/2019.webp',
+    alt: 'The studio floor in its first year' },
+  { year: 2021, title: 'Onto the shelf',
+    body: 'CHI Limited puts the work in front of a national audience. Chivita and Capri-Sonne campaigns are shot, cut and shipped in house.',
+    img: '/timeline/2021.webp',
+    alt: 'A campaign shoot in progress on set' },
+  { year: 2023, title: 'Into the app',
+    body: 'VFD Microfinance Bank and Dash MFB move the work onto screens, where a brand has to earn trust in the first ten seconds.',
+    img: '/timeline/2023.webp',
+    alt: 'Interface design being worked through on screen' },
+  { year: 2025, title: 'Eight industries in',
+    body: 'Insurance, clean energy, logistics, art. The studio moves between sectors now without changing how it works.',
+    img: '/timeline/2025.webp',
+    alt: 'The studio at work across several projects' },
 ]
+
 
 export const SERVICES = [
   { id: 'strategy',  title: 'Brand strategy',     img: '/svc/1.webp' },
@@ -102,7 +101,6 @@ export const GALLERY = [
   { src: '/gallery/09.webp', alt: 'Acacia Solicitors identity' },
 ]
 
-// the "that's not all" accordion — the work that surrounds the six disciplines
 export const EXTRAS = [
   {
     id: 'influencer', title: 'Influencer campaigns',
@@ -149,8 +147,7 @@ export const CAPABILITIES = [
   },
 ]
 
-// How we work, told as a sell rather than a scoreboard. The stats still live
-// on /about, where studio facts belong.
+
 export const APPROACH = [
   {
     id: 'understand', n: '01', title: 'Understand',
@@ -175,5 +172,35 @@ export const APPROACH = [
     lead: 'We stay for the part that counts.',
     body: 'The work goes out, we watch what it moves, and we change what is not working. We took one bank from roughly 100 followers to over 10,000 in nine months by staying in the room after launch.',
     img: '/approach/04.webp',
+  },
+]
+
+
+export const STATEMENT = {
+  eyebrow: 'Who we are',
+  body: `We are a Lagos creative studio built the way a brand actually needs one: strategy, design, film and media sitting in the same room, answering to the same brief, judged on the same result.`.split(' '),
+  sig: 'The Creative Sphere, Lagos',
+}
+
+export const PRINCIPLES = [
+  {
+    id: 'strategy',
+    title: 'Strategy before decoration.',
+    line: 'Work that looks good but says nothing is expensive noise.',
+  },
+  {
+    id: 'oneteam',
+    title: 'One team, no handoffs.',
+    line: 'Six disciplines in one room, so nothing arrives diluted.',
+  },
+  {
+    id: 'local',
+    title: 'Nigerian market. International standard.',
+    line: 'We build for the room you are actually selling in.',
+  },
+  {
+    id: 'after',
+    title: 'We stay past launch.',
+    line: 'The work is judged on what it moves, not on the reveal.',
   },
 ]

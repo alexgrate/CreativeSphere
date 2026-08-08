@@ -183,7 +183,7 @@ export default function Timeline() {
                                 <div className="tl-detail-in">
                                     <p className="tl-body">{m.body}</p>
                                     <img className="tl-img" src={m.img}
-                                         alt={`${m.year} — ${m.title}`} loading="lazy" draggable="false" />
+                                         alt={m.alt} loading="lazy" draggable="false" />
                                 </div>
                             </div>
                         </article>

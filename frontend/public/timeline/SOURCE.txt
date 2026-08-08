@@ -1,0 +1,17 @@
+timeline/2019.webp · 2021.webp · 2023.webp · 2025.webp
+------------------------------------------------------
+PLACEHOLDERS. Swap for real Creative Sphere archive photography.
+
+These replaced four client product key visuals (Capri-Sonne, Aurora and others)
+that had been dropped in as timeline art. They showed the clients' packaging,
+not the studio, and none of them matched the caption they sat under — 2023 read
+"Banking and fintech practice" over an Aurora solar KV.
+
+Each frame now shows the thing its entry describes:
+  2019  the room          Pexels 1170412
+  2021  the set           Pexels 8088386
+  2023  the screen        Pexels 34212988
+  2025  reviewing the body of work   Pexels 6615035
+
+Licence: Pexels Licence — free for commercial use, no attribution required.
+Processing: centre crop to 900x515 (the card ratio), Pillow WebP q80.

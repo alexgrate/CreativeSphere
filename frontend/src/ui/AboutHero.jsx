@@ -3,7 +3,6 @@ import { LOGOS } from "../content/site"
 
 
 export default function AboutHero() {
-    // duplicated so the -50% loop is seamless; tripled gives room to drag
     const strip = [...LOGOS, ...LOGOS, ...LOGOS]
 
     const railRef = useRef(null)
@@ -13,7 +12,7 @@ export default function AboutHero() {
         const rail = railRef.current
         drag.current = { active: true, startX: e.clientX, startScroll: rail.scrollLeft, moved: 0 }
         rail.setPointerCapture(e.pointerId)
-        rail.classList.add('is-dragging')      // pauses the CSS animation
+        rail.classList.add('is-dragging')   
     }
     const move = (e) => {
         if (!drag.current.active) return
@@ -33,7 +32,14 @@ export default function AboutHero() {
             <h1 className="abt-title spark">Craft. Leadership. Consequence.</h1>
 
             <div className="abt-frame">
-                <img src="/hero-06.webp" alt="The Creative Sphere studio" width="1440" height="920" loading="eager" />
+                <picture>
+                    <source media="(max-width: 639px)" srcSet="/about/studio-portrait.webp" width="900" height="1250" />
+                    <img
+                        src="/about/studio.webp"
+                        alt="The Creative Sphere team working together in the studio"
+                        width="2000" height="1042" loading="eager" fetchPriority="high"
+                    />
+                </picture>
 
                 <div
                     className="abt-marquee"
