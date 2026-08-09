@@ -103,7 +103,7 @@ It checks:
 | IIS | service present and running |
 | URL Rewrite 2.1 | module installed — without it, refreshing `/work/vfd` 404s |
 | ARR 3.0 | module installed **and** server-level proxy enabled, which is a separate switch |
-| Python | present, and warns below 3.12 |
+| Python | present and 3.12+, falling back to the `py` launcher if `python` is the Store stub |
 | Node, npm, Git | present and on PATH |
 | NSSM **or** pm2 | either can keep Django running; pm2 is already here |
 | win-acme | present (informational — you may already issue certificates another way) |
@@ -121,12 +121,28 @@ usually by picking a different port or name.
 
 ## Step 2 — Backend dependencies
 
+> **On this VM, use `py`, not `python`.** The `python` on PATH is the Microsoft
+> Store stub at `AppData\Local\Microsoft\WindowsApps\python.exe`, which prints
+> *"Python was not found"* and does nothing. The `py` launcher finds the real
+> interpreter — 3.13.14, which is fine. This only matters for the line that
+> creates the environment; every command after it calls `.venv\Scripts\...`
+> directly, which is a real interpreter.
+
 ```bat
 cd C:\sites\creativesphere\backend
-python -m venv .venv
-.venv\Scripts\pip install --upgrade pip
+py -m venv .venv
+.venv\Scripts\python -m pip install --upgrade pip
 .venv\Scripts\pip install -r requirements.txt
 ```
+
+**Check:**
+
+```bat
+.venv\Scripts\python --version
+```
+
+Should print `Python 3.13.14`. If it prints the Store message instead, the venv
+was created by the stub — delete `.venv` and redo it with `py -m venv`.
 
 The virtual environment is entirely separate from your other Django project —
 different versions here cannot affect it.
@@ -491,6 +507,7 @@ Worth a scheduled task, and worth doing before every deploy.
 | Service will not start | Port already taken — the log will say so. Change `BACKEND_PORT` and the `web.config` proxy line together. |
 | Contact form succeeds but **no email** | `/admin/api/contactmessage/` — the enquiry is stored regardless and *Delivery error* says why Graph refused. Usually an expired client secret. |
 | `database is locked` | Two things writing sqlite at once. Keep `threads` low in `serve.py`, or move to Postgres. |
+| `Python was not found` | You used `python` rather than `py`. The `python` on PATH is the Microsoft Store stub. Use `py -m venv .venv`, then `.venv\Scripts\python` for everything else. |
 
 ---
 
