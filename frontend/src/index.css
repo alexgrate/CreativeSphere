@@ -2656,7 +2656,8 @@ html.page-dark .hb-burger { color: var(--type); }
   /* fixed while the run is on screen, so you always know where you are */
   .wk-count {
     position: fixed;
-    left: 34px;
+    /* left would sit on top of the meta of any card in the first column */
+    right: 34px;
     bottom: 30px;
     z-index: 6;
     display: flex;

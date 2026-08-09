@@ -1,56 +1,52 @@
-/work imagery
-=============
-These are REAL Creative Sphere client campaign key visuals, recovered from git
-(commit 01c7ce7^) after they were pulled off the home and services pages. They
-were the wrong content there — a campaign KV with a client logo baked in tells a
-designer nothing about what belongs in an "Approach: Understand" slot. On a Work
-page they are exactly right, because here the client IS the subject.
+/work imagery — PLACEHOLDERS
+============================
+Every picture on the work index and the eight case study pages is a stock
+stand-in. None of it is Creative Sphere work. It is here so a designer can read
+what belongs in each slot; swap all of it for real project photography.
 
-Cropped from 2400x1372 to 1400x980 (10:7, matching the reference's card ratio),
-Pillow WebP q82. t-*.webp are 360x252 thumbnails for the scatter hero.
+Previously this folder held the real client campaign key visuals recovered from
+git (commit 01c7ce7^). They were replaced on request. They are not lost — they
+are still in git history at that commit under public/hero/ and public/hero-06.webp.
 
-  chi.webp         CHI Nigeria — Capri-Sonne summer KV
-  chivita.webp     Chivita — full product range KV (was /hero-06.webp, 6000x3430)
-  vfd.webp         VFD / Vbank — social growth creative
-  prudential.webp  Prudential Zenith Life — campaign KV
-  esvolt.webp      ESVolt — clean energy campaign KV
-  acacia.webp      Acacia Solicitors — brand campaign KV
-  aurora.webp      Aurora — optoelectronics product KV
+Files per project (8 projects, 5 files each, 40 total)
+-----------------------------------------------------
+  <id>.webp        1400x980 (10:7)  index card
+  t-<id>.webp       360x252         hero scatter thumbnail
+  <id>-hero.webp   1800x900 (2:1)   case study banner
+  <id>-1.webp      1100x820         case study detail 1
+  <id>-2.webp      1100x820         case study detail 2
 
-  dash.webp        PLACEHOLDER — Dash MFB has no key visual in the repo. This is
-                   the stock image from /timeline/2023.webp standing in so the
-                   client list is complete. SWAP THIS for real Dash MFB work.
+The card, thumbnail and banner are cut from one photo; the two detail shots come
+from two *different* photos, so each case study has three genuinely different
+pictures rather than three crops of one.
 
-Everything else on this page is real. The copy (titles, one-liners, disciplines,
-years) was written from the existing site content and should be checked with the
-team lead — the years in particular are inferred, not confirmed.
+Sources (all Pexels Licence — free for commercial use, no attribution required)
+------------------------------------------------------------------------------
+  vfd         banking app on a phone           38289280 / 8938729  / 6969809
+  chi         summer juice, outdoors           8215113  / 8743869  / 14930492
+  prudential  family at home                   7642087  / 7642218  / 10044359
+  chivita     juice range, studio              8743863  / 17612776 / 8956796
+  esvolt      solar install + rooftops         9875415  / 12243093 / 17762230
+  dash        fintech app + card               6406691  / 7534791  / 6214373
+  acacia      law library + counsel            6077091  / 7876191  / 5668775
+  aurora      LED / optical technology         33966530 / 1044988  / 8108718
 
+Rejected during selection because a real third-party brand was legible in the
+frame: 10967991 (Sandora), 35261893 (Mike's), 33785780 (Mastercard).
 
-CASE STUDY PAGES (/work/:id) — added later
-===========================================
-Each project now has a detail page. Images per project:
+Processing
+----------
+Crops chosen programmatically: slide a window across the photo, score each
+position by edge energy, keep the busiest. A hand-picked first pass put two
+crops on empty gradient. Sizes normalised to a per-role byte budget (banner
+<= 260 KB, everything else <= 175 KB); esvolt's lead photo was swapped to the
+installer shot because a dense aerial panel array is compression-hostile.
 
-  <id>-hero.webp   1800x900 (2:1) banner
-  <id>-1.webp      1100x820 detail crop
-  <id>-2.webp      1100x820 detail crop
-
-All three are crops of the SAME client key visual — there is only one asset per
-client in this repo. Crops were picked programmatically by scoring edge detail
-across the artwork and requiring the two to come from different regions; the
-first hand-guessed pass put two of them on empty gradient. Replace with real
-additional assets (process shots, applications, stills) when they exist.
-
-COPY — read before showing a client
------------------------------------
-`brief`, `approach` and `outcome` in site.js were written from the one-line
-descriptions and the disciplines already on the site. They are plausible and
-non-specific by design, but they are NOT client-approved and were not taken
-from a brief. Have the team lead read all eight before this goes near a pitch.
-
-`stats` is null on seven of the eight projects on purpose. VFD is the only
-engagement with a figure the site already stands behind (~100 followers to
-10,000+ in nine months, stated on the home page). The stats band simply does
-not render when stats is null — do not fill the others in with invented
-numbers to make the layout look even. Add them only when they are real.
-
-`sector` and `scope` are reasonable but also unconfirmed.
+Copy
+----
+brief / approach / outcome in site.js were written from the one-line
+descriptions and disciplines already on the site. Plausible, deliberately
+non-specific, NOT client-approved. `stats` is null on seven of eight on
+purpose — VFD is the only project with a figure the site already stands behind.
+Do not fill the others in with invented numbers. sector, scope and the years
+are also unconfirmed.
