@@ -23,102 +23,97 @@ consistent.
 
 ---
 
-## Step 0 — Push the code (do this on your Mac, first)
+## This VM already hosts other projects
 
-The VM pulls from GitHub, so anything uncommitted simply will not be there.
-Right now the whole `backend\` folder is untracked.
+Read this before anything else. Three things can collide, and one piece of
+common advice would actively break a neighbouring site.
+
+**Port 8000.** It is Django's default, so your existing Django app very likely
+holds it. Step 1 tells you. If it is taken, pick a free port and set it in
+**two** places that must agree:
+
+- `BACKEND_PORT` in `backend\.env`
+- the `<action type="Rewrite" url="http://127.0.0.1:8000/{R:0}" />` line in
+  `frontend\public\web.config`
+
+**Do not stop the Default Web Site.** Guides say to, and on a shared machine
+that can take another project offline. IIS routes by host header, so several
+sites share port 80 happily. What *does* break things is a site bound to port 80
+with **no host header** — it answers for every hostname, including yours. Step 1
+lists the bindings so you can spot one; the fix is to give that site an explicit
+host header, not to stop it.
+
+**Names must be unique** — the IIS site (`creativesphere`), its application pool,
+and the NSSM service. Step 1 warns if any are taken.
+
+Nothing else is shared. The Python virtual environment, the database and the
+uploaded images all live under this project's folder and cannot affect your
+other apps.
+
+---
+
+## Step 0 — Push the code (on your Mac, first)
+
+The VM pulls from GitHub, so anything uncommitted will not be there. Right now
+the whole `backend\` folder is untracked.
 
 ```bash
 cd ~/Desktop/Main_Dev/CreativeSphere
-git status                 # sanity check
+git status
 git add -A
 git commit -m "Add Django backend, admin CMS, contact form and deployment config"
 git push origin main
 ```
 
-Confirm the secrets stayed out:
+Confirm the secrets stayed out — this must print nothing:
 
 ```bash
-git ls-files | grep -E "\.env$|db\.sqlite3|/media/"     # must print nothing
+git ls-files | grep -E "\.env$|db\.sqlite3|/media/"
 ```
 
 `backend\.env`, `backend\db.sqlite3`, `backend\media\` and both `.venv` folders
-are gitignored on purpose. You will recreate `.env` by hand on the VM and get
-the images across in Step 6.
+are gitignored deliberately. You recreate `.env` by hand in Step 3 and bring the
+images across in Step 4.
 
 ---
 
-## Step 1 — Install IIS
+## Step 1 — Audit the VM
 
-On the VM, open **PowerShell as Administrator**:
-
-```powershell
-Install-WindowsFeature -Name Web-Server -IncludeManagementTools
-```
-
-On Windows 10/11 rather than Server:
-
-```powershell
-Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole, IIS-WebServer, IIS-StaticContent, IIS-DefaultDocument, IIS-HttpErrors, IIS-HttpLogging, IIS-RequestFiltering, IIS-HttpCompressionStatic -All
-```
-
-**Check:** browse to `http://localhost` on the VM. You should see the IIS
-welcome page.
-
----
-
-## Step 2 — Install the two IIS modules
-
-Neither ships with IIS, and without them the proxy rules in `web.config`
-silently return 404.
-
-1. **URL Rewrite 2.1** — https://www.iis.net/downloads/microsoft/url-rewrite
-2. **Application Request Routing 3.0** — https://www.iis.net/downloads/microsoft/application-request-routing
-
-Then **turn the proxy on**, which is a separate action people miss:
-
-> IIS Manager → click the **server** name in the left tree (not a site) →
-> **Application Request Routing Cache** → *Proxy* → **Server Proxy Settings…**
-> (right panel) → tick **Enable proxy** → **Apply**.
-
-**Check:** IIS Manager → server → you should now see both *URL Rewrite* and
-*Application Request Routing Cache* icons.
-
----
-
-## Step 3 — Install Python, Node and Git
-
-- **Python 3.12 or newer** — https://www.python.org/downloads/windows/
-  Tick **"Add python.exe to PATH"** during install.
-- **Node.js LTS** — https://nodejs.org/ (needed to build the frontend on the VM;
-  see the note in Step 7 if you would rather build on your Mac)
-- **Git** — https://git-scm.com/download/win
-- **NSSM** — https://nssm.cc/download — unzip and copy `win64\nssm.exe` into
-  `C:\Windows\System32` so it is on PATH.
-
-**Check**, in a *new* terminal so PATH is picked up:
-
-```bat
-python --version
-node --version
-git --version
-nssm version
-```
-
----
-
-## Step 4 — Get the code onto the VM
+Clone first, then run the audit script. It changes nothing — it reports what is
+installed and surveys what is already using the ports and hostnames this
+deployment wants.
 
 ```bat
 mkdir C:\sites
 cd C:\sites
 git clone https://github.com/alexgrate/CreativeSphere.git creativesphere
-cd creativesphere
+cd creativesphere\deploy
+powershell -ExecutionPolicy Bypass -File .\preflight.ps1
 ```
+
+It checks:
+
+| | |
+|---|---|
+| IIS | service present and running |
+| URL Rewrite 2.1 | module installed — without it, refreshing `/work/vfd` 404s |
+| ARR 3.0 | module installed **and** server-level proxy enabled, which is a separate switch |
+| Python | present, and warns below 3.12 |
+| Node, npm, Git, NSSM | present and on PATH |
+| win-acme | present (informational — you may already issue certificates another way) |
+| **Port 8000** | free, or who holds it, plus three free ports to use instead |
+| **Ports 8000–8100** | everything currently listening, so you can see your other apps |
+| **IIS sites** | every site, its state, path and bindings — flagging any with no host header |
+| **Services** | anything that looks like an app server, and whether `CreativeSphere` is taken |
+| Firewall | inbound 80 and 443 |
+
+Anything marked `MISSING` needs installing before you continue; the line
+includes where to get it. Anything marked `WARN` is a collision to resolve —
+usually by picking a different port or name.
 
 ---
 
-## Step 5 — Set up the backend
+## Step 2 — Backend dependencies
 
 ```bat
 cd C:\sites\creativesphere\backend
@@ -127,21 +122,27 @@ python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 ```
 
-### 5a. Create `.env`
+The virtual environment is entirely separate from your other Django project —
+different versions here cannot affect it.
+
+---
+
+## Step 3 — Create `.env`
 
 ```bat
 copy .env.example .env
 notepad .env
 ```
 
-Generate a **new** secret key (do not reuse the one from your Mac):
+Generate a **new** secret key — do not reuse the one from your Mac:
 
 ```bat
 .venv\Scripts\python -c "import secrets; print(secrets.token_urlsafe(64))"
 ```
 
-Fill in, leaving HTTPS enforcement **off for now** — you cannot test over HTTPS
-until the certificate exists in Step 10:
+Fill in, leaving HTTPS enforcement **off for now**. You cannot test over HTTPS
+until the certificate exists in Step 8, and with it on you would be debugging a
+site you cannot reach:
 
 ```
 SECRET_KEY=<the key you just generated>
@@ -161,12 +162,15 @@ TIME_ZONE=Africa/Lagos
 BEHIND_PROXY=True
 SERVE_MEDIA=True
 
+BACKEND_PORT=8000
+
 SECURE_SSL_REDIRECT=False
 ```
 
-> `SECURE_SSL_REDIRECT=False` is temporary. Step 11 removes it.
+> If Step 1 said port 8000 was taken, change `BACKEND_PORT` here **and** the
+> proxy line in `frontend\public\web.config`. They must match.
 
-### 5b. Database, static files, admin account
+Then:
 
 ```bat
 .venv\Scripts\python manage.py migrate
@@ -178,9 +182,9 @@ SECURE_SSL_REDIRECT=False
 
 ---
 
-## Step 6 — Get the images onto the VM
+## Step 4 — Get the images onto the VM
 
-`backend\media\` is gitignored, so the database will reference files that are not
+`backend\media\` is gitignored, so the database references files that are not
 there yet. Two ways:
 
 **Option A — rebuild from the committed source images** (simplest):
@@ -194,23 +198,18 @@ there yet. Two ways:
 These copy from `frontend\public\`, which *is* in git, and use
 `update_or_create`, so re-running them is safe.
 
-**Option B — copy your Mac's folder** (keeps anything you uploaded through the
-admin). About 3 MB:
+**Option B — copy your Mac's folder**, which keeps anything you uploaded through
+the admin. About 3 MB:
 
 ```bash
-# from your Mac
 scp -r backend/media Administrator@<vm-ip>:C:/sites/creativesphere/backend/
 ```
 
-**Check:**
-
-```bat
-dir C:\sites\creativesphere\backend\media\work
-```
+**Check:** `dir C:\sites\creativesphere\backend\media\work`
 
 ---
 
-## Step 7 — Build the frontend
+## Step 5 — Build the frontend
 
 ```bat
 cd C:\sites\creativesphere\frontend
@@ -221,28 +220,29 @@ npm run build
 **Check:** `dir dist` shows `index.html`, `assets\`, `web.config`, `robots.txt`
 and `sitemap.xml`.
 
-> Prefer not to install Node on the VM? Run `npm run build` on your Mac and copy
-> the `dist` folder over instead. The `web.config` is inside it either way.
+> Node already on the VM for another project is fine — `npm ci` installs into
+> this folder's own `node_modules`. If you would rather not build here at all,
+> run `npm run build` on your Mac and copy `dist` over; `web.config` is inside it
+> either way.
 
 ---
 
-## Step 8 — Run Django as a Windows service
+## Step 6 — Run Django as a Windows service
 
-Test it by hand first:
+Test by hand first:
 
 ```bat
 cd C:\sites\creativesphere\backend
 .venv\Scripts\python serve.py
 ```
 
-In a second terminal:
+It prints the port it bound to. In a second terminal:
 
 ```bat
 curl http://127.0.0.1:8000/api/projects/
 ```
 
-JSON means it works. Press `Ctrl+C` to stop, then register it so it survives
-reboots:
+JSON means it works. `Ctrl+C`, then register it so it survives reboots:
 
 ```bat
 nssm install CreativeSphere "C:\sites\creativesphere\backend\.venv\Scripts\python.exe" "C:\sites\creativesphere\backend\serve.py"
@@ -251,121 +251,126 @@ nssm set CreativeSphere Start SERVICE_AUTO_START
 nssm start CreativeSphere
 ```
 
-**Check:**
+**Check:** `nssm status CreativeSphere` reports `SERVICE_RUNNING`, and the curl
+above still works.
 
-```bat
-nssm status CreativeSphere
-curl http://127.0.0.1:8000/api/projects/
-```
-
-Both should succeed. If the service will not start, `nssm edit CreativeSphere`
-→ *I/O* tab → point stdout and stderr at a log file, then read it.
+If it will not start: `nssm edit CreativeSphere` → *I/O* tab → point stdout and
+stderr at a log file, restart, read the log.
 
 ---
 
-## Step 9 — Create the IIS site
+## Step 7 — Create the IIS site
 
-### 9a. The site
+### 7a. The site
 
 > IIS Manager → **Sites** → right-click → **Add Website…**
 >
 > - **Site name:** `creativesphere`
 > - **Physical path:** `C:\sites\creativesphere\frontend\dist`
-> - **Binding:** http, port 80, hostname `dcreativesphere.com`
->
-> Add a second binding for `www.dcreativesphere.com`.
+> - **Binding:** http, port 80, **hostname `dcreativesphere.com`**
 
-Stop the **Default Web Site** so it does not fight for port 80.
+Add a second binding for `www.dcreativesphere.com`.
 
-### 9b. Application pool
+**Always set the hostname.** A blank host header means this site answers for
+every domain on the machine, including your other projects'.
 
-> IIS Manager → **Application Pools** → `creativesphere` → **Basic Settings…** →
-> set **.NET CLR version** to **No Managed Code**.
+### 7b. Application pool
 
-Nothing here runs .NET — it is static files plus a proxy.
+> **Application Pools** → `creativesphere` → **Basic Settings…** → **.NET CLR
+> version: No Managed Code**.
 
-### 9c. Allow the forwarded-protocol header
+Nothing here runs .NET — it is static files plus a proxy. Leave it in its own
+pool so a restart never touches your other sites.
 
-Without this, IIS refuses to set the variable and Django's HTTPS redirect loops
-forever once you enable it.
+### 7c. Allow the forwarded-protocol header
 
-> IIS Manager → select the **site** → **URL Rewrite** → **View Server
-> Variables…** (right panel) → **Add…** → `HTTP_X_FORWARDED_PROTO` → OK.
+> Select the **site** → **URL Rewrite** → **View Server Variables…** (right
+> panel) → **Add…** → `HTTP_X_FORWARDED_PROTO`
 
-### 9d. Permissions
+This is per-site, so it does not affect anything else. Without it, Django's
+HTTPS redirect loops forever once enabled.
+
+### 7d. Permissions
 
 > Right-click `C:\sites\creativesphere\frontend\dist` → Properties → Security →
 > Edit → Add → `IIS_IUSRS` → allow **Read & execute**.
 
-### 9e. Firewall
+### 7e. Firewall
+
+Already open if your other sites are reachable. If Step 1 flagged it:
 
 ```powershell
 New-NetFirewallRule -DisplayName "HTTP"  -Direction Inbound -Protocol TCP -LocalPort 80  -Action Allow
 New-NetFirewallRule -DisplayName "HTTPS" -Direction Inbound -Protocol TCP -LocalPort 443 -Action Allow
 ```
 
-If the VM is on Azure/AWS/GCP, open 80 and 443 in the cloud firewall too — the
-Windows rule alone is not enough.
+Cloud VM? Open 80 and 443 in the provider's firewall too.
 
-**Check**, on the VM:
+### Check before moving on
+
+From the VM, using the hostname (not `localhost`, which will not match the host
+header). Add a temporary line to `C:\Windows\System32\drivers\etc\hosts` if DNS
+has not moved yet:
+
+```
+127.0.0.1  dcreativesphere.com
+```
 
 | URL | Expected |
 |---|---|
-| `http://localhost/` | The site loads, **with images** |
-| `http://localhost/work` | Work page with project cards |
-| `http://localhost/work/vfd` **refreshed** | Loads — proves the SPA rule |
-| `http://localhost/api/projects/` | JSON — proves the proxy |
-| `http://localhost/admin/` | Login page **with styling** |
+| `http://dcreativesphere.com/` | Site loads, **with images** |
+| `http://dcreativesphere.com/work/vfd` **refreshed** | Loads — proves the SPA rule |
+| `http://dcreativesphere.com/api/projects/` | JSON — proves the proxy |
+| `http://dcreativesphere.com/admin/` | Login page **with styling** |
+| Your other sites | Still working |
 
-If images are missing but text is fine, see *`.webp` returns 404* in
-Troubleshooting.
+Remove the `hosts` line afterwards.
 
 ---
 
-## Step 10 — DNS and the certificate
+## Step 8 — DNS and the certificate
 
-### 10a. Point the domain at the VM
+### 8a. Point the domain at the VM
 
-In **GoDaddy → My Products → DNS**:
+**GoDaddy → My Products → DNS**:
 
 | Type | Name | Value |
 |---|---|---|
 | A | `@` | `<the VM's public IP>` |
 | A | `www` | `<the VM's public IP>` |
 
-Delete any conflicting A or CNAME records for `@` and `www` left from the
-current hosting. Propagation is usually minutes; up to a few hours.
+Delete conflicting A or CNAME records for `@` and `www` from the current
+hosting. Propagation is usually minutes.
 
 **Check** from your Mac: `nslookup dcreativesphere.com` returns the VM's IP.
 
-### 10b. Get a free certificate
+### 8b. Certificate
 
-Download **win-acme** from https://www.win-acme.com/, unzip, and run
-`wacs.exe` as Administrator:
+If this VM already issues certificates with win-acme, add this domain the same
+way you did the others. Otherwise download it from https://www.win-acme.com/ and
+run `wacs.exe` as Administrator:
 
 ```
 N  →  Create certificate (default settings)
      → pick the creativesphere site
-     → include both dcreativesphere.com and www.dcreativesphere.com
+     → include dcreativesphere.com and www.dcreativesphere.com
 ```
 
-It validates over HTTP on port 80, installs the certificate, adds the HTTPS
-binding, and schedules automatic renewal every 60 days.
+It validates on port 80, installs the certificate, adds the HTTPS binding and
+schedules renewal every 60 days.
 
 **Check:** `https://dcreativesphere.com` loads with a padlock.
 
 ---
 
-## Step 11 — Turn on HTTPS enforcement
-
-Now that the certificate works, remove the temporary override:
+## Step 9 — Turn on HTTPS enforcement
 
 ```bat
 notepad C:\sites\creativesphere\backend\.env
 ```
 
-Delete the `SECURE_SSL_REDIRECT=False` line entirely — it defaults to **on**
-whenever `DEBUG=False`. Then:
+Delete the `SECURE_SSL_REDIRECT=False` line — it defaults to **on** whenever
+`DEBUG=False`. Then:
 
 ```bat
 nssm restart CreativeSphere
@@ -377,7 +382,7 @@ nssm restart CreativeSphere
 
 ---
 
-## Step 12 — Final verification
+## Step 10 — Final verification
 
 | Check | Expected |
 |---|---|
@@ -388,9 +393,10 @@ nssm restart CreativeSphere
 | Home page | Logos float in the "Start your project" section |
 | `/api/projects/` | JSON, 8 projects |
 | `/admin/` | Styled login; log in and edit a project |
-| Contact form | Submit a test — mail arrives, and the enquiry shows at `/admin/api/contactmessage/` with **Emailed ✓** |
+| Contact form | Mail arrives, and the enquiry shows at `/admin/api/contactmessage/` with **Emailed ✓** |
 | `http://` | Redirects to `https://` |
 | Share a link in WhatsApp | Preview card with the logo image |
+| **Your other sites** | **Still working** |
 
 ---
 
@@ -433,29 +439,33 @@ Worth a scheduled task, and worth doing before every deploy.
 
 | Symptom | Cause and fix |
 |---|---|
-| Text loads, **all images 404** | IIS does not serve `.webp` unless the MIME type is registered. `web.config` does this — confirm `dist\web.config` exists and that IIS Manager → site → *MIME Types* lists `.webp`. |
-| `/api/` returns **404** | ARR proxy not enabled. IIS Manager → **server** → ARR Cache → Proxy → tick *Enable proxy*. |
-| `/api/` returns **502** | Django is not running. `nssm status CreativeSphere`, then `curl http://127.0.0.1:8000/api/projects/`. |
-| Refreshing `/work/vfd` gives **404** | URL Rewrite module not installed, or `web.config` missing from `dist`. |
-| Admin loads **unstyled** | `collectstatic` was not run after deploying. |
-| Admin login says **CSRF verification failed** | The domain is missing from `CSRF_TRUSTED_ORIGINS`, with the `https://` scheme. Restart the service after editing. |
-| Browser reports a **redirect loop** | `SECURE_SSL_REDIRECT` is on but Django cannot tell the request was HTTPS. Needs `BEHIND_PROXY=True` **and** `HTTP_X_FORWARDED_PROTO` added under URL Rewrite → View Server Variables. |
-| Site returns **400 Bad Request** | The hostname is missing from `ALLOWED_HOSTS`. |
-| Contact form succeeds but **no email** | Look at `/admin/api/contactmessage/`. The enquiry is stored regardless; the *Delivery error* field says why Graph refused it. Usually an expired client secret. |
-| `database is locked` | Two things writing sqlite at once. Keep `threads` in `serve.py` low, or move to Postgres. |
+| Text loads, **all images 404** | IIS does not serve `.webp` unless the MIME type is registered. `web.config` does this — confirm `dist\web.config` exists and IIS Manager → site → *MIME Types* lists `.webp`. |
+| `/api/` returns **404** | ARR proxy not enabled at server level. Re-run `preflight.ps1`. |
+| `/api/` returns **502** | Django not running, or on a different port than `web.config` expects. `nssm status CreativeSphere`, then curl `127.0.0.1:<BACKEND_PORT>`. |
+| **Another project broke** | This site is bound to port 80 with no host header, so it is catching their traffic. Add the hostname to its binding. |
+| **This site shows another project** | The reverse — their site has the blank host header. Give theirs an explicit hostname. |
+| Refreshing `/work/vfd` gives **404** | URL Rewrite not installed, or `web.config` missing from `dist`. |
+| Admin loads **unstyled** | `collectstatic` not run after deploying. |
+| Admin login: **CSRF verification failed** | Domain missing from `CSRF_TRUSTED_ORIGINS`, with the `https://` scheme. Restart after editing. |
+| **Redirect loop** | `SECURE_SSL_REDIRECT` on but Django cannot tell the request was HTTPS. Needs `BEHIND_PROXY=True` **and** `HTTP_X_FORWARDED_PROTO` allowed under URL Rewrite → View Server Variables. |
+| **400 Bad Request** | Hostname missing from `ALLOWED_HOSTS`. |
+| Service will not start | Port already taken — the log will say so. Change `BACKEND_PORT` and the `web.config` proxy line together. |
+| Contact form succeeds but **no email** | `/admin/api/contactmessage/` — the enquiry is stored regardless and *Delivery error* says why Graph refused. Usually an expired client secret. |
+| `database is locked` | Two things writing sqlite at once. Keep `threads` low in `serve.py`, or move to Postgres. |
 
 ---
 
 ## Moving to Postgres later
 
-No code change:
+No code change. If the VM already runs Postgres for your other project, make a
+separate database for this one:
 
 ```bat
 .venv\Scripts\pip install "psycopg[binary]"
 ```
 
-Add to `.env`, then migrate and re-seed:
-
 ```
 DATABASE_URL=postgres://user:password@localhost:5432/creativesphere
 ```
+
+Then `migrate` and re-run the three seeders.

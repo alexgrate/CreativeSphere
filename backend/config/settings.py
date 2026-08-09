@@ -177,6 +177,11 @@ STORAGES = {
 # up; turn it off once IIS is serving them.
 SERVE_MEDIA = env.bool("SERVE_MEDIA", default=True)
 
+# The localhost port waitress listens on, proxied to by IIS. Only needs changing
+# if something else on the machine already holds it — another Django app very
+# often does. Change it here and in the matching line of frontend/public/web.config.
+BACKEND_PORT = env.int("BACKEND_PORT", default=8000)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

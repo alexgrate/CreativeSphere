@@ -24,9 +24,12 @@ from django.core.wsgi import get_wsgi_application  # noqa: E402  (must follow th
 application = get_wsgi_application()
 
 if __name__ == "__main__":
+    from django.conf import settings
+
+    print(f"CreativeSphere backend on 127.0.0.1:{settings.BACKEND_PORT}", flush=True)
     serve(
         application,
-        listen="127.0.0.1:8000",
+        listen=f"127.0.0.1:{settings.BACKEND_PORT}",
         # a portfolio site's traffic is tiny; the default 4 is plenty, and each
         # thread holds a database connection
         threads=4,
