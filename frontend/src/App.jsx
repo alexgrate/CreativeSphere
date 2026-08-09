@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Header from './ui/Header'
 import Hero from './ui/Hero'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
@@ -17,8 +17,6 @@ import WorkDetailPage from './pages/WorkDetailPage'
 import ContactPage from './pages/ContactPage'
 
 function Home() {
-  useSmoothScroll()
-  useReveal()
   return (
     <>
       <Header />
@@ -35,19 +33,30 @@ function Home() {
   )
 }
 
+
+function Shell() {
+  const { pathname } = useLocation()
+  useSmoothScroll()
+  useReveal(pathname)
+
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path='/about' element={<AboutPage />} />
+      <Route path='/work' element={<WorkPage />} />
+      <Route path='/work/:id' element={<WorkDetailPage />} />
+      <Route path='/services' element={<ServicesPage />} />
+      <Route path='/contact' element={<ContactPage />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  )
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Loader />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path='/about' element={<AboutPage />} />
-        <Route path='/work' element={<WorkPage />} />
-        <Route path='/work/:id' element={<WorkDetailPage />} />
-        <Route path='/services' element={<ServicesPage />} />
-        <Route path='/contact' element={<ContactPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Shell />
     </BrowserRouter>
   )
 }

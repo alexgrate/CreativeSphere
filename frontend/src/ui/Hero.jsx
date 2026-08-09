@@ -7,9 +7,6 @@ gsap.registerPlugin(ScrollTrigger)
 const STATEMENT = "We’re a creative and digital agency that moves at the speed of your ambition. From strategy to production and beyond."
 const WORDMARK = ['The', 'Creative', 'Sphere']
 
-/* The bottom spark: a four-point star plus two trailing swooshes, drawn as
-   separate paths so they can be staggered — the reference stacks four of these
-   and reveals each with stroke-dashoffset. */
 const SPARK = [
     'M110 46 C 112 24, 114 14, 116 2 C 118 14, 120 24, 122 46 C 138 48, 150 50, 168 52 C 150 54, 138 56, 122 58 C 120 80, 118 90, 116 102 C 114 90, 112 80, 110 58 C 92 56, 80 54, 62 52 C 80 50, 92 48, 110 46 Z',
     'M6 74 C 22 74, 30 66, 38 56 C 46 46, 56 40, 74 40 L 104 40',
@@ -22,9 +19,6 @@ export default function Hero() {
     const sparkRef = useRef(null)
     const videoRef = useRef(null)
 
-    /* iOS will not honour the autoplay attribute on its own. It needs muted set
-       as a property, playsinline, and an explicit play() — and it still refuses
-       in Low Power Mode, so the last resort is to start on the first touch. */
     useEffect(() => {
         const v = videoRef.current
         if (!v) return
@@ -34,29 +28,37 @@ export default function Hero() {
         v.defaultMuted = true
         v.playsInline = true
 
-        let done = false
         const tryPlay = () => {
-            if (done || !v.paused) return
-            v.play().then(() => { done = true }).catch(() => { /* blocked; wait for a tap */ })
+            if (!v.paused) return
+            v.muted = true          
+            const p = v.play()
+            if (p?.catch) p.catch(() => { /* blocked; a later attempt or a tap wins */ })
         }
-        tryPlay()
-        v.addEventListener('loadeddata', tryPlay)
-        v.addEventListener('canplay', tryPlay)
 
-        const onGesture = () => { tryPlay(); }
+        tryPlay()
+        const evs = ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'pause', 'stalled', 'suspend']
+        evs.forEach((e) => v.addEventListener(e, tryPlay))
+
+        let tries = 0
+        const poll = setInterval(() => {
+            tryPlay()
+            if (++tries > 24 || !v.paused) clearInterval(poll)
+        }, 400)
+
+        const onGesture = () => tryPlay()
         document.addEventListener('touchstart', onGesture, { passive: true })
         document.addEventListener('click', onGesture)
-        // Safari also suspends playback when the tab is hidden and doesn't
-        // always resume it
         const onVis = () => { if (!document.hidden) tryPlay() }
         document.addEventListener('visibilitychange', onVis)
+        window.addEventListener('resize', onGesture)
 
         return () => {
-            v.removeEventListener('loadeddata', tryPlay)
-            v.removeEventListener('canplay', tryPlay)
+            clearInterval(poll)
+            evs.forEach((e) => v.removeEventListener(e, tryPlay))
             document.removeEventListener('touchstart', onGesture)
             document.removeEventListener('click', onGesture)
             document.removeEventListener('visibilitychange', onVis)
+            window.removeEventListener('resize', onGesture)
         }
     }, [])
 
@@ -65,8 +67,6 @@ export default function Hero() {
         if (reduce) videoRef.current?.pause()
 
         const ctx = gsap.context(() => {
-            // dash each path by its own length, then run the offsets to zero in
-            // sequence — the star lands first, then the trails chase it
             const paths = sparkRef.current?.querySelectorAll('path') || []
             paths.forEach((path) => {
                 const len = path.getTotalLength()
@@ -85,8 +85,6 @@ export default function Hero() {
                     { clipPath: 'inset(0% 0% 0% 0% round 0px)', scale: 1,
                       duration: 1.5, ease: 'power3.inOut' })
 
-                // the crest assembles: mark first, then each wordmark line out
-                // of its own mask
                 gsap.fromTo('.hc-mark',
                     { scale: 0.7, opacity: 0, rotate: -12 },
                     { scale: 1, opacity: 1, rotate: 0, duration: 1.4, ease: 'power3.out', delay: 0.35 })
@@ -94,7 +92,6 @@ export default function Hero() {
                     { yPercent: 115 },
                     { yPercent: 0, duration: 1, ease: 'power3.out', stagger: 0.11, delay: 0.6 })
 
-                // a slow drift keeps it alive without asking for attention
                 gsap.to('.hero-crest', {
                     y: -9, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 2,
                 })
@@ -128,12 +125,16 @@ export default function Hero() {
         <section className="hero" ref={secRef}>
             <div className="hero-media" aria-hidden="true">
                 <video
-                    ref={videoRef}
+                    ref={(el) => {
+                        videoRef.current = el
+                        if (el) { el.muted = true; el.defaultMuted = true; el.playsInline = true }
+                    }}
                     autoPlay
                     muted
                     loop
                     playsInline
                     disablePictureInPicture
+                    controls={false}
                     preload="auto"
                     poster="/video/poster.webp"
                 >
@@ -153,8 +154,7 @@ export default function Hero() {
                     </p>
                 </div>
 
-                {/* a crest, not the header lockup repeated: the mark sits behind
-                    the wordmark stacked and set large */}
+
                 <h1 className="hero-crest">
                     <img className="hc-mark" src="/brand/logo-mark-white-trim.png" alt="" aria-hidden="true" />
                     <span className="hc-stack">
@@ -172,7 +172,6 @@ export default function Hero() {
                 </p>
             </div>
 
-            {/* bottom-centre, the way theirs sits — not tucked under the mark */}
             <svg className="hero-spark" ref={sparkRef} viewBox="0 0 174 108" fill="none" aria-hidden="true">
                 {SPARK.map((d, i) => (
                     <path key={i} d={d} stroke="currentColor" strokeWidth="1.4"

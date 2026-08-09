@@ -26,9 +26,6 @@ export default function WorkDetail({ project }) {
                 opacity: 0, y: 20, duration: 0.85, ease: 'power3.out', stagger: 0.09, delay: 0.25,
             })
 
-            /* the banner opens from the bottom while the picture settles inside
-               it — same device as the index cards, so arriving here feels like
-               the same page continuing rather than a different site */
             const banner = sec.querySelector('.wd-banner')
             gsap.timeline({ delay: 0.35 })
                 .fromTo(banner,
@@ -61,7 +58,6 @@ export default function WorkDetail({ project }) {
                 })
             })
 
-            // the counter on the index taught the eye to expect a number here
             sec.querySelectorAll('.wd-stat b').forEach((el) => {
                 const raw = el.dataset.v || ''
                 const num = parseFloat(raw.replace(/[^\d.]/g, ''))
@@ -89,9 +85,9 @@ export default function WorkDetail({ project }) {
                     <span aria-hidden="true">&larr;</span> All work
                 </a>
 
-                <h1 className="wd-title">
+                <h1 className="wd-title spark-line">
                     {project.title.split(' ').map((word, n) => (
-                        <span className="wd-word" key={n}><i>{word}</i></span>
+                        <span className="wd-word" key={n}><i className="spark spark--light">{word}</i></span>
                     ))}
                 </h1>
 
@@ -134,8 +130,6 @@ export default function WorkDetail({ project }) {
                 ))}
             </div>
 
-            {/* only rendered where there are figures the site already stands
-                behind — an invented metric on a client page is worse than none */}
             {project.stats && (
                 <ul className="wd-stats wd-reveal">
                     {project.stats.map((s) => (

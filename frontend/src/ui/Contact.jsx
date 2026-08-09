@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { ArrowRight, MapPin } from "lucide-react"
 
+const ADDRESS = '5B Adewumi Adu St, off Sanni Balogun Street, Abule-Egba, Lagos 101232, Nigeria'
+
 const MAX = 600
 const MAILTO = 'hello@thecreativesphere.com'
 
@@ -116,6 +118,10 @@ export default function Contact() {
                             <span className="ct-sr">{office.open ? 'Open now' : 'Closed now'}</span>
                         </h2>
                         <p className="ct-org">The Creative Sphere</p>
+                        <address className="ct-addr">
+                            5B Adewumi Adu St, off Sanni Balogun Street,<br />
+                            Abule-Egba, Lagos 101232
+                        </address>
                         <p className="ct-meta">Mon&ndash;Fri, 9am&ndash;6pm WAT</p>
                         <p className="ct-meta">
                             <a href={`mailto:${MAILTO}`}>{MAILTO}</a><br />
@@ -179,6 +185,32 @@ export default function Contact() {
                     {sent && 'Thanks — your message is on its way.'}
                 </p>
             </form>
+
+            <div className="ct-map" data-reveal>
+                <div className="ct-map-frame">
+                    <iframe
+                        title="The Creative Sphere on Google Maps — Abule-Egba, Lagos"
+                        src={`https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&z=16&output=embed`}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        allowFullScreen
+                    />
+                </div>
+
+                <a
+                    className="ct-map-pin"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    <span className="ct-map-label">The studio</span>
+                    <span className="ct-map-addr">{ADDRESS}</span>
+                    <span className="ct-map-go">
+                        Open in Maps
+                        <ArrowRight size={15} strokeWidth={1.8} aria-hidden="true" />
+                    </span>
+                </a>
+            </div>
         </section>
     )
 }

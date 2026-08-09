@@ -3,17 +3,14 @@ import { lockScroll } from "../hooks/useSmoothScroll"
 
 const SEEN = 'tcs:loaded'
 
-/* Exactly what the first screen paints. This drifted once already: it was
-   still waiting on a hero slide image after the hero became a video, so the
-   number tracked an asset that was never rendered. */
 const CRITICAL = [
-    '/brand/logo-full-white-trim.png',   // the crest wordmark
-    '/brand/logo-mark-white-trim.png',   // the crest mark
-    '/video/poster.webp',                // first frame behind the video
+    '/brand/logo-full-white-trim.png',  
+    '/brand/logo-mark-white-trim.png',  
+    '/video/poster.webp',            
 ]
 
 const MIN_MS = 1100    
-const MAX_MS = 6000
+const MAX_MS = 11000  
 const PANELS = 5      
 const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -26,7 +23,7 @@ function Digit({ value, speed }) {
             </span>
         </span>
     )
-}
+} 
 
 export default function Loader() {
     const [pct, setPct] = useState(0)
@@ -59,29 +56,49 @@ export default function Loader() {
             im.src = src
         }
 
-        // the hero is a video now, so "loaded" has to include it having enough
-        // data to paint — otherwise the curtain lifts onto a blank frame
+
         let videoReady = false
+
+        let waited = 0
         const watchVideo = () => {
+            if (!alive) return
             const v = document.querySelector('.hero-media video')
-            if (!v) return setTimeout(watchVideo, 120)
+            if (!v) {
+                waited += 120
+                if (waited > 1200) { videoReady = true; return }
+                return setTimeout(watchVideo, 120)
+            }
             if (v.readyState >= 2) { videoReady = true; return }
             const ok = () => { videoReady = true }
             v.addEventListener('loadeddata', ok, { once: true })
             v.addEventListener('canplay', ok, { once: true })
-            // a hero-less page (or a video that never loads) must not stall us
             setTimeout(ok, 3500)
         }
-        if (document.querySelector('.hero') || true) watchVideo()
+        watchVideo()
 
-        const assetsDone = () => ready >= CRITICAL.length && fontsDone && videoReady
+        let pageLoaded = document.readyState === 'complete'
+        const onLoad = () => { pageLoaded = true }
+        if (!pageLoaded) window.addEventListener('load', onLoad, { once: true })
+
+        const imgShare = () => {
+            const imgs = [...document.images].filter(
+                (i) => (i.currentSrc || i.src) && i.loading !== 'lazy'
+            )
+            if (!imgs.length) return 1
+            return imgs.filter((i) => i.complete).length / imgs.length
+        }
+
+        const assetsDone = () =>
+            ready >= CRITICAL.length && fontsDone && videoReady && pageLoaded && imgShare() === 1
 
         const readTarget = () => {
-            const real = (ready / CRITICAL.length) * 0.6
-                       + (fontsDone ? 0.2 : 0)
-                       + (videoReady ? 0.2 : 0)
+            const real = (ready / CRITICAL.length) * 0.22
+                       + (fontsDone ? 0.14 : 0)
+                       + (videoReady ? 0.14 : 0)
+                       + imgShare() * 0.3
+                       + (pageLoaded ? 0.2 : 0)
 
-            const creep = 0.9 * (1 - Math.exp(-(performance.now() - t0) / 2600))
+            const creep = 0.86 * (1 - Math.exp(-(performance.now() - t0) / 2600))
             return Math.max(real, creep)
         }
 
@@ -116,6 +133,7 @@ export default function Loader() {
             alive = false
             cancelAnimationFrame(raf)
             clearTimeout(relock)
+            window.removeEventListener('load', onLoad)
             document.documentElement.classList.remove('is-loading')
             lockScroll(false)
         }

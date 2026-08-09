@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import Header from "./Header"
+import Footer from "./Footer"
 
 export default function NotFound() {
     const { pathname } = useLocation()
@@ -30,6 +31,8 @@ export default function NotFound() {
                     <span className="nf-path" aria-label="Requested address">{pathname}</span>
                 </section>
             </main>
+            <div className="ftr-spacer" aria-hidden="true" />
+            <Footer />
         </>
     )
 }

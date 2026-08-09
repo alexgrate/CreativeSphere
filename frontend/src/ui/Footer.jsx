@@ -2,6 +2,12 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 
 const WORDMARK = 'thecreativesphere'
 
+const FTR_LINKS = [
+    { href: 'mailto:hello@thecreativesphere.com', label: 'HELLO@THECREATIVESPHERE.COM' },
+    { href: 'https://instagram.com/inthecrativesphere', label: 'INSTAGRAM', external: true },
+    { href: 'https://linkedin.com', label: 'LINKEDIN', external: true },
+]
+
 const AMP_RATIO = 0.11       
 const REACH = 0.26          
 const COL = 2              
@@ -259,10 +265,23 @@ export default function Footer() {
                 <p className="ftr-line" data-reveal>
                     Strategy, design and story.<br />Working as one.
                 </p>
+                {/* one span per letter so they can hop on hover, same as the
+                    header nav; the aria-label keeps it readable to AT */}
                 <nav className="ftr-links" data-reveal>
-                    <a href="mailto:hello@thecreativesphere.com">HELLO@THECREATIVESPHERE.COM</a>
-                    <a href="https://instagram.com/inthecrativesphere" target="_blank" rel="noreferrer">INSTAGRAM</a>
-                    <a href="https://linkedin.com" target="_blank" rel="noreferrer">LINKEDIN</a>
+                    {FTR_LINKS.map((l) => (
+                        <a
+                            key={l.href}
+                            href={l.href}
+                            aria-label={l.label}
+                            {...(l.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                        >
+                            {[...l.label].map((ch, i) => (
+                                <span key={i} style={{ '--i': i }} aria-hidden="true">
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                </span>
+                            ))}
+                        </a>
+                    ))}
                 </nav>
             </div>
 

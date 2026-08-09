@@ -120,9 +120,9 @@ export default function WorkHero() {
             <div className="wh-mid">
                 <span className="wh-eyebrow"><em />Portfolio — 2022 to 2024</span>
 
-                <h1 className="wh-title">
-                    <span className="wh-word"><i>Selected</i></span>{' '}
-                    <span className="wh-word"><i>work</i></span>
+                <h1 className="wh-title spark-line">
+                    <span className="wh-word"><i className="spark spark--light">Selected</i></span>{' '}
+                    <span className="wh-word"><i className="spark spark--light">work</i></span>
                 </h1>
 
                 <p className="wh-lead">
@@ -142,8 +142,6 @@ export default function WorkHero() {
                 className="wh-scroll"
                 href="#work-index"
                 onClick={(e) => {
-                    // Lenis owns the scroll position, so the browser's own
-                    // anchor jump would fight it
                     const t = document.getElementById('work-index')
                     if (!t) return
                     e.preventDefault()

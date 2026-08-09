@@ -5,12 +5,8 @@ import Gallery from "../ui/Gallery"
 import Extras from "../ui/Extras"
 import Capabilities from "../ui/Capabilities"
 import CTA from "../ui/CTA"
-import { useSmoothScroll } from "../hooks/useSmoothScroll"
-import { useReveal } from "../hooks/useReveal"
 
 export default function ServicesPage() {
-    useSmoothScroll()
-    useReveal()
     return (
         <>
             <Header />

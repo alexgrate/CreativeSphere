@@ -215,9 +215,9 @@ export default function WorkGrid() {
                     <div className="wk-meta">
                         <span className="wk-client">{w.client}</span>
 
-                        <h2 className="wk-title">
+                        <h2 className="wk-title spark-line">
                             {w.title.split(' ').map((word, n) => (
-                                <span className="wk-word" key={n}><i>{word}</i></span>
+                                <span className="wk-word" key={n}><i className="spark spark--light">{word}</i></span>
                             ))}
                         </h2>
 
