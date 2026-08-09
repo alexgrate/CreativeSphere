@@ -2682,6 +2682,264 @@ html.page-dark .hb-burger { color: var(--type); }
   .wk-count span { color: var(--muted); }
   .wk-count em { width: 16px; height: 1px; background: var(--line); }
 
+
+  /* WORK DETAIL — /work/:id ------------------------------------------------ */
+  .wd { padding: var(--top-clear) 0 0; }
+
+  .wd-top { padding: 0 48px; max-width: 1500px; margin: 0 auto; }
+
+  .wd-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 26px;
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.35s ease;
+  }
+  .wd-eyebrow:hover { color: var(--accent); }
+  .wd-eyebrow span { transition: transform 0.35s ease; }
+  .wd-eyebrow:hover span { transform: translateX(-4px); }
+
+  .wd-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.6rem, 6.4vw, 5.8rem);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    max-width: 16em;
+  }
+  .wd-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.1em;
+  }
+  .wd-word i { display: inline-block; font-style: normal; }
+  .wd-word + .wd-word { margin-left: 0.24em; }
+
+  .wd-line {
+    margin-top: 20px;
+    max-width: 34em;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .wd-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px 32px;
+    margin-top: 44px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+  }
+  .wd-facts-wide { grid-column: 1 / -1; }
+  .wd-facts dt {
+    font-family: 'Martian Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .wd-facts dd { margin-top: 7px; font-size: 15.5px; line-height: 1.45; }
+
+  .wd-banner {
+    margin: clamp(46px, 6vh, 80px) 0 0;
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+    position: relative;
+    will-change: clip-path;
+  }
+  .wd-banner img {
+    position: absolute;
+    left: 0; top: -4%;
+    width: 100%; height: 108%;
+    object-fit: cover;
+    will-change: transform;
+  }
+
+  .wd-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 56px;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: clamp(60px, 8vh, 110px) 48px 0;
+  }
+  .wd-block h2 {
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .wd-block p {
+    font-size: 17px;
+    line-height: 1.68;
+    color: var(--muted);
+    max-width: 34em;
+  }
+
+  .wd-shots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: clamp(52px, 7vh, 96px) 48px 0;
+  }
+  .wd-shot {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 11 / 8;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--panel);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    will-change: clip-path;
+  }
+  .wd-shot img {
+    position: absolute;
+    left: 0; top: -5%;
+    width: 100%; height: 110%;
+    object-fit: cover;
+    will-change: transform;
+  }
+
+  .wd-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: clamp(56px, 8vh, 104px) 48px 0;
+    list-style: none;
+  }
+  .wd-stat b {
+    display: block;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2.6rem, 5vw, 4.4rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .wd-stat span {
+    display: block;
+    margin-top: 12px;
+    font-family: 'Martian Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .wd-outcome {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: clamp(56px, 8vh, 104px) 48px 0;
+  }
+  .wd-outcome-label {
+    display: block;
+    margin-bottom: 18px;
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .wd-outcome p {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    max-width: 18em;
+  }
+
+  /* the way out of a case study is the next one, not the back button */
+  .wd-next {
+    position: relative;
+    display: grid;
+    align-content: center;
+    gap: 8px;
+    margin-top: clamp(64px, 9vh, 120px);
+    padding: clamp(52px, 7vh, 88px) 48px;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+  }
+  .wd-next-label {
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .wd-next-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(2rem, 5vw, 4.2rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.032em;
+    transition: color 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .wd-next:hover .wd-next-title { color: var(--accent); transform: translateX(14px); }
+  .wd-next-client {
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .wd-next figure {
+    position: absolute;
+    right: 48px;
+    top: 50%;
+    width: 210px;
+    margin: 0;
+    aspect-ratio: 10 / 7;
+    border-radius: 12px;
+    overflow: hidden;
+    transform: translateY(-50%) scale(0.9);
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .wd-next:hover figure { opacity: 1; transform: translateY(-50%) scale(1); }
+  .wd-next figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* index card link wrapper + its new CTA */
+  .wk-link { display: block; color: inherit; text-decoration: none; }
+
+  .wk-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 18px;
+    font-family: 'Martian Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.4s ease;
+  }
+  .wk-cta em { font-style: normal; transition: transform 0.4s ease; }
+  .wk-card.is-hot .wk-cta { color: var(--accent); }
+  .wk-card.is-hot .wk-cta em { transform: translateX(6px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wd-banner, .wd-shot { clip-path: none !important; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .wh-scroll em { animation: none; }
     .wk-thread, .wk-ghost { display: none; }
@@ -3070,6 +3328,47 @@ html.page-dark .hb-burger { color: var(--type); }
     }
     .wh-scroll em { width: 22px; height: 22px; }
     .wh-scroll em svg { width: 10px; height: 14px; }
+
+    /* WORK DETAIL */
+    .wd-top { padding: 0 24px; }
+    .wd-title { font-size: 2.35rem; }
+    .wd-line { margin-top: 15px; font-size: 16px; }
+    .wd-facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 20px;
+      margin-top: 30px;
+      padding-top: 20px;
+    }
+    .wd-facts dd { font-size: 14.5px; }
+    .wd-banner { margin-top: 30px; aspect-ratio: 4 / 3; }
+    .wd-body {
+      grid-template-columns: 1fr;
+      gap: 34px;
+      padding: 44px 24px 0;
+    }
+    .wd-block p { font-size: 15.5px; }
+    .wd-shots { grid-template-columns: 1fr; gap: 14px; padding: 40px 24px 0; }
+    .wd-shot { border-radius: 12px; }
+    .wd-stats { grid-template-columns: 1fr; gap: 24px; padding: 44px 24px 0; }
+    .wd-stat b { font-size: 2.6rem; }
+    .wd-stat span { margin-top: 8px; }
+    .wd-outcome { padding: 44px 24px 0; }
+    .wd-outcome p { font-size: 1.5rem; }
+
+    .wd-next { margin-top: 52px; padding: 40px 24px; }
+    .wd-next-title { font-size: 2rem; }
+    /* no hover on a phone, so the next-project thumb is simply always there */
+    .wd-next figure {
+      position: static;
+      width: 100%;
+      margin-top: 18px;
+      opacity: 1;
+      transform: none;
+    }
+    .wd-next:hover .wd-next-title { transform: none; }
+
+    .wk-cta { margin-top: 14px; color: var(--accent); }
+
   }
 
   @media (max-width: 380px) {

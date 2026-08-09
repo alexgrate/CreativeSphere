@@ -24,3 +24,33 @@ Pillow WebP q82. t-*.webp are 360x252 thumbnails for the scatter hero.
 Everything else on this page is real. The copy (titles, one-liners, disciplines,
 years) was written from the existing site content and should be checked with the
 team lead — the years in particular are inferred, not confirmed.
+
+
+CASE STUDY PAGES (/work/:id) — added later
+===========================================
+Each project now has a detail page. Images per project:
+
+  <id>-hero.webp   1800x900 (2:1) banner
+  <id>-1.webp      1100x820 detail crop
+  <id>-2.webp      1100x820 detail crop
+
+All three are crops of the SAME client key visual — there is only one asset per
+client in this repo. Crops were picked programmatically by scoring edge detail
+across the artwork and requiring the two to come from different regions; the
+first hand-guessed pass put two of them on empty gradient. Replace with real
+additional assets (process shots, applications, stills) when they exist.
+
+COPY — read before showing a client
+-----------------------------------
+`brief`, `approach` and `outcome` in site.js were written from the one-line
+descriptions and the disciplines already on the site. They are plausible and
+non-specific by design, but they are NOT client-approved and were not taken
+from a brief. Have the team lead read all eight before this goes near a pitch.
+
+`stats` is null on seven of the eight projects on purpose. VFD is the only
+engagement with a figure the site already stands behind (~100 followers to
+10,000+ in nine months, stated on the home page). The stats band simply does
+not render when stats is null — do not fill the others in with invented
+numbers to make the layout look even. Add them only when they are real.
+
+`sector` and `scope` are reasonable but also unconfirmed.

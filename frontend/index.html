@@ -15,6 +15,15 @@
     <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
 
     <title>The Creative Sphere</title>
+
+    <!-- Every internal link is a full page load, so a dark /work page would
+         paint the light background first and flash. React sets this class too;
+         doing it here just gets in before the first paint. -->
+    <script>
+      if (/^\/work(\/|$)/.test(location.pathname)) {
+        document.documentElement.classList.add('page-dark')
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

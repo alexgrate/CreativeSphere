@@ -204,6 +204,9 @@ export default function WorkGrid() {
                 >
                     <span className="wk-ghost" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
 
+                    {/* the whole card is the link now that there is somewhere
+                        to go — a plain <a> to match the rest of the site */}
+                    <a className="wk-link" href={`/work/${w.id}`} aria-label={`${w.client} — ${w.title}`}>
                     <figure className="wk-shot">
                         <img src={w.img} alt={`${w.client} — ${w.title}`} loading="lazy" />
                         <span className="wk-n">{String(i + 1).padStart(2, '0')}</span>
@@ -224,7 +227,13 @@ export default function WorkGrid() {
                             {w.disciplines.map((d) => <li key={d}>{d}</li>)}
                             <li className="wk-year">{w.year}</li>
                         </ul>
+
+                        <span className="wk-cta">
+                            View case study
+                            <em aria-hidden="true">&rarr;</em>
+                        </span>
                     </div>
+                    </a>
                 </article>
             ))}
 
