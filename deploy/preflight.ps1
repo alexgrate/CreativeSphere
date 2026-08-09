@@ -72,22 +72,38 @@ if ($null -eq $proxy) {
 }
 
 function Probe {
-    # NB: the parameter must not be called $Args - that is a PowerShell automatic
-    # variable, and naming it so silently drops the arguments, which makes every
-    # tool run bare (node opens its REPL, git prints usage).
+
     param([string]$Label, [string]$Exe, [string]$Flag, [string]$Hint)
     $cmd = Get-Command $Exe
     if (-not $cmd) { Report 'MISSING' $Label $Hint; return $null }
-    $out = (& $Exe $Flag 2>&1 | Select-Object -First 1)
+    $out = (cmd /c "$Exe $Flag 2>&1" | Where-Object { $_ -match '\S' } | Select-Object -First 1)
+    if (-not $out) {
+        Report 'WARN' $Label "no output - resolved to $($cmd.Source)"
+        return $null
+    }
     Report 'OK' $Label "$out"
     return "$out"
 }
 
 $py = Probe 'Python' 'python' '--version' 'python.org/downloads/windows (tick Add to PATH)'
-if ($py -match '(\d+)\.(\d+)') {
-    if ([int]$Matches[1] -lt 3 -or ([int]$Matches[1] -eq 3 -and [int]$Matches[2] -lt 12)) {
-        Report 'WARN' 'Python version' 'this project expects 3.12 or newer'
+if (-not $py) {
+    # a bare `python` on PATH is often the Microsoft Store stub, which answers
+    # nothing useful; the py launcher finds the real interpreters
+    $py = Probe 'Python (py launcher)' 'py' '-V' 'python.org/downloads/windows'
+    if ($py) {
+        Write-Host '           `python` is not usable but `py` is. Create the venv with:' -ForegroundColor Yellow
+        Write-Host '             py -m venv .venv' -ForegroundColor Yellow
     }
+}
+if ($py -match '(\d+)\.(\d+)') {
+    $maj = [int]$Matches[1]; $min = [int]$Matches[2]
+    if ($maj -lt 3 -or ($maj -eq 3 -and $min -lt 12)) {
+        Report 'WARN' 'Python version' "found $maj.$min - this project expects 3.12 or newer"
+    } else {
+        Report 'OK' 'Python version' "$maj.$min is fine"
+    }
+} elseif ($py) {
+    Report 'WARN' 'Python version' 'could not parse the version - check it by hand'
 }
 
 Probe 'Node.js' 'node' '--version' 'nodejs.org (or build dist on your Mac and copy it)' | Out-Null
@@ -97,10 +113,22 @@ Probe 'Git'     'git'  '--version' 'git-scm.com/download/win'                   
 # Either process manager will do. NSSM makes a real Windows service; pm2 is
 # already here for the Node projects and can run this too.
 $hasNssm = [bool](Get-Command nssm)
-$hasPm2 = [bool](Get-Command pm2)
-if ($hasNssm) { Report 'OK' 'NSSM' 'on PATH' }
-elseif ($hasPm2) { Report 'OK' 'Process manager' 'pm2 found - use it instead of NSSM (see DEPLOY.md Step 6)' }
-else { Report 'MISSING' 'NSSM or pm2' 'nssm.cc/download, copy nssm.exe into System32' }
+$pm2Cmd = Get-Command pm2
+$pm2Svc = Get-Service | Where-Object { $_.Name -match 'pm2' -and $_.Status -eq 'Running' }
+
+if ($hasNssm) {
+    Report 'OK' 'NSSM' 'on PATH'
+} elseif ($pm2Cmd) {
+    Report 'OK' 'pm2' "on PATH - use it instead of NSSM (DEPLOY.md Step 6)"
+} elseif ($pm2Svc) {
+    # installed for another account, so the shim is missing from this PATH
+    $guess = Join-Path $env:APPDATA 'npm\pm2.cmd'
+    $found = if (Test-Path $guess) { $guess } else { '(run: npm root -g)' }
+    Report 'WARN' 'pm2' "service running but not on this PATH - try $found"
+    Write-Host '           Either call pm2 by its full path, or install NSSM instead.' -ForegroundColor Yellow
+} else {
+    Report 'MISSING' 'NSSM or pm2' 'nssm.cc/download, copy nssm.exe into System32'
+}
 
 if (Get-Command wacs) { Report 'OK' 'win-acme' 'on PATH' }
 else { Report 'INFO' 'win-acme' 'only needed if this VM does not already issue certificates' }
@@ -183,11 +211,23 @@ if (Get-Service -Name 'CreativeSphere') {
 
 Section 'Firewall'
 
+# Walking every rule and asking each for its ports takes minutes on a busy
+# server. Start from the port filters instead - there are far fewer.
+$openPorts = @()
+foreach ($f in Get-NetFirewallPortFilter) {
+    if ($f.LocalPort -in @('80', '443', 'Any')) {
+        $r = $f | Get-NetFirewallRule
+        if ($r.Enabled -eq 'True' -and $r.Direction -eq 'Inbound' -and $r.Action -eq 'Allow') {
+            $openPorts += $f.LocalPort
+        }
+    }
+}
 foreach ($port in 80, 443) {
-    $rule = Get-NetFirewallRule -Enabled True -Direction Inbound |
-        Where-Object { ($_ | Get-NetFirewallPortFilter).LocalPort -eq $port }
-    if ($rule) { Report 'OK' "Inbound $port" 'allowed' }
-    else { Report 'WARN' "Inbound $port" 'no rule found - may still be covered by a broader rule' }
+    if ($openPorts -contains "$port" -or $openPorts -contains 'Any') {
+        Report 'OK' "Inbound $port" 'allowed'
+    } else {
+        Report 'WARN' "Inbound $port" 'no explicit rule - your other HTTPS sites suggest it is open anyway'
+    }
 }
 
 # ---------------------------------------------------------------------- summary
