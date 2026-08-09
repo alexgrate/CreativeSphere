@@ -2,23 +2,70 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/brand/logo-mark-blue.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>The Creative Sphere — Brand, campaign and content studio in Lagos</title>
     <meta
       name="description"
-      content="The Creative Sphere — full-service creative & digital agency. Turning ideas into powerful brands."
+      content="A Lagos creative studio building brands, campaigns and content for companies that have to be understood before they can be chosen. Strategy, identity, film and social under one roof."
     />
+    <link rel="canonical" href="https://dcreativesphere.com/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <link rel="icon" type="image/png" href="/brand/logo-mark-blue.png" />
+    <link rel="apple-touch-icon" href="/brand/logo-mark-blue.png" />
+    <meta name="theme-color" content="#0e0e12" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The Creative Sphere" />
+    <meta property="og:locale" content="en_NG" />
+    <meta property="og:url" content="https://dcreativesphere.com/" />
+    <meta property="og:title" content="The Creative Sphere — Brand, campaign and content studio in Lagos" />
+    <meta
+      property="og:description"
+      content="A Lagos creative studio building brands, campaigns and content for companies that have to be understood before they can be chosen."
+    />
+    <meta property="og:image" content="https://dcreativesphere.com/brand/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The Creative Sphere" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Creative Sphere — Brand, campaign and content studio in Lagos" />
+    <meta
+      name="twitter:description"
+      content="A Lagos creative studio building brands, campaigns and content for companies that have to be understood before they can be chosen."
+    />
+    <meta name="twitter:image" content="https://dcreativesphere.com/brand/og-image.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
 
-    <title>The Creative Sphere</title>
 
-    <!-- Every internal link is a full page load, so a dark /work page would
-         paint the light background first and flash. React sets this class too;
-         doing it here just gets in before the first paint. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "The Creative Sphere",
+        "url": "https://dcreativesphere.com/",
+        "logo": "https://dcreativesphere.com/brand/logo-mark-blue.png",
+        "image": "https://dcreativesphere.com/brand/og-image.png",
+        "description": "A Lagos creative studio building brands, campaigns and content.",
+        "email": "hello@thecreativesphere.com",
+        "telephone": "+2349057051623",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "5B Adewumi Adu St, off Sanni Balogun Street, Abule-Egba",
+          "addressLocality": "Lagos",
+          "postalCode": "101232",
+          "addressCountry": "NG"
+        }
+      }
+    </script>
+
     <script>
       if (/^\/work(\/|$)/.test(location.pathname)) {
         document.documentElement.classList.add('page-dark')

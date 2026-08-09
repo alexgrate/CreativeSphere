@@ -531,126 +531,6 @@ html.page-dark .hb-burger { color: var(--type); }
     color: rgba(255, 255, 255, 0.78);
   }
 
-  .impact {
-    padding: 110px 48px;
-  }
-
-  .impact-head {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: start;
-    max-width: 1600px;
-    margin: 0 auto 64px;
-  }
-
-  .impact-head h2 {
-    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-    font-size: clamp(2.2rem, 4vw, 4.2rem);
-    line-height: 1.02;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-  }
-
-  .impact-head p{
-    font-size: clamp(16px, 1.4vw, 20px);
-    line-height: 1.6;
-    color: #9a9aa2;                    
-    max-width: 34em;
-    padding-top: 10px;
-  }
-
-  .impact-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    max-width: 1600px;
-    margin: 0 auto;
-  }
-
-  .i-card {
-    position: relative;
-    min-height: 330px;
-    background: var(--panel);
-    border-radius: 20px;
-    padding: 30px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
-  }
-
-  .i-card:hover,
-  .i-card:focus-within {
-    transform: translateY(-6px);
-    box-shadow: 0 22px 48px rgba(13, 114, 255, 0.16);
-  }
-  
-  .i-front {
-    position: absolute;
-    inset: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .i-front svg {
-    width: 34px;
-    height: 34px;
-    fill: none;
-    stroke: var(--ink);
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .i-value {
-    display: block;
-    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    color: var(--accent);   
-  }
-
-  .i-label{
-    display: block;
-    margin-top: 8px;
-    font-size: 15px;
-    color: var(--muted);
-  }
-
-  .i-back {
-    position: absolute;
-    inset: 30px;
-    display: flex;
-    align-items: flex-end;
-    font-size: 15.5px;
-    line-height: 1.6;
-    color: #3c3c44;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.4s ease 0.05s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
-  }
-
-  .i-card:hover .i-front,
-  .i-card:focus-within .i-front{
-    opacity: 0;
-    transform: translateY(-16px);
-  }
-
-  .i-card:hover .i-back,
-  .i-card:focus-within .i-back{
-    opacity: 1;
-    transform: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .i-card, .i-front, .i-back {
-      transition: none;
-    }
-  }
-
   /* FORMATS */
   .fmt {
     display: grid;
@@ -2421,6 +2301,16 @@ html.page-dark .hb-burger { color: var(--type); }
     50%      { transform: translateY(3px); }
   }
 
+.wk-wait {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: rgb(255 255 255 / 0.45);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+
   .wk {
     position: relative;
     display: grid;
@@ -3041,30 +2931,6 @@ html.page-dark .hb-burger { color: var(--type); }
       white-space: nowrap;
     }
 
-    .impact {
-      padding: 72px 0;
-    }
-
-    .impact-head {
-      grid-template-columns: 1fr;
-      gap: 18px;
-      margin-bottom: 40px;
-    }
-
-    .impact-cards {
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .i-card {
-      min-height: 260px;
-      padding: 24px;
-    }
-
-    .i-front, .i-back{
-      inset: 24px;
-    }
-
     .fmt{
       grid-template-columns: 1fr;
       gap: 34px;
@@ -3486,12 +3352,23 @@ html.page-dark .hb-burger { color: var(--type); }
       display: none;
     }
 
-    .impact-cards{
-      grid-template-columns: 1fr;
-    }
-
     .cta-chip{
       display: none;
     }
   }
+}
+
+/* contact form honeypot — off-screen, never display:none */
+.ct-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ct-btn[disabled] {
+  opacity: 0.6;
+  cursor: progress;
 }

@@ -5,11 +5,21 @@ import Footer from "../ui/Footer"
 import WorkDetail from "../ui/WorkDetail"
 import NotFound from "../ui/NotFound"
 import CTA from "../ui/CTA"
-import { WORK } from "../content/site"
+import { useWork } from "../lib/api"
+import { usePageMeta } from "../hooks/usePageMeta"
 
 export default function WorkDetailPage() {
     const { id } = useParams()
-    const project = WORK.find((w) => w.id === id)
+    const { work, ready } = useWork()
+    const project = work.find((w) => w.id === id)
+
+    // falls back to the work-page defaults until the project resolves
+    usePageMeta({
+        title: project && `${project.client} — ${project.title}`,
+        description: project && `${project.line} ${project.outcome}`.slice(0, 200),
+        path: `/work/${id}`,
+        image: project?.hero,
+    })
 
     useLayoutEffect(() => {
         if (!project) return
@@ -17,15 +27,20 @@ export default function WorkDetailPage() {
         return () => document.documentElement.classList.remove('page-dark')
     }, [project])
 
-
-    if (!project) return <NotFound />
+    if (ready && !project) return <NotFound />
 
     return (
         <>
             <Header />
             <main className="shell">
-                <WorkDetail project={project} />
-                <CTA />
+                {project ? (
+                    <>
+                        <WorkDetail project={project} work={work} />
+                        <CTA />
+                    </>
+                ) : (
+                    <div className="wk-wait" />
+                )}
             </main>
             <div className="ftr-spacer" aria-hidden="true" />
             <Footer />

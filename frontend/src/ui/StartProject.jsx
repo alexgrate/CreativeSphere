@@ -1,9 +1,11 @@
-import { CTA_LOGOS } from "../content/site"
+import { useCtaLogos } from "../lib/api"
 
 export default function StartProject() {
+    const { data: chips } = useCtaLogos()
+
     return (
         <section className="cta">
-            {CTA_LOGOS.map((l, n) => (
+            {chips.map((l, n) => (
                 <span
                     key={n}
                     className="cta-chip"

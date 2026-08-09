@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef } from "react"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
-import { WORK } from "../content/site"
 import { scrollToY } from "../hooks/useSmoothScroll"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -16,8 +15,10 @@ const SLOTS = [
 const LIVE = 6            
 const POOL = 9         
 
-export default function WorkHero() {
+export default function WorkHero({ work }) {
     const secRef = useRef(null)
+    const disciplines = new Set(work.flatMap((w) => w.disciplines)).size
+    const industries = new Set(work.map((w) => w.sector)).size
 
     useLayoutEffect(() => {
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -42,12 +43,12 @@ export default function WorkHero() {
             const cycle = (el, first) => {
                 const img = el.querySelector('img')
                 const slot = SLOTS[slotCursor++ % SLOTS.length]
-                const item = WORK[imgCursor++ % WORK.length]
+                const item = work[imgCursor++ % work.length]
                 const w = rand(wMin, wMax)
                 const travel = rand(38, 74)
                 const dir = rand([-1, 1])
 
-                img.src = `/work/t-${item.id}.webp`
+                img.src = item.thumb
 
                 gsap.set(el, {
                     left: `${slot.x}%`,
@@ -105,14 +106,14 @@ export default function WorkHero() {
         }, secRef)
 
         return () => ctx.revert()
-    }, [])
+    }, [work])
 
     return (
         <section className="wh" ref={secRef}>
             <div className="wh-scatter" aria-hidden="true">
                 {Array.from({ length: POOL }, (_, i) => (
                     <div className="wh-thumb" key={i}>
-                        <img src={`/work/t-${WORK[i % WORK.length].id}.webp`} alt="" loading="eager" />
+                        <img src={work[i % work.length].thumb} alt="" loading="eager" />
                     </div>
                 ))}
             </div>
@@ -131,9 +132,9 @@ export default function WorkHero() {
                 </p>
 
                 <ul className="wh-stats">
-                    <li><b>{String(WORK.length).padStart(2, '0')}</b><span>Projects</span></li>
-                    <li><b>06</b><span>Disciplines</span></li>
-                    <li><b>08</b><span>Industries</span></li>
+                    <li><b>{String(work.length).padStart(2, '0')}</b><span>Projects</span></li>
+                    <li><b>{String(disciplines).padStart(2, '0')}</b><span>Disciplines</span></li>
+                    <li><b>{String(industries).padStart(2, '0')}</b><span>Industries</span></li>
                 </ul>
             </div>
 

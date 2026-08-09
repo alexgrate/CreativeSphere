@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
-import { WORK } from "../content/site"
 
 gsap.registerPlugin(ScrollTrigger)
 
-export default function WorkGrid() {
+export default function WorkGrid({ work }) {
     const secRef = useRef(null)
     const pathRef = useRef(null)
     const pulseRef = useRef(null)
@@ -169,7 +168,7 @@ export default function WorkGrid() {
         }, secRef)
 
         return () => ctx.revert()
-    }, [draw])
+    }, [draw, work])
 
     useEffect(() => {
         const redo = () => { draw(); ScrollTrigger.refresh() }
@@ -196,7 +195,7 @@ export default function WorkGrid() {
                 <path ref={pulseRef} className="wk-line-pulse" d="" fill="none" />
             </svg>
 
-            {WORK.map((w, i) => (
+            {work.map((w, i) => (
                 <article
                     className="wk-card"
                     key={w.id}
@@ -204,8 +203,6 @@ export default function WorkGrid() {
                 >
                     <span className="wk-ghost" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
 
-                    {/* the whole card is the link now that there is somewhere
-                        to go — a plain <a> to match the rest of the site */}
                     <a className="wk-link" href={`/work/${w.id}`} aria-label={`${w.client} — ${w.title}`}>
                     <figure className="wk-shot">
                         <img src={w.img} alt={`${w.client} — ${w.title}`} loading="lazy" />
@@ -240,7 +237,7 @@ export default function WorkGrid() {
             <div className={`wk-count ${inRun ? 'is-on' : ''}`} aria-hidden="true">
                 <b>{String(live + 1).padStart(2, '0')}</b>
                 <em />
-                <span>{String(WORK.length).padStart(2, '0')}</span>
+                <span>{String(work.length).padStart(2, '0')}</span>
             </div>
         </section>
     )

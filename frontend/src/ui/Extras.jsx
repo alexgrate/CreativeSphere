@@ -1,14 +1,16 @@
 import { useState } from "react"
 import { CornerDownRight, Plus } from "lucide-react"
-import { EXTRAS } from "../content/site"
+import { useFaqs } from "../lib/api"
 
 export default function Extras() {
+    const { data: faqs } = useFaqs()
     const [open, setOpen] = useState(() => new Set())
 
     const toggle = (id) =>
         setOpen((cur) => {
             const next = new Set(cur)
-            next.has(id) ? next.delete(id) : next.add(id)
+            if (next.has(id)) next.delete(id)
+            else next.add(id)
             return next
         })
 
@@ -20,7 +22,7 @@ export default function Extras() {
             </div>
 
             <ul className="acc-list">
-                {EXTRAS.map((x) => {
+                {faqs.map((x) => {
                     const isOpen = open.has(x.id)
                     return (
                         <li className={`acc-item ${isOpen ? 'is-open' : ''}`} key={x.id}>

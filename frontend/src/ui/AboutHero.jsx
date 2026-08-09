@@ -1,9 +1,10 @@
 import { useRef } from "react"
-import { LOGOS } from "../content/site"
+import { useLogos } from "../lib/api"
 
 
 export default function AboutHero() {
-    const strip = [...LOGOS, ...LOGOS, ...LOGOS]
+    const { data: logos } = useLogos()
+    const strip = [...logos, ...logos, ...logos]
 
     const railRef = useRef(null)
     const drag = useRef({ active: false, startX: 0, startScroll: 0, moved: 0 })

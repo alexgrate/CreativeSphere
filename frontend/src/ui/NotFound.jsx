@@ -2,9 +2,13 @@ import { Link, useLocation } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import Header from "./Header"
 import Footer from "./Footer"
+import { usePageMeta } from "../hooks/usePageMeta"
 
 export default function NotFound() {
     const { pathname } = useLocation()
+
+    // noindex so a mistyped or retired URL never gets indexed as a real page
+    usePageMeta({ title: 'Page not found', path: pathname, noindex: true })
 
     return (
         <>

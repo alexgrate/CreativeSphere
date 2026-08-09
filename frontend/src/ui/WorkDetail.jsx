@@ -1,15 +1,14 @@
 import { useLayoutEffect, useRef } from "react"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
-import { WORK } from "../content/site"
 
 gsap.registerPlugin(ScrollTrigger)
 
-export default function WorkDetail({ project }) {
+export default function WorkDetail({ project, work }) {
     const secRef = useRef(null)
 
-    const idx = WORK.findIndex((w) => w.id === project.id)
-    const next = WORK[(idx + 1) % WORK.length]
+    const idx = work.findIndex((w) => w.id === project.id)
+    const next = work[(idx + 1) % work.length]
 
     useLayoutEffect(() => {
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -150,7 +149,7 @@ export default function WorkDetail({ project }) {
                 <span className="wd-next-label">Next project</span>
                 <span className="wd-next-title">{next.title}</span>
                 <span className="wd-next-client">{next.client}</span>
-                <figure><img src={`/work/t-${next.id}.webp`} alt="" loading="lazy" /></figure>
+                <figure><img src={next.thumb} alt="" loading="lazy" /></figure>
             </a>
         </article>
     )

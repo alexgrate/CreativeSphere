@@ -15,8 +15,12 @@ import ServicesPage from './pages/ServicesPage'
 import WorkPage from './pages/WorkPage'
 import WorkDetailPage from './pages/WorkDetailPage'
 import ContactPage from './pages/ContactPage'
+import { useFaqs, useWork } from './lib/api'
+import { usePageMeta } from './hooks/usePageMeta'
 
 function Home() {
+  usePageMeta({ path: '/' })
+
   return (
     <>
       <Header />
@@ -36,8 +40,15 @@ function Home() {
 
 function Shell() {
   const { pathname } = useLocation()
+  const onWork = pathname.startsWith('/work')
+  const onServices = pathname.startsWith('/services')
+  const { ready: workReady } = useWork(onWork)
+  const { ready: faqsReady } = useFaqs(onServices)
+  const loaded = onWork ? workReady : onServices ? faqsReady : true
+
   useSmoothScroll()
-  useReveal(pathname)
+  useReveal(`${pathname}:${loaded}`)
+
 
   return (
     <Routes>

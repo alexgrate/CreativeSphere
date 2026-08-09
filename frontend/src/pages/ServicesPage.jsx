@@ -1,3 +1,4 @@
+import { usePageMeta } from "../hooks/usePageMeta"
 import Header from "../ui/Header"
 import Footer from "../ui/Footer"
 import ServiceList from "../ui/ServiceList"
@@ -7,6 +8,13 @@ import Capabilities from "../ui/Capabilities"
 import CTA from "../ui/CTA"
 
 export default function ServicesPage() {
+    usePageMeta({
+        title: 'Services',
+        description: 'Brand strategy, identity, campaign, film and social — built as one system '
+                   + 'so the work holds together wherever it runs.',
+        path: '/services',
+    })
+
     return (
         <>
             <Header />

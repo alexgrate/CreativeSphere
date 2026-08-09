@@ -1,13 +1,30 @@
 import { useEffect, useState } from "react"
 import { ArrowRight, MapPin } from "lucide-react"
+import { postContact } from "../lib/api"
 
 const ADDRESS = '5B Adewumi Adu St, off Sanni Balogun Street, Abule-Egba, Lagos 101232, Nigeria'
 
 const MAX = 600
 const MAILTO = 'hello@thecreativesphere.com'
 
+const BLANK = { name: '', company: '', email: '', phone: '', message: '', website: '' }
+const OWN_FIELDS = new Set(['name', 'company', 'email', 'phone', 'message'])
 
-const FORM_ENDPOINT = null
+const serverErrors = (err) => {
+    if (err.status === 429) {
+        return { form: `Too many messages sent from here recently. Please try again later, or email us at ${MAILTO}.` }
+    }
+
+    const mapped = {}
+    if (err.detail && typeof err.detail === 'object' && !Array.isArray(err.detail)) {
+        for (const [key, value] of Object.entries(err.detail)) {
+            if (OWN_FIELDS.has(key)) mapped[key] = Array.isArray(value) ? value[0] : String(value)
+        }
+    }
+    if (Object.keys(mapped).length) return mapped
+
+    return { form: `Something went wrong sending that. Please email us directly at ${MAILTO}.` }
+}
 
 const FIELDS = [
     { name: 'name',    label: 'Name',    type: 'text',  required: true,  half: true },
@@ -31,8 +48,9 @@ const officeOpen = () => {
 }
 
 export default function Contact() {
-    const [values, setValues] = useState({ name: '', company: '', email: '', phone: '', message: '' })
+    const [values, setValues] = useState(BLANK)
     const [errors, setErrors] = useState({})
+    const [sending, setSending] = useState(false)
     const [sent, setSent] = useState(false)
     const [office, setOffice] = useState(officeOpen)
 
@@ -69,31 +87,16 @@ export default function Contact() {
             return
         }
 
-        if (FORM_ENDPOINT) {
-            try {
-                await fetch(FORM_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(values),
-                })
-                setSent(true)
-            } catch {
-                setErrors({ form: 'Something went wrong. Please email us directly.' })
-            }
-            return
+        setSending(true)
+        try {
+            await postContact(values)
+            setValues(BLANK)
+            setSent(true)
+        } catch (err) {
+            setErrors(serverErrors(err))
+        } finally {
+            setSending(false)
         }
-
-        const body = [
-            `Name: ${values.name}`,
-            `Company: ${values.company}`,
-            `Email: ${values.email}`,
-            values.phone && `Phone: ${values.phone}`,
-            '', values.message,
-        ].filter(Boolean).join('\n')
-        window.location.href =
-            `mailto:${MAILTO}?subject=${encodeURIComponent(`New enquiry — ${values.company}`)}` +
-            `&body=${encodeURIComponent(body)}`
-        setSent(true)
     }
 
     return (
@@ -174,15 +177,26 @@ export default function Contact() {
                     </div>
                 </div>
 
+                <input
+                    className="ct-hp"
+                    type="text"
+                    name="website"
+                    value={values.website}
+                    onChange={set('website')}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                />
+
                 {errors.form && <p className="ct-err">{errors.form}</p>}
 
-                <button type="submit" className="ct-btn">
-                    {sent ? 'Thank you' : 'Send message'}
+                <button type="submit" className="ct-btn" disabled={sending}>
+                    {sending ? 'Sending' : sent ? 'Thank you' : 'Send message'}
                     <ArrowRight size={18} strokeWidth={1.8} aria-hidden="true" />
                 </button>
 
                 <p className="ct-status" role="status">
-                    {sent && 'Thanks — your message is on its way.'}
+                    {sent && 'Thanks your message is on its way.'}
                 </p>
             </form>
 
