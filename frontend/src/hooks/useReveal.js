@@ -29,7 +29,7 @@ export function useReveal() {
             const targets = gsap.utils.toArray(TARGETS)
             const LINE = () => window.innerHeight * 0.92
             const hidden = targets.filter((el) => el.getBoundingClientRect().top > LINE())
-            gsap.set(hidden, { opacity: 0, y: 56 })
+            if (hidden.length) gsap.set(hidden, { opacity: 0, y: 56 })
 
             const settle = () => {
                 const late = hidden.filter((el) => {
@@ -41,7 +41,8 @@ export function useReveal() {
             ScrollTrigger.addEventListener('refresh', settle)
             reveal.cleanup = () => ScrollTrigger.removeEventListener('refresh', settle)
 
-            ScrollTrigger.batch(hidden, {
+            // batching an empty set hands GSAP a blank target and it warns
+            if (hidden.length) ScrollTrigger.batch(hidden, {
                 start: 'top 95%',
                 onEnter: (batch) => gsap.to(batch, {
                     y: 0,

@@ -1,0 +1,26 @@
+/work imagery
+=============
+These are REAL Creative Sphere client campaign key visuals, recovered from git
+(commit 01c7ce7^) after they were pulled off the home and services pages. They
+were the wrong content there — a campaign KV with a client logo baked in tells a
+designer nothing about what belongs in an "Approach: Understand" slot. On a Work
+page they are exactly right, because here the client IS the subject.
+
+Cropped from 2400x1372 to 1400x980 (10:7, matching the reference's card ratio),
+Pillow WebP q82. t-*.webp are 360x252 thumbnails for the scatter hero.
+
+  chi.webp         CHI Nigeria — Capri-Sonne summer KV
+  chivita.webp     Chivita — full product range KV (was /hero-06.webp, 6000x3430)
+  vfd.webp         VFD / Vbank — social growth creative
+  prudential.webp  Prudential Zenith Life — campaign KV
+  esvolt.webp      ESVolt — clean energy campaign KV
+  acacia.webp      Acacia Solicitors — brand campaign KV
+  aurora.webp      Aurora — optoelectronics product KV
+
+  dash.webp        PLACEHOLDER — Dash MFB has no key visual in the repo. This is
+                   the stock image from /timeline/2023.webp standing in so the
+                   client list is complete. SWAP THIS for real Dash MFB work.
+
+Everything else on this page is real. The copy (titles, one-liners, disciplines,
+years) was written from the existing site content and should be checked with the
+team lead — the years in particular are inferred, not confirmed.

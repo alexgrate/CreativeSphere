@@ -195,3 +195,61 @@ export const PRINCIPLES = [
     line: 'The work is judged on what it moves, not on the reveal.',
   },
 ]
+
+/* Work index. Trionn runs 21 projects and can afford to show a title and one
+   line; we have eight, so each one also carries the disciplines it used —
+   that range is the thing we are actually selling.
+   `start`/`span`/`row` place the card on a 12-column grid, two projects per
+   row at different widths, and `off` drops one of each pair so the pair never
+   reads as a tidy pair. Collapses to one column on a phone. */
+export const WORK = [
+  {
+    id: 'vfd', client: 'VFD / Vbank', title: 'A bank people talk about',
+    line: 'Roughly 100 followers to over 10,000 in nine months.',
+    disciplines: ['Social', 'Content', 'Analytics'], year: '2024',
+    img: '/work/vfd.webp', start: 1, span: 6, row: 1, off: 0,
+  },
+  {
+    id: 'chi', client: 'CHI Nigeria', title: 'Capri-Sonne summer',
+    line: 'A seasonal campaign built to travel across every format.',
+    disciplines: ['Strategy', 'Campaign', 'Content'], year: '2024',
+    img: '/work/chi.webp', start: 8, span: 4, row: 1, off: 150,
+  },
+  {
+    id: 'prudential', client: 'Prudential Zenith', title: 'Insurance without the flinch',
+    line: 'Life cover explained the way people actually ask about it.',
+    disciplines: ['Strategy', 'Identity', 'Advertising'], year: '2023',
+    img: '/work/prudential.webp', start: 2, span: 4, row: 2, off: 0,
+  },
+  {
+    id: 'chivita', client: 'Chivita', title: 'The whole range, one voice',
+    line: 'Twelve products held together by a single art direction.',
+    disciplines: ['Identity', 'Content', 'Campaign'], year: '2023',
+    img: '/work/chivita.webp', start: 7, span: 6, row: 2, off: 110,
+  },
+  {
+    id: 'esvolt', client: 'ESVolt', title: 'Clean energy, plainly put',
+    line: 'Solar sold on the evening it gives back, not on the hardware.',
+    disciplines: ['Strategy', 'Campaign', 'Social'], year: '2024',
+    img: '/work/esvolt.webp', start: 1, span: 5, row: 3, off: 70,
+  },
+  {
+    id: 'dash', client: 'Dash MFB', title: 'Banking that fits the thumb',
+    line: 'A fintech brand that had to earn trust in ten seconds.',
+    disciplines: ['Identity', 'Product', 'Social'], year: '2023',
+    img: '/work/dash.webp', start: 7, span: 5, row: 3, off: 0,
+  },
+  {
+    id: 'acacia', client: 'Acacia Solicitors', title: 'Counsel with a spine',
+    line: 'A law firm positioned on conviction rather than credentials.',
+    disciplines: ['Strategy', 'Identity'], year: '2022',
+    img: '/work/acacia.webp', start: 2, span: 5, row: 4, off: 0,
+  },
+  {
+    id: 'aurora', client: 'Aurora', title: 'Power you can picture',
+    line: 'Optoelectronics made legible to the people who buy it.',
+    disciplines: ['Identity', 'Content'], year: '2022',
+    img: '/work/aurora.webp', start: 8, span: 4, row: 4, off: 130,
+  },
+]
+

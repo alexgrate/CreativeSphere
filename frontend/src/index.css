@@ -34,6 +34,39 @@ html.is-menu body {
   touch-action: none;
 }
 
+
+/* ---- the work page is the one dark room in a light building ----------------
+   Unlayered on purpose. :root above is unlayered too, and unlayered custom
+   properties beat layered ones — declaring these inside @layer components
+   meant --bg never changed. */
+html.page-dark {
+  --bg: #0e0e12;
+  --panel: #17171d;
+  --line: rgba(255, 255, 255, 0.15);
+  --muted: #9a9aa2;
+  --type: #f3f3f5;
+  --accent: #4d94ff;      /* lifted, or brand blue vibrates on near-black */
+}
+html.page-dark,
+html.page-dark body {
+  background: var(--bg);
+  color: var(--type);
+}
+
+/* the header is solid from the top here (no .hero on this page), so it has to
+   be dark and keep the white lockup rather than swapping to the blue one */
+html.page-dark .hb.is-solid {
+  background: rgba(14, 14, 18, 0.82);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+html.page-dark .hb.is-solid .hb-logo .hb-light { opacity: 1; }
+html.page-dark .hb.is-solid .hb-logo .hb-dark { opacity: 0; }
+html.page-dark .hb.is-solid .hb-nav a,
+html.page-dark .hb.is-solid .hb-ico,
+html.page-dark .hb-burger { color: var(--type); }
+
 @layer base {
 
   * {
@@ -2259,6 +2292,402 @@ html.is-menu body {
 
 
 
+
+
+  /* WORK — the reference (trionn.com/work) runs one project per screen on a
+     staggered grid with a thread drawn between them. Same behaviour here, in
+     our own light palette rather than their near-black. */
+  .wh {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding: var(--top-clear) 22px 40px;
+    overflow: hidden;
+  }
+
+  .wh-scatter {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  /* a halo in the page colour, so a thumbnail drifting near the middle never
+     competes with the heading — it fades out instead of being clipped */
+  .wh-scatter::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* the heading is full-bleed now, so the protected area is a band across
+       the whole width, not an ellipse in the middle */
+    background: linear-gradient(to bottom,
+      rgb(from var(--bg) r g b / 0) 0%,
+      rgb(from var(--bg) r g b / 0.45) 24%,
+      rgb(from var(--bg) r g b / 0.93) 34%,
+      rgb(from var(--bg) r g b / 0.93) 80%,
+      rgb(from var(--bg) r g b / 0.45) 90%,
+      rgb(from var(--bg) r g b / 0) 100%);
+  }
+
+  /* every geometric property here is driven by the cycle in WorkHero — the
+     element only carries the look */
+  .wh-thumb {
+    position: absolute;
+    aspect-ratio: 10 / 7;
+    opacity: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--panel);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    will-change: transform;
+  }
+  .wh-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .wh-mid {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Edge to edge, one line. A polite centred heading was the single biggest
+     reason this page read as timid — the reference fills the full measure and
+     lets the type carry the page. */
+  .wh-title {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: 9.4vw;
+    font-weight: 500;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  /* the mask is per word, not on the heading: clipping the whole h1 cuts the
+     line off horizontally as well, and the words sit on two lines here */
+  .wh-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.08em;
+  }
+  .wh-word i { display: inline-block; font-style: normal; }
+
+  .wh-lead {
+    margin: 20px auto 0;
+    max-width: 32em;
+    font-size: 17.5px;
+    line-height: 1.62;
+    color: var(--muted);
+  }
+  /* the half that carries the argument sits at full strength */
+  .wh-lead strong { font-weight: 400; color: var(--type); }
+
+  .wh-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 20px;
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .wh-eyebrow em {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(77, 148, 255, 0.55);
+    animation: whPing 2.6s ease-out infinite;
+  }
+  @keyframes whPing {
+    0%   { box-shadow: 0 0 0 0 rgba(77, 148, 255, 0.5); }
+    70%  { box-shadow: 0 0 0 9px rgba(77, 148, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(77, 148, 255, 0); }
+  }
+
+  .wh-stats {
+    display: flex;
+    justify-content: center;
+    gap: 46px;
+    margin-top: 34px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+  .wh-stats li { display: flex; flex-direction: column; gap: 5px; }
+  .wh-stats b {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .wh-stats span {
+    font-family: 'Martian Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .wh-scroll {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 9px 9px 18px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(23, 23, 29, 0.5);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-family: 'Martian Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--type);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.4s ease, background 0.4s ease;
+  }
+  .wh-scroll:hover {
+    border-color: rgba(77, 148, 255, 0.5);
+    background: rgba(77, 148, 255, 0.12);
+  }
+  .wh-scroll em {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #06060a;
+    animation: whNudge 1.9s ease-in-out infinite;
+  }
+  @keyframes whNudge {
+    0%, 100% { transform: translateY(-2px); }
+    50%      { transform: translateY(3px); }
+  }
+
+  .wk {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: clamp(52px, 6vh, 96px);
+    align-items: start;
+    padding: clamp(56px, 7vh, 96px) 22px clamp(70px, 10vh, 130px);
+  }
+
+  /* sits under the cards and is never interactive */
+  .wk-thread {
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .wk-line-base {
+    stroke: var(--accent);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    opacity: 0.32;
+  }
+  /* a short lit segment chasing the drawing head down the line */
+  .wk-line-pulse {
+    stroke: var(--accent);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 7px rgba(13, 114, 255, 0.6));
+  }
+
+  .wk-card {
+    position: relative;
+    z-index: 1;
+    grid-column: var(--start) / span var(--span);
+    grid-row: var(--row);
+    /* drops one of each pair so a row never reads as a tidy pair */
+    margin-top: var(--off, 0px);
+    padding-bottom: 30px;
+    /* the tilt needs somewhere to happen; on the card so the meta stays flat */
+    perspective: 1100px;
+    transition: opacity 0.5s ease, filter 0.5s ease;
+  }
+
+  /* one project at a time — the rest of the run drops back */
+  .wk.is-focus .wk-card:not(.is-hot) {
+    opacity: 0.34;
+    filter: saturate(0.55);
+  }
+
+  .wk-ghost {
+    position: absolute;
+    top: -0.32em;
+    left: -0.14em;
+    z-index: -1;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(7rem, 13vw, 15rem);
+    font-weight: 500;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.16);
+    pointer-events: none;
+    will-change: transform;
+  }
+  .wk-card.is-hot .wk-ghost { -webkit-text-stroke-color: rgba(77, 148, 255, 0.55); }
+
+  .wk-shot {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 10 / 7;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--panel);
+    transform-style: preserve-3d;
+    will-change: transform, clip-path;
+    /* a shadow is invisible on near-black, so the frame is described by a
+       hairline ring that brightens on hover instead */
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: box-shadow 0.5s ease;
+  }
+  .wk-card.is-hot .wk-shot {
+    box-shadow: 0 0 0 1px rgba(77, 148, 255, 0.5), 0 40px 80px rgba(0, 0, 0, 0.6);
+  }
+
+  /* oversized so the parallax has room to travel without baring an edge */
+  .wk-shot img {
+    position: absolute;
+    left: 0;
+    top: -6%;
+    width: 100%;
+    height: 112%;
+    object-fit: cover;
+    display: block;
+    will-change: transform;
+  }
+
+  .wk-n {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 5px 9px 4px;
+    border-radius: 999px;
+    background: rgba(8, 8, 11, 0.6);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-family: 'Martian Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: #fff;
+  }
+
+  .wk-meta { padding-top: 18px; }
+
+  .wk-client {
+    display: block;
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.4s ease;
+  }
+  .wk-card.is-hot .wk-client { color: var(--accent); }
+
+  .wk-title {
+    margin-top: 10px;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-size: clamp(1.5rem, 2.4vw, 2.15rem);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.022em;
+  }
+  /* per-word masks, same device as the hero heading */
+  .wk-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.1em;
+  }
+  .wk-word i { display: inline-block; font-style: normal; }
+  .wk-word + .wk-word { margin-left: 0.26em; }
+
+  .wk-line {
+    margin-top: 8px;
+    max-width: 26em;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  /* the reference shows title + one line only. We carry eight projects rather
+     than twenty-one, so each also states the disciplines it used — the range
+     is the argument. */
+  .wk-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+    list-style: none;
+  }
+  .wk-tags li {
+    padding: 5px 11px 4px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: 'Martian Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: border-color 0.4s ease, color 0.4s ease;
+  }
+  .wk-card.is-hot .wk-tags li { border-color: rgba(77, 148, 255, 0.42); color: var(--type); }
+  .wk-tags .wk-year {
+    border-color: transparent;
+    color: var(--accent);
+  }
+  .wk-card.is-hot .wk-tags .wk-year { border-color: transparent; }
+
+  /* fixed while the run is on screen, so you always know where you are */
+  .wk-count {
+    position: fixed;
+    left: 34px;
+    bottom: 30px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px 7px;
+    border-radius: 999px;
+    background: rgba(23, 23, 29, 0.78);
+    -webkit-backdrop-filter: blur(11px);
+    backdrop-filter: blur(11px);
+    border: 1px solid var(--line);
+    color: var(--type);
+    font-family: 'Martian Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    pointer-events: none;
+  }
+  .wk-count.is-on { opacity: 1; transform: none; }
+  .wk-count b { font-weight: 400; color: var(--accent); }
+  .wk-count span { color: var(--muted); }
+  .wk-count em { width: 16px; height: 1px; background: var(--line); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wh-scroll em { animation: none; }
+    .wk-thread, .wk-ghost { display: none; }
+    .wk-shot { clip-path: none !important; }
+  }
+
   @media (max-width: 960px) {
     :root { --ftr-h: 420px; }
 
@@ -2611,6 +3040,91 @@ html.is-menu body {
 
     .svc-note { padding-top: 0; }
     .svc-note { padding-top: 0; font-size: 15.5px; }
+
+    /* the stagger has nowhere to go on a phone — one column, and the thread
+       becomes a spine running down the middle of the run */
+    .wh { padding: var(--top-clear) 22px 34px; min-height: 96svh; }
+    .wh-mid { max-width: none; }
+    /* two words per line here; 9.4vw would be 37px and lost on the page */
+    .wh-title { font-size: 16.5vw; white-space: normal; line-height: 0.92; }
+    .wh-eyebrow { margin-bottom: 13px; font-size: 9px; letter-spacing: 0.18em; }
+    .wh-lead { margin-top: 16px; font-size: 15.5px; }
+    /* width is set inline by the cycle, so only the look is styled here */
+    .wh-thumb { border-radius: 8px; }
+
+    /* three across is too tight under 360px, so they wrap to 2 + 1 */
+    .wh-stats {
+      flex-wrap: wrap;
+      gap: 20px 32px;
+      margin-top: 24px;
+      padding-top: 18px;
+    }
+    .wh-stats b { font-size: 1.4rem; }
+
+    .wh-scroll {
+      bottom: 18px;
+      gap: 10px;
+      padding: 7px 7px 7px 14px;
+      font-size: 8.5px;
+      letter-spacing: 0.14em;
+    }
+    .wh-scroll em { width: 22px; height: 22px; }
+    .wh-scroll em svg { width: 10px; height: 14px; }
+  }
+
+  @media (max-width: 380px) {
+    .wh-scroll { font-size: 7.5px; letter-spacing: 0.1em; padding-left: 12px; gap: 8px; }
+    .wh-stats { gap: 16px 26px; }
+    .wh-stats b { font-size: 1.25rem; }
+    /* the halo has to cover more of a narrow screen to keep the lead readable */
+    .wh-scatter::after {
+      background: linear-gradient(to bottom,
+        rgb(from var(--bg) r g b / 0) 0%,
+        rgb(from var(--bg) r g b / 0.5) 16%,
+        rgb(from var(--bg) r g b / 0.94) 26%,
+        rgb(from var(--bg) r g b / 0.94) 86%,
+        rgb(from var(--bg) r g b / 0.5) 94%,
+        rgb(from var(--bg) r g b / 0) 100%);
+    }
+
+    .wk {
+      grid-template-columns: 1fr;
+      row-gap: 60px;
+      padding: 56px 24px 64px;
+    }
+    /* the two-per-row grid and its drop offsets have nowhere to go on a phone */
+    .wk-card {
+      grid-column: 1;
+      grid-row: auto;
+      margin-top: 0;
+      padding-bottom: 0;
+      perspective: none;
+    }
+    .wk-shot { border-radius: 12px; }
+    .wk-meta { padding-top: 15px; }
+    .wk-title { font-size: 1.5rem; }
+    .wk-line { font-size: 14.5px; margin-top: 7px; }
+    .wk-tags { margin-top: 13px; }
+    .wk-line-base { opacity: 0.22; }
+    .wk-line-pulse { stroke-width: 2; }
+
+    /* the numeral has no side margin to sit in on one column, so it tucks
+       behind the top of the frame instead of beside it */
+    .wk-ghost {
+      top: -0.42em;
+      left: auto;
+      right: -0.04em;
+      font-size: 6.2rem;
+    }
+
+    .wk-count {
+      left: 50%;
+      transform: translate(-50%, 12px);
+      bottom: 18px;
+      padding: 7px 12px 6px;
+      font-size: 9px;
+    }
+    .wk-count.is-on { transform: translate(-50%, 0); }
 
   }
 
