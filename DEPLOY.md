@@ -9,7 +9,7 @@ Both halves run on one machine and one domain:
       |                                            |
   everything else                    /api  /admin  /static  /media
       |                                            |
-  dist\  (React build, served as files)   waitress on 127.0.0.1:8000
+  dist\  (React build, served as files)   waitress on 127.0.0.1:8001
                                                    |
                                             Django + sqlite
 ```
@@ -28,23 +28,28 @@ consistent.
 Read this before anything else. Three things can collide, and one piece of
 common advice would actively break a neighbouring site.
 
-**Port 8000.** It is Django's default, so your existing Django app very likely
-holds it. Step 1 tells you. If it is taken, pick a free port and set it in
-**two** places that must agree:
+**Port 8000 is already taken on this VM** by your other Django app. This
+deployment uses **8001**, which must be set in **two** places that agree:
 
-- `BACKEND_PORT` in `backend\.env`
-- the `<action type="Rewrite" url="http://127.0.0.1:8000/{R:0}" />` line in
+- `BACKEND_PORT=8001` in `backend\.env`
+- the `<action type="Rewrite" url="http://127.0.0.1:8001/{R:0}" />` line in
   `frontend\public\web.config`
 
-**Do not stop the Default Web Site.** Guides say to, and on a shared machine
-that can take another project offline. IIS routes by host header, so several
-sites share port 80 happily. What *does* break things is a site bound to port 80
-with **no host header** — it answers for every hostname, including yours. Step 1
-lists the bindings so you can spot one; the fix is to give that site an explicit
-host header, not to stop it.
+Change both or you get a 502.
+
+**Do not stop the Default Web Site**, and do not touch the other sites. On this
+VM the Default Web Site *is* `helpdesk.dash-mfb.com`, and stopping it would take
+that offline.
+
+Several sites share port 80 fine, because **IIS routes to the most specific
+match**. Three of your sites (`dash-mobile`, `Dash_hr_frontend`,
+`dash_hr_backend`) are bound with no host header, which sounds alarming but only
+means they catch hostnames nothing else claims. The moment this site has an
+explicit `dcreativesphere.com` binding, it wins that hostname outright. The one
+rule that matters: **always set the hostname on your bindings** (Step 7a).
 
 **Names must be unique** — the IIS site (`creativesphere`), its application pool,
-and the NSSM service. Step 1 warns if any are taken.
+and the pm2 process or NSSM service. Step 1 warns if any are taken.
 
 Nothing else is shared. The Python virtual environment, the database and the
 uploaded images all live under this project's folder and cannot affect your
@@ -99,7 +104,8 @@ It checks:
 | URL Rewrite 2.1 | module installed — without it, refreshing `/work/vfd` 404s |
 | ARR 3.0 | module installed **and** server-level proxy enabled, which is a separate switch |
 | Python | present, and warns below 3.12 |
-| Node, npm, Git, NSSM | present and on PATH |
+| Node, npm, Git | present and on PATH |
+| NSSM **or** pm2 | either can keep Django running; pm2 is already here |
 | win-acme | present (informational — you may already issue certificates another way) |
 | **Port 8000** | free, or who holds it, plus three free ports to use instead |
 | **Ports 8000–8100** | everything currently listening, so you can see your other apps |
@@ -162,13 +168,14 @@ TIME_ZONE=Africa/Lagos
 BEHIND_PROXY=True
 SERVE_MEDIA=True
 
-BACKEND_PORT=8000
+BACKEND_PORT=8001
 
 SECURE_SSL_REDIRECT=False
 ```
 
-> If Step 1 said port 8000 was taken, change `BACKEND_PORT` here **and** the
-> proxy line in `frontend\public\web.config`. They must match.
+> Port 8000 is held by your other Django app, so this uses **8001**. Edit
+> `frontend\public\web.config` to match before building in Step 5 — change
+> `http://127.0.0.1:8000` to `http://127.0.0.1:8001`.
 
 Then:
 
@@ -227,7 +234,7 @@ and `sitemap.xml`.
 
 ---
 
-## Step 6 — Run Django as a Windows service
+## Step 6 — Keep Django running
 
 Test by hand first:
 
@@ -239,10 +246,42 @@ cd C:\sites\creativesphere\backend
 It prints the port it bound to. In a second terminal:
 
 ```bat
-curl http://127.0.0.1:8000/api/projects/
+curl http://127.0.0.1:8001/api/projects/
 ```
 
-JSON means it works. `Ctrl+C`, then register it so it survives reboots:
+JSON means it works. `Ctrl+C`, then keep it running across reboots. Either
+process manager is fine — **you already have pm2 on this VM**, so Option A needs
+no new software.
+
+### Option A — pm2 (already installed here)
+
+pm2 is not just for Node; `--interpreter none` makes it run any executable.
+
+```bat
+pm2 start "C:\sites\creativesphere\backend\.venv\Scripts\python.exe" ^
+    --name creativesphere ^
+    --cwd "C:\sites\creativesphere\backend" ^
+    --interpreter none ^
+    -- serve.py
+
+pm2 save
+```
+
+`pm2 save` writes it into the resurrect list, so it comes back with the pm2
+service that is already running on this machine.
+
+Useful afterwards:
+
+```bat
+pm2 status
+pm2 logs creativesphere
+pm2 restart creativesphere
+```
+
+### Option B — NSSM (a true Windows service)
+
+Download from https://nssm.cc/download and copy `win64\nssm.exe` into
+`C:\Windows\System32`, then:
 
 ```bat
 nssm install CreativeSphere "C:\sites\creativesphere\backend\.venv\Scripts\python.exe" "C:\sites\creativesphere\backend\serve.py"
@@ -251,11 +290,11 @@ nssm set CreativeSphere Start SERVICE_AUTO_START
 nssm start CreativeSphere
 ```
 
-**Check:** `nssm status CreativeSphere` reports `SERVICE_RUNNING`, and the curl
-above still works.
-
 If it will not start: `nssm edit CreativeSphere` → *I/O* tab → point stdout and
 stderr at a log file, restart, read the log.
+
+**Check either way:** `curl http://127.0.0.1:8001/api/projects/` still returns
+JSON after a reboot.
 
 ---
 
@@ -414,10 +453,10 @@ cd ..\backend
 .venv\Scripts\pip install -r requirements.txt
 .venv\Scripts\python manage.py migrate
 .venv\Scripts\python manage.py collectstatic --noinput
-nssm restart CreativeSphere
+pm2 restart creativesphere       :: or: nssm restart CreativeSphere
 ```
 
-Changed `.env`? Restart the service — that is the only way it is re-read.
+Changed `.env`? Restart it — that is the only way it is re-read.
 
 ---
 
@@ -441,7 +480,7 @@ Worth a scheduled task, and worth doing before every deploy.
 |---|---|
 | Text loads, **all images 404** | IIS does not serve `.webp` unless the MIME type is registered. `web.config` does this — confirm `dist\web.config` exists and IIS Manager → site → *MIME Types* lists `.webp`. |
 | `/api/` returns **404** | ARR proxy not enabled at server level. Re-run `preflight.ps1`. |
-| `/api/` returns **502** | Django not running, or on a different port than `web.config` expects. `nssm status CreativeSphere`, then curl `127.0.0.1:<BACKEND_PORT>`. |
+| `/api/` returns **502** | Django not running, or on a different port than `web.config` expects. `pm2 status`, then curl `127.0.0.1:8001`. Check `web.config` says 8001, not 8000. |
 | **Another project broke** | This site is bound to port 80 with no host header, so it is catching their traffic. Add the hostname to its binding. |
 | **This site shows another project** | The reverse — their site has the blank host header. Give theirs an explicit hostname. |
 | Refreshing `/work/vfd` gives **404** | URL Rewrite not installed, or `web.config` missing from `dist`. |

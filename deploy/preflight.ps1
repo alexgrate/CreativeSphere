@@ -1,8 +1,8 @@
 <#
     Pre-deployment audit for the Windows VM.
 
-    Reports what is already installed, and — because this machine already runs
-    other projects — surveys what is already using the ports and hostnames this
+    Reports what is already installed, and - because this machine already runs
+    other projects - surveys what is already using the ports and hostnames this
     deployment wants.
 
     Run in PowerShell as Administrator:
@@ -55,26 +55,30 @@ if (Test-Path (Join-Path $inetsrv 'rewrite.dll')) {
     Report 'MISSING' 'URL Rewrite' 'iis.net/downloads/microsoft/url-rewrite'
 }
 
-if (Test-Path (Join-Path $inetsrv 'requestRouter.dll')) {
-    Report 'OK' 'ARR' 'module present'
-} else {
-    Report 'MISSING' 'ARR' 'iis.net/downloads/microsoft/application-request-routing'
-}
-
-# ARR proxy must be switched on at server level, separately from installing it
+# ARR does not install its DLL under inetsrv, so detect it by the config section
+# it registers - system.webServer/proxy exists only when ARR is present.
 $proxy = Get-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT/APPHOST' `
             -Filter 'system.webServer/proxy' -Name 'enabled'
-if ($proxy -and $proxy.Value -eq $true) {
-    Report 'OK' 'ARR proxy enabled' 'server-level proxy is on'
+if ($null -eq $proxy) {
+    Report 'MISSING' 'ARR' 'iis.net/downloads/microsoft/application-request-routing'
+    Report 'MISSING' 'ARR proxy enabled' 'install ARR first'
 } else {
-    Report 'MISSING' 'ARR proxy enabled' 'IIS Manager > server > ARR Cache > Proxy > Enable proxy'
+    Report 'OK' 'ARR' 'module present'
+    if ($proxy.Value -eq $true) {
+        Report 'OK' 'ARR proxy enabled' 'server-level proxy is on'
+    } else {
+        Report 'MISSING' 'ARR proxy enabled' 'IIS Manager > server > ARR Cache > Proxy > Enable proxy'
+    }
 }
 
 function Probe {
-    param([string]$Label, [string]$Exe, [string]$Args, [string]$Hint)
+    # NB: the parameter must not be called $Args - that is a PowerShell automatic
+    # variable, and naming it so silently drops the arguments, which makes every
+    # tool run bare (node opens its REPL, git prints usage).
+    param([string]$Label, [string]$Exe, [string]$Flag, [string]$Hint)
     $cmd = Get-Command $Exe
     if (-not $cmd) { Report 'MISSING' $Label $Hint; return $null }
-    $out = (& $Exe $Args.Split(' ') 2>&1 | Select-Object -First 1)
+    $out = (& $Exe $Flag 2>&1 | Select-Object -First 1)
     Report 'OK' $Label "$out"
     return "$out"
 }
@@ -90,8 +94,13 @@ Probe 'Node.js' 'node' '--version' 'nodejs.org (or build dist on your Mac and co
 Probe 'npm'     'npm'  '--version' 'ships with Node.js'                                 | Out-Null
 Probe 'Git'     'git'  '--version' 'git-scm.com/download/win'                           | Out-Null
 
-if (Get-Command nssm) { Report 'OK' 'NSSM' 'on PATH' }
-else { Report 'MISSING' 'NSSM' 'nssm.cc/download, copy nssm.exe into System32' }
+# Either process manager will do. NSSM makes a real Windows service; pm2 is
+# already here for the Node projects and can run this too.
+$hasNssm = [bool](Get-Command nssm)
+$hasPm2 = [bool](Get-Command pm2)
+if ($hasNssm) { Report 'OK' 'NSSM' 'on PATH' }
+elseif ($hasPm2) { Report 'OK' 'Process manager' 'pm2 found - use it instead of NSSM (see DEPLOY.md Step 6)' }
+else { Report 'MISSING' 'NSSM or pm2' 'nssm.cc/download, copy nssm.exe into System32' }
 
 if (Get-Command wacs) { Report 'OK' 'win-acme' 'on PATH' }
 else { Report 'INFO' 'win-acme' 'only needed if this VM does not already issue certificates' }
@@ -139,14 +148,16 @@ if ($sites) {
         Write-Host ("  {0,-26} {1,-8} {2}" -f $s.Name, $s.State, $s.PhysicalPath)
         foreach ($b in $s.Bindings.Collection) {
             $hostHeader = ($b.bindingInformation -split ':')[2]
-            $label = if ($hostHeader) { $hostHeader } else { '(no host header - CATCHES EVERYTHING)' }
+            $label = if ($hostHeader) { $hostHeader } else { '(no host header - catch-all fallback)' }
             Write-Host ("      {0,-10} {1}" -f $b.protocol, $label) -ForegroundColor DarkGray
         }
     }
     Write-Host ''
-    Write-Host '  A site bound to port 80 with NO host header will answer requests meant' -ForegroundColor Yellow
-    Write-Host '  for dcreativesphere.com. Give every site an explicit host header rather' -ForegroundColor Yellow
-    Write-Host '  than stopping one — another project is probably using it.' -ForegroundColor Yellow
+    Write-Host '  IIS routes to the MOST SPECIFIC match, so a site bound with an explicit' -ForegroundColor Gray
+    Write-Host '  hostname wins over any site bound with no host header. Give this site an' -ForegroundColor Gray
+    Write-Host '  explicit dcreativesphere.com binding and the sites above cannot take it.' -ForegroundColor Gray
+    Write-Host '  Those no-host-header sites only catch hostnames nothing else claims.' -ForegroundColor Gray
+    Write-Host '  Do NOT stop them - they belong to other projects.' -ForegroundColor Gray
 
     if ($sites.Name -contains 'creativesphere') {
         Report 'WARN' 'Site name' "'creativesphere' already exists"
