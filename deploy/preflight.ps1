@@ -209,6 +209,37 @@ if (Get-Service -Name 'CreativeSphere') {
     Report 'WARN' 'NSSM service name' "'CreativeSphere' already exists"
 }
 
+Section 'Machine-wide environment variables that collide with this project'
+
+# Another project's global variables are inherited by every process on the box.
+# settings.py now reads .env with overwrite=True so the project's own file wins,
+# but it is still worth seeing which ones are set.
+$keys = @(
+    'SECRET_KEY', 'DEBUG', 'ALLOWED_HOSTS', 'CORS_ALLOWED_ORIGINS',
+    'CSRF_TRUSTED_ORIGINS', 'DATABASE_URL', 'TIME_ZONE', 'BEHIND_PROXY',
+    'SERVE_MEDIA', 'BACKEND_PORT', 'CONTACT_RECIPIENT',
+    'MS_GRAPH_TENANT_ID', 'MS_GRAPH_CLIENT_ID', 'MS_GRAPH_CLIENT_SECRET',
+    'MS_GRAPH_SENDER', 'SECURE_SSL_REDIRECT'
+)
+$found = @()
+foreach ($k in $keys) {
+    $v = [Environment]::GetEnvironmentVariable($k, 'Machine')
+    if (-not $v) { $v = [Environment]::GetEnvironmentVariable($k, 'User') }
+    if ($v) {
+        $shown = if ($k -match 'SECRET|CLIENT_ID|TENANT') { '<set>' } else { $v }
+        $found += $k
+        Write-Host ('  {0,-24} {1}' -f $k, $shown) -ForegroundColor Yellow
+    }
+}
+if ($found.Count -gt 0) {
+    Write-Host ''
+    Write-Host '  These are set machine-wide, almost certainly by another project.' -ForegroundColor Yellow
+    Write-Host '  Make sure backend\.env defines each one explicitly - including' -ForegroundColor Yellow
+    Write-Host '  DATABASE_URL= (empty) if you want sqlite - so nothing is inherited.' -ForegroundColor Yellow
+} else {
+    Report 'OK' 'Inherited variables' 'none of our settings are set machine-wide'
+}
+
 Section 'Firewall'
 
 # Walking every rule and asking each for its ports takes minutes on a busy

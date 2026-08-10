@@ -24,7 +24,11 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, []),
     CORS_ALLOWED_ORIGINS=(list, []),
 )
-environ.Env.read_env(BASE_DIR / ".env")
+# overwrite=True on purpose. This project shares a server with others, and a
+# machine-wide variable set for one of them would otherwise silently win here —
+# an inherited DATABASE_URL is enough to point this app at the wrong database.
+# The .env sitting next to manage.py is the authority for this project.
+environ.Env.read_env(BASE_DIR / ".env", overwrite=True)
 
 
 # Quick-start development settings - unsuitable for production
@@ -115,10 +119,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# sqlite locally; set DATABASE_URL on the server to point at Postgres, e.g.
-# postgres://user:password@host:5432/dbname (needs `pip install psycopg[binary]`)
+# Empty means the local sqlite file. Set DATABASE_URL to a postgres:// URL to
+# move (needs `pip install "psycopg[binary]"`).
+#
+# Read as a plain string first rather than letting env.db_url fall back on its
+# own: an empty value has to mean "sqlite", so that .env can blank out a
+# DATABASE_URL inherited from another project on the same machine.
+_database_url = env("DATABASE_URL", default="")
 DATABASES = {
-    "default": env.db_url("DATABASE_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+    "default": env.db_url_config(_database_url) if _database_url else {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    },
 }
 
 
