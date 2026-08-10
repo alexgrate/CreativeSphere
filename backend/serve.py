@@ -30,9 +30,10 @@ if __name__ == "__main__":
     serve(
         application,
         listen=f"127.0.0.1:{settings.BACKEND_PORT}",
-        # a portfolio site's traffic is tiny; the default 4 is plenty, and each
-        # thread holds a database connection
-        threads=4,
+        # Every image is served through Django while SERVE_MEDIA is on, and a
+        # single page pulls a lot of them, so 4 threads queues visibly. These
+        # are cheap: an image response never touches the database.
+        threads=12,
         # long enough for the contact form's Graph call, which can take a second
         channel_timeout=60,
         ident="CreativeSphere",
