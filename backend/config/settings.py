@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 import environ
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +30,37 @@ env = environ.Env(
 # machine-wide variable set for one of them would otherwise silently win here —
 # an inherited DATABASE_URL is enough to point this app at the wrong database.
 # The .env sitting next to manage.py is the authority for this project.
-environ.Env.read_env(BASE_DIR / ".env", overwrite=True)
+ENV_FILE = BASE_DIR / ".env"
+environ.Env.read_env(ENV_FILE, overwrite=True)
+
+
+def _declared_in_env_file():
+    """The keys the project's own .env actually sets, ignoring comments."""
+    if not ENV_FILE.exists():
+        return set()
+    keys = set()
+    for line in ENV_FILE.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = line.strip().removeprefix("export ")
+        if line and not line.startswith("#") and "=" in line:
+            keys.add(line.split("=", 1)[0].strip())
+    return keys
+
+
+# Overwriting only helps for keys the file actually declares. A key it leaves
+# out is still inherited from the machine — which is how this app once pointed
+# itself at another project's live database and created tables in it. Refuse to
+# start instead, for the two that do real damage silently.
+_declared = _declared_in_env_file()
+for _key in ("DATABASE_URL", "SECRET_KEY"):
+    if _key not in _declared and os.environ.get(_key):
+        raise ImproperlyConfigured(
+            f"{_key} is set machine-wide on this server (probably by another "
+            f"project) but {ENV_FILE} does not declare it, so this app would "
+            f"silently use the inherited value.\n\n"
+            f"Add an explicit line to {ENV_FILE}. For DATABASE_URL, an empty "
+            f"value means 'use the local sqlite file':\n\n"
+            f"    {_key}=\n"
+        )
 
 
 # Quick-start development settings - unsuitable for production
