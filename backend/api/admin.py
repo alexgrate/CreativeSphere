@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import ContactMessage, CtaChip, Faq, Logo, Project, Shot, Stat
+from .models import ContactMessage, CtaChip, Faq, Format, Logo, Project, Shot, Stat
 
 
 def thumb(field, height=34, pad="transparent"):
@@ -210,3 +210,24 @@ class ContactMessageAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
+@admin.register(Format)
+class FormatAdmin(admin.ModelAdmin):
+    list_display = ("preview", "alt", "order", "published")
+    list_display_links = ("alt",)
+    list_editable = ("order", "published")
+    readonly_fields = ("preview",)
+
+    fieldsets = (
+        (None, {
+            "description": "The sliding images in the \"Global formats. Local brands.\" "
+                           "section on the home page. They rotate every few seconds and "
+                           "loop, so any number works - three or more looks best.",
+            "fields": ("image", "preview", "alt", "order", "published"),
+        }),
+    )
+
+    @admin.display(description="Image")
+    def preview(self, obj):
+        return thumb(obj.image, 60, pad="#f4f4f4")

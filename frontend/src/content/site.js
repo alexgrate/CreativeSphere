@@ -1,12 +1,4 @@
 
-export const FORMATS = [
-  { id: 'campaign', img: '/format/1-campaign.webp', alt: 'Campaign film in production' },
-  { id: 'system',   img: '/format/2-system.webp',   alt: 'Campaign frames laid out as a system' },
-  { id: 'identity', img: '/format/3-identity.webp', alt: 'Printed identity, stacked and checked' },
-  { id: 'social',   img: '/format/4-social.webp',   alt: 'Social content being filmed' },
-  { id: 'product',  img: '/format/5-product.webp',  alt: 'Packaging shot in the studio' },
-]
-
 export const TIMELINE = [
   { year: 2019, title: 'One room in Lagos',
     body: 'The Creative Sphere opens with a small team and a single idea: strategy, design and story in one room instead of three agencies.',

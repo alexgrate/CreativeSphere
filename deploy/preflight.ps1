@@ -55,8 +55,6 @@ if (Test-Path (Join-Path $inetsrv 'rewrite.dll')) {
     Report 'MISSING' 'URL Rewrite' 'iis.net/downloads/microsoft/url-rewrite'
 }
 
-# ARR does not install its DLL under inetsrv, so detect it by the config section
-# it registers - system.webServer/proxy exists only when ARR is present.
 $proxy = Get-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT/APPHOST' `
             -Filter 'system.webServer/proxy' -Name 'enabled'
 if ($null -eq $proxy) {

@@ -22,8 +22,6 @@ def render_webp(field, max_edge):
     if not field or field._committed:
         return
 
-    # SVG is already the smallest and sharpest form a logo can take, and Pillow
-    # cannot open it anyway — store it untouched
     if Path(field.name).suffix.lower() == ".svg":
         return
 
@@ -126,7 +124,6 @@ class Project(models.Model):
         help_text="Untick to take this project off the website without deleting it.")
     created = models.DateTimeField(auto_now_add=True)
 
-    # ceiling on the longest edge, comfortably above what each slot renders at
     MAX_EDGE = {"card": 1600, "hero": 2000, "thumb": 600}
 
     class Meta:
@@ -236,6 +233,38 @@ class CtaChip(models.Model):
 
     def __str__(self):
         return f"{self.logo.name} chip at {self.x},{self.y}"
+
+
+class Format(models.Model):
+    """One image in the sliding carousel in the "Global formats. Local brands."
+    section on the home page."""
+
+    image = models.ImageField(
+        "Image", upload_to="format/",
+        help_text="A roughly square image works best — it is cropped to fill the frame. "
+                  "Upload the best quality you have; it is compressed for you.")
+    alt = models.CharField(
+        "Describe the image", max_length=160,
+        help_text="A short description for people using a screen reader, for example "
+                  "\"Campaign film in production\". Not shown on the page.")
+    order = models.PositiveIntegerField(
+        "Display order", default=0,
+        help_text="The carousel runs lowest number first, then loops.")
+    published = models.BooleanField(
+        "Published", default=True,
+        help_text="Untick to drop this image from the carousel without deleting it.")
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "Home page carousel image"
+        verbose_name_plural = "Home page carousel"
+
+    def __str__(self):
+        return self.alt or f"Carousel image {self.pk}"
+
+    def save(self, *args, **kwargs):
+        render_webp(self.image, 1400)
+        super().save(*args, **kwargs)
 
 
 class ContactMessage(models.Model):

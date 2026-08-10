@@ -4,11 +4,12 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework.throttling import ScopedRateThrottle
 
 from .mail import send_enquiry
-from .models import CtaChip, Faq, Logo, Project
+from .models import CtaChip, Faq, Format, Logo, Project
 from .serializers import (
     ContactMessageSerializer,
     CtaChipSerializer,
     FaqSerializer,
+    FormatSerializer,
     LogoSerializer,
     ProjectSerializer,
 )
@@ -67,3 +68,9 @@ class ContactView(generics.CreateAPIView):
             log.exception("contact enquiry %s could not be emailed", enquiry.pk)
 
         enquiry.save(update_fields=["sent", "error"])
+
+
+class FormatViewSet(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = FormatSerializer
+    queryset = Format.objects.filter(published=True)

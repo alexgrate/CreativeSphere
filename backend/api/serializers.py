@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ContactMessage, CtaChip, Faq, Logo, Project
+from .models import ContactMessage, CtaChip, Faq, Format, Logo, Project
 
 
 def split(text):
@@ -124,3 +124,16 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         if attrs.pop("website", ""):
             raise serializers.ValidationError("Rejected")
         return attrs
+
+
+class FormatSerializer(serializers.ModelSerializer):
+    """The home page carousel — same {id, img, alt} shape it used before."""
+
+    img = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Format
+        fields = ["id", "img", "alt"]
+
+    def get_img(self, obj):
+        return file_url(obj.image, self.context.get("request"))

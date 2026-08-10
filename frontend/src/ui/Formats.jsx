@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { FORMATS } from "../content/site";
+import { useFormats } from "../lib/api";
 
 const AUTO_MS = 5000
 
-const len = FORMATS.length
-
 export default function Formats() {
+    const { data: formats } = useFormats()
     const [i, setI] = useState(0)
+
+    // no longer a module constant — the carousel is whatever the admin holds
+    const len = formats.length
 
     const go = (d) => setI(v => (v + d + len) % len)
 
     useEffect(() => {
+        if (!len) return
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
         const t = setInterval(() => setI(v => (v + 1) % len), AUTO_MS)
         return () => clearInterval(t)
-    }, [i])
+    }, [i, len])
 
-    const big = FORMATS[i]
-    const small = FORMATS[(i + 1) % len]
+    // len is 0 until the fetch lands, and the modulo would give NaN
+    const big = len ? formats[i % len] : null
+    const small = len ? formats[(i + 1) % len] : null
 
     return (
         <section className="fmt">
@@ -33,23 +37,29 @@ export default function Formats() {
             </div>
 
             <div className="fmt-stage">
-                <div className="fmt-row">
-                    <figure className="fmt-slot fmt-slot--big">
-                        <img key={big.id} src={big.img} alt={big.alt} />
-                    </figure>
-                    <figure className="fmt-slot fmt-slot--small" aria-hidden="true">
-                        <img key={small.id} src={small.img} alt="" />
-                    </figure>
-                </div>
+                {big && (
+                    <>
+                        <div className="fmt-row">
+                            <figure className="fmt-slot fmt-slot--big">
+                                <img key={big.id} src={big.img} alt={big.alt} />
+                            </figure>
+                            <figure className="fmt-slot fmt-slot--small" aria-hidden="true">
+                                <img key={small.id} src={small.img} alt="" />
+                            </figure>
+                        </div>
 
-                <div className="fmt-nav">
-                    <button onClick={() => go(-1)} aria-label="Previous image">
-                        <ChevronLeft size={18} />
-                    </button>
-                    <button onClick={() => go(1)} aria-label="Next image">
-                        <ChevronRight size={18} />
-                    </button>
-                </div>
+                        {len > 1 && (
+                            <div className="fmt-nav">
+                                <button onClick={() => go(-1)} aria-label="Previous image">
+                                    <ChevronLeft size={18} />
+                                </button>
+                                <button onClick={() => go(1)} aria-label="Next image">
+                                    <ChevronRight size={18} />
+                                </button>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </section>
     )
