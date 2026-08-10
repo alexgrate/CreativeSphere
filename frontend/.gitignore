@@ -25,3 +25,6 @@ dist-ssr
 
 # local env
 .env
+
+# raw video masters - kept locally, never shipped in the build
+video-src

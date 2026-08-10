@@ -136,10 +136,13 @@ export default function Hero() {
                     disablePictureInPicture
                     controls={false}
                     preload="auto"
-                    poster="/video/poster.webp"
+                    poster="/video/hero-poster.webp"
                 >
-                    <source src="/video/reel.webm" type="video/webm" />
-                    <source src="/video/reel.mp4" type="video/mp4" />
+                    {/* To go back to the previous reel, swap these three lines
+                        for /video/poster.webp, /video/reel.webm and
+                        /video/reel.mp4 — those files are still in public/video. */}
+                    <source src="/video/hero.webm" type="video/webm" />
+                    <source src="/video/hero.mp4" type="video/mp4" />
                 </video>
             </div>
             <div className="hero-scrim" aria-hidden="true" />
