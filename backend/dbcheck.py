@@ -43,6 +43,33 @@ print(f"    {mask(os.environ.get('DATABASE_URL')) or '(not set)'}")
 
 print()
 print("=" * 70)
+print("WHERE .env IS AND WHAT IT SAYS")
+print("=" * 70)
+env_path = settings.BASE_DIR / ".env"
+print(f"  BASE_DIR    : {settings.BASE_DIR}")
+print(f"  looking for : {env_path}")
+print(f"  exists      : {env_path.exists()}")
+if env_path.exists():
+    raw = env_path.read_bytes()
+    print(f"  size        : {len(raw)} bytes")
+    if raw.startswith(b"\xef\xbb\xbf"):
+        print("  WARNING     : file starts with a UTF-8 BOM, which breaks its first line")
+    hits = [
+        line for line in raw.decode("utf-8", "replace").splitlines()
+        if "DATABASE_URL" in line
+    ]
+    print(f"  DATABASE_URL lines found: {len(hits)}")
+    for line in hits:
+        stripped = line.strip()
+        marker = "  (commented out - does nothing)" if stripped.startswith("#") else ""
+        print(f"    {mask(stripped)}{marker}")
+    if not hits:
+        print("    (none - so the machine-wide value is inherited)")
+else:
+    print("  -> Django found no .env here, so every setting comes from the machine")
+
+print()
+print("=" * 70)
 print("WHAT THE SERVER SAYS")
 print("=" * 70)
 is_postgres = "postgresql" in db["ENGINE"]
