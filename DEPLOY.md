@@ -189,9 +189,9 @@ BACKEND_PORT=8001
 SECURE_SSL_REDIRECT=False
 ```
 
-> Port 8000 is held by your other Django app, so this uses **8001**. Edit
-> `frontend\public\web.config` to match before building in Step 5 — change
-> `http://127.0.0.1:8000` to `http://127.0.0.1:8001`.
+> Port 8000 is held by your other Django app, so this deployment uses **8001**.
+> Both `.env.example` and `frontend\public\web.config` already say 8001 — no
+> edit needed. If you ever change it, change it in both.
 
 ### 3a. Give this project its own Postgres database
 
