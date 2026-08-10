@@ -199,13 +199,31 @@ SECURE_SSL_REDIRECT=False
 > is set machine-wide for another Django project. Pointing this app at it would
 > create Creative Sphere's tables inside that project's database.
 
-Open `psql` as the `postgres` superuser. Making the new user the *owner* of the
-database avoids the schema-permission trap in Postgres 15+:
+Making the new user the *owner* of the database avoids the schema-permission
+trap in Postgres 15+: without ownership the role can connect but cannot create
+tables in the `public` schema, and `migrate` fails partway through.
+
+**In psql**, as the `postgres` superuser:
 
 ```sql
 CREATE USER creativesphere WITH PASSWORD 'pick-a-strong-one';
 CREATE DATABASE creativesphere OWNER creativesphere;
 ```
+
+**Or in pgAdmin**, which is already installed on this VM:
+
+1. Right-click **Login/Group Roles** -> *Create* -> *Login/Group Role...*
+   - **General**: Name `creativesphere`
+   - **Definition**: set a password
+   - **Privileges**: **Can login? = Yes** (easy to miss; without it the role
+     cannot connect at all)
+2. Right-click **Databases** -> *Create* -> *Database...*
+   - **General**: Database `creativesphere`, **Owner `creativesphere`**
+
+Check the server's real host before writing the connection string: right-click
+the server -> *Properties* -> *Connection*. The entry named "Dash MFB Production"
+may point somewhere other than this VM, in which case use that host and port
+rather than `localhost:5432`.
 
 Confirm you can reach it:
 
