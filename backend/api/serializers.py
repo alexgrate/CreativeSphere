@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ContactMessage, CtaChip, Faq, Format, Logo, Project
+from .models import ContactMessage, CtaChip, Faq, Format, GalleryImage, Logo, Project
 
 
 def split(text):
@@ -136,4 +136,17 @@ class FormatSerializer(serializers.ModelSerializer):
         fields = ["id", "img", "alt"]
 
     def get_img(self, obj):
+        return file_url(obj.image, self.context.get("request"))
+
+
+class GalleryImageSerializer(serializers.ModelSerializer):
+    """The sliding strip on the services page — {id, src, alt} as before."""
+
+    src = serializers.SerializerMethodField()
+
+    class Meta:
+        model = GalleryImage
+        fields = ["id", "src", "alt"]
+
+    def get_src(self, obj):
         return file_url(obj.image, self.context.get("request"))

@@ -6,6 +6,7 @@ from .views import (
     CtaChipViewSet,
     FaqViewSet,
     FormatViewSet,
+    GalleryImageViewSet,
     LogoViewSet,
     ProjectViewSet,
 )
@@ -16,6 +17,7 @@ router.register("logos", LogoViewSet, basename="logo")
 router.register("cta-logos", CtaChipViewSet, basename="cta-logo")
 router.register("faqs", FaqViewSet, basename="faq")
 router.register("formats", FormatViewSet, basename="format")
+router.register("gallery", GalleryImageViewSet, basename="gallery")
 
 urlpatterns = [
     path("contact/", ContactView.as_view(), name="contact"),

@@ -47,6 +47,7 @@ export const useCtaLogos = () => useResource('/api/cta-logos/')
 
 export const useFaqs = (enabled = true) => useResource('/api/faqs/', enabled)
 export const useFormats = () => useResource('/api/formats/')
+export const useGallery = () => useResource('/api/gallery/')
 
 export async function postContact(values) {
     const res = await fetch(`${API}/api/contact/`, {

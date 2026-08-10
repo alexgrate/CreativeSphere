@@ -27,18 +27,6 @@ export const SERVICES = [
   { id: 'analytics', title: 'Analytics & growth', img: '/svc/6.webp' },
 ]
 
-export const GALLERY = [
-  { src: '/gallery/01.webp', alt: 'On location with the crew' },
-  { src: '/gallery/02.webp', alt: 'Reviewing materials in the studio' },
-  { src: '/gallery/03.webp', alt: 'Shooting social content' },
-  { src: '/gallery/04.webp', alt: 'In the print studio' },
-  { src: '/gallery/05.webp', alt: 'Product and packaging still life' },
-  { src: '/gallery/06.webp', alt: 'The studio floor' },
-  { src: '/gallery/07.webp', alt: 'Lettering and craft on the desk' },
-  { src: '/gallery/08.webp', alt: 'Two designers going through prints' },
-  { src: '/gallery/09.webp', alt: 'Typography and layout reference' },
-]
-
 export const CAPABILITIES = [
   {
     id: 'strategy', title: 'Strategy',
@@ -63,25 +51,25 @@ export const APPROACH = [
     id: 'understand', n: '01', title: 'Understand',
     lead: 'We start with the business, not the brief.',
     body: 'Before anything gets designed we learn how you actually make money, who you are really competing with, and what your audience already believes. Most briefs describe a symptom. We go looking for the cause.',
-    img: '/approach/01.webp', alt: 'Discovery session at the whiteboard',
+    img: '/approach/01.webp', alt: 'Two colleagues working through reports and data together',
   },
   {
     id: 'position', n: '02', title: 'Position',
     lead: 'A brand people can repeat back to you.',
     body: 'Positioning, message and tone, decided together and written down. If your team cannot repeat it in one sentence, neither can your market — so we keep working until it is that short.',
-    img: '/approach/02.webp', alt: 'Positioning worked out on a wall of notes',
+    img: '/approach/02.webp', alt: 'Presenting the strategy to the team on screen',
   },
   {
     id: 'make', n: '03', title: 'Make',
     lead: 'Six disciplines under one roof.',
     body: 'Identity, content, film, social and advertising built by one team that shares a brief. Nothing gets handed between agencies, so nothing arrives diluted or three weeks late.',
-    img: '/approach/03.webp', alt: 'A campaign being shot on set',
+    img: '/approach/03.webp', alt: 'Filming content on a studio set',
   },
   {
     id: 'grow', n: '04', title: 'Grow',
     lead: 'We stay for the part that counts.',
     body: 'The work goes out, we watch what it moves, and we change what is not working. We took one bank from roughly 100 followers to over 10,000 in nine months by staying in the room after launch.',
-    img: '/approach/04.webp', alt: 'Performance data reviewed after launch',
+    img: '/approach/04.webp', alt: 'A performance dashboard being reviewed',
   },
 ]
 

@@ -267,6 +267,39 @@ class Format(models.Model):
         super().save(*args, **kwargs)
 
 
+class GalleryImage(models.Model):
+    """One frame in the horizontal strip that slides sideways as you scroll the
+    services page."""
+
+    image = models.ImageField(
+        "Image", upload_to="gallery/",
+        help_text="Shown at a fixed height with the width left to follow, so portrait "
+                  "and landscape both sit happily in the row. Upload the best quality "
+                  "you have; it is compressed for you.")
+    alt = models.CharField(
+        "Describe the image", max_length=160,
+        help_text="A short description for people using a screen reader, for example "
+                  "\"Shooting social content\". Not shown on the page.")
+    order = models.PositiveIntegerField(
+        "Display order", default=0,
+        help_text="The strip runs left to right, lowest number first.")
+    published = models.BooleanField(
+        "Published", default=True,
+        help_text="Untick to drop this image from the strip without deleting it.")
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "Gallery image"
+        verbose_name_plural = "Services page gallery"
+
+    def __str__(self):
+        return self.alt or f"Gallery image {self.pk}"
+
+    def save(self, *args, **kwargs):
+        render_webp(self.image, 1000)
+        super().save(*args, **kwargs)
+
+
 class ContactMessage(models.Model):
     """Every contact form submission, stored before the email is attempted — a
     Graph outage or an expired secret must not lose an enquiry."""

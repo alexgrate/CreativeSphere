@@ -34,10 +34,10 @@ export default function AboutHero() {
 
             <div className="abt-frame">
                 <picture>
-                    <source media="(max-width: 639px)" srcSet="/about/studio-portrait.webp" width="900" height="1250" />
+                    <source media="(max-width: 639px)" srcSet="/about/about-hero-portrait.webp" width="900" height="1250" />
                     <img
-                        src="/about/studio.webp"
-                        alt="The Creative Sphere team working together in the studio"
+                        src="/about/about-hero.webp"
+                        alt="Three colleagues reviewing printed work together"
                         width="2000" height="1042" loading="eager" fetchPriority="high"
                     />
                 </picture>

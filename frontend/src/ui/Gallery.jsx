@@ -1,11 +1,12 @@
 import { useLayoutEffect, useRef } from "react"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
-import { GALLERY } from "../content/site"
+import { useGallery } from "../lib/api"
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function Gallery() {
+    const { data: gallery } = useGallery()
     const secRef = useRef(null)
     const stripRef = useRef(null)
 
@@ -39,13 +40,15 @@ export default function Gallery() {
 
         const t = setTimeout(() => ScrollTrigger.refresh(), 500)
         return () => { clearTimeout(t); ctx.revert() }
-    }, [])
+        // rebuilt when the images land: the tween's travel distance comes from
+        // strip.scrollWidth, which is zero until they are in the DOM
+    }, [gallery])
 
     return (
         <section className="gal" ref={secRef} aria-label="Selected work">
             <div className="gal-strip" ref={stripRef}>
-                {GALLERY.map((g) => (
-                    <figure className="gal-item" key={g.src}>
+                {gallery.map((g) => (
+                    <figure className="gal-item" key={g.id}>
                         <img src={g.src} alt={g.alt} loading="lazy" draggable="false" />
                     </figure>
                 ))}
