@@ -193,7 +193,36 @@ SECURE_SSL_REDIRECT=False
 > `frontend\public\web.config` to match before building in Step 5 — change
 > `http://127.0.0.1:8000` to `http://127.0.0.1:8001`.
 
-Then:
+### 3a. Give this project its own Postgres database
+
+> **Do not reuse the database from the inherited `DATABASE_URL`.** That variable
+> is set machine-wide for another Django project. Pointing this app at it would
+> create Creative Sphere's tables inside that project's database.
+
+Open `psql` as the `postgres` superuser. Making the new user the *owner* of the
+database avoids the schema-permission trap in Postgres 15+:
+
+```sql
+CREATE USER creativesphere WITH PASSWORD 'pick-a-strong-one';
+CREATE DATABASE creativesphere OWNER creativesphere;
+```
+
+Confirm you can reach it:
+
+```bat
+psql -U creativesphere -d creativesphere -h localhost -c "select current_database(), current_user;"
+```
+
+Then set that exact connection string in `.env`:
+
+```
+DATABASE_URL=postgres://creativesphere:pick-a-strong-one@localhost:5432/creativesphere
+```
+
+Percent-encode any of `: / ? # [ ] @` in the password — an `@` splits the URL in
+the wrong place and gives a baffling host error. `@` becomes `%40`.
+
+### 3b. Migrate
 
 ```bat
 .venv\Scripts\python manage.py migrate
@@ -201,7 +230,14 @@ Then:
 .venv\Scripts\python manage.py createsuperuser
 ```
 
-**Check:** `collectstatic` reports roughly 163 files copied.
+**Check:** every migration applies, and `collectstatic` reports roughly 163
+files. Then confirm it really used the new database:
+
+```bat
+.venv\Scripts\python -c "import os,sys;sys.path.insert(0,'.');os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings');import django;django.setup();from django.conf import settings;print(settings.DATABASES['default']['NAME'])"
+```
+
+It must print `creativesphere` — not your other project's database name.
 
 ---
 
@@ -511,17 +547,11 @@ Worth a scheduled task, and worth doing before every deploy.
 
 ---
 
-## Moving to Postgres later
+## Switching between Postgres and sqlite
 
-No code change. If the VM already runs Postgres for your other project, make a
-separate database for this one:
+The driver ships in `requirements.txt`, so it is only ever a `DATABASE_URL`
+change plus `migrate`. An empty `DATABASE_URL=` line means the local sqlite file.
 
-```bat
-.venv\Scripts\pip install "psycopg[binary]"
-```
-
-```
-DATABASE_URL=postgres://user:password@localhost:5432/creativesphere
-```
-
-Then `migrate` and re-run the three seeders.
+Whichever you use, **keep the line present**. Removing or commenting it out
+means this app inherits the machine-wide `DATABASE_URL` belonging to another
+project on this server.
