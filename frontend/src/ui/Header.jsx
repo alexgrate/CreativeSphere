@@ -10,14 +10,6 @@ const IgIcon = () => (
     </svg>
 )
 
-const LiIcon = () => (
-    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-         strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-13h4v1.5A6 6 0 0 1 16 8z" />
-        <rect x="2" y="9" width="4" height="12" />
-        <circle cx="4" cy="4" r="2" />
-    </svg>
-)
 import { lockScroll } from "../hooks/useSmoothScroll"
 
 const LINKS = [
@@ -105,10 +97,6 @@ export default function Header() {
                     <a className="hb-ico" href="https://www.instagram.com/inthecreativesphere?igsh=MTVhMm1vMGp1N2JoMg%3D%3D&utm_source=qr"
                        target="_blank" rel="noreferrer" aria-label="Instagram">
                         <IgIcon />
-                    </a>
-                    <a className="hb-ico" href="https://linkedin.com"
-                       target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                        <LiIcon />
                     </a>
                     <a className="hb-cta" href="/contact" aria-label={CTA_LABEL}>
                         <span className="hb-cta-win" aria-hidden="true">
