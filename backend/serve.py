@@ -37,4 +37,10 @@ if __name__ == "__main__":
         # long enough for the contact form's Graph call, which can take a second
         channel_timeout=60,
         ident="CreativeSphere",
+        # Waitress drops X-Forwarded-* from anything it does not know as a
+        # proxy, so without this Django cannot tell a request arrived over
+        # HTTPS and SECURE_SSL_REDIRECT bounces it to the URL it is already on
+        # — an endless redirect. Only IIS on this machine can reach this port.
+        trusted_proxy="127.0.0.1",
+        trusted_proxy_headers={"x-forwarded-for", "x-forwarded-proto", "x-forwarded-host"},
     )
