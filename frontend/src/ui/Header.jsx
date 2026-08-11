@@ -102,7 +102,7 @@ export default function Header() {
                 </a>
 
                 <div className="hb-right">
-                    <a className="hb-ico" href="https://instagram.com/inthecrativesphere"
+                    <a className="hb-ico" href="https://www.instagram.com/inthecreativesphere?igsh=MTVhMm1vMGp1N2JoMg%3D%3D&utm_source=qr"
                        target="_blank" rel="noreferrer" aria-label="Instagram">
                         <IgIcon />
                     </a>
