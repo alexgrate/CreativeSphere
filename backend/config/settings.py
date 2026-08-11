@@ -246,8 +246,15 @@ CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=not DEBUG)
 
 # Tells Django a request was HTTPS when a proxy terminated the TLS. Without it,
 # SECURE_SSL_REDIRECT behind a load balancer becomes an infinite redirect loop.
-if env.bool("BEHIND_PROXY", default=False):
+BEHIND_PROXY = env.bool("BEHIND_PROXY", default=False)
+if BEHIND_PROXY:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    # IIS proxies to 127.0.0.1, and ARR rewrites Host to that target. Django
+    # builds absolute media URLs from Host, so without this every image URL in
+    # the API comes back as http://127.0.0.1:8001/media/... — a dead address in
+    # the visitor's browser. The rewrite rule passes the real host along.
+    USE_X_FORWARDED_HOST = True
 
 # Left off deliberately. HSTS tells browsers to refuse plain HTTP for this
 # domain for the given period, and it cannot be undone early — turn it on only
