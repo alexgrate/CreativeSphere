@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Menu, X, Plus } from "lucide-react"
 
-/* lucide dropped brand marks, so these two are inline */
 const IgIcon = () => (
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
          strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -31,9 +30,8 @@ const LINKS = [
 const NAV = [...LINKS, { href: '/contact', label: 'Contact' }]
 
 const CTA_LABEL = 'Let’s talk'
-// enough copies that translating the track by -50% lands on an identical frame
 const CTA_REPEATS = 6
-const MAILTO = 'hello@thecreativesphere.com'
+const MAILTO = 'inthecreativesphere@gmail.com'
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false)

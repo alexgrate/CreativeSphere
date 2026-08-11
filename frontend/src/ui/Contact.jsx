@@ -5,7 +5,7 @@ import { postContact } from "../lib/api"
 const ADDRESS = '5B Adewumi Adu St, off Sanni Balogun Street, Abule-Egba, Lagos 101232, Nigeria'
 
 const MAX = 600
-const MAILTO = 'hello@thecreativesphere.com'
+const MAILTO = 'inthecreativesphere@gmail.com'
 
 const BLANK = { name: '', company: '', email: '', phone: '', message: '', website: '' }
 const OWN_FIELDS = new Set(['name', 'company', 'email', 'phone', 'message'])

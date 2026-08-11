@@ -3,7 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 const WORDMARK = 'thecreativesphere'
 
 const FTR_LINKS = [
-    { href: 'mailto:hello@thecreativesphere.com', label: 'HELLO@THECREATIVESPHERE.COM' },
+    { href: 'mailto:inthecreativesphere@gmail.com', label: 'inthecreativesphere@gmail.com' },
     { href: 'https://instagram.com/inthecrativesphere', label: 'INSTAGRAM', external: true },
     { href: 'https://linkedin.com', label: 'LINKEDIN', external: true },
 ]
