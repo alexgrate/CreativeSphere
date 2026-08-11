@@ -10,6 +10,14 @@ const IgIcon = () => (
     </svg>
 )
 
+/* The X mark is a solid glyph rather than a stroked outline like the others, so
+   it is set a couple of pixels smaller to carry the same visual weight. */
+const XIcon = () => (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+)
+
 import { lockScroll } from "../hooks/useSmoothScroll"
 
 const LINKS = [
@@ -97,6 +105,10 @@ export default function Header() {
                     <a className="hb-ico" href="https://www.instagram.com/inthecreativesphere?igsh=MTVhMm1vMGp1N2JoMg%3D%3D&utm_source=qr"
                        target="_blank" rel="noreferrer" aria-label="Instagram">
                         <IgIcon />
+                    </a>
+                    <a className="hb-ico" href="https://x.com/CreativeSphereX"
+                       target="_blank" rel="noreferrer" aria-label="X">
+                        <XIcon />
                     </a>
                     <a className="hb-cta" href="/contact" aria-label={CTA_LABEL}>
                         <span className="hb-cta-win" aria-hidden="true">

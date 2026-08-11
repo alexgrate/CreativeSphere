@@ -5,6 +5,7 @@ const WORDMARK = 'thecreativesphere'
 const FTR_LINKS = [
     { href: 'mailto:inthecreativesphere@gmail.com', label: 'inthecreativesphere@gmail.com' },
     { href: 'https://www.instagram.com/inthecreativesphere?igsh=MTVhMm1vMGp1N2JoMg%3D%3D&utm_source=qr', label: 'INSTAGRAM', external: true },
+    { href: 'https://x.com/CreativeSphereX', label: 'X', external: true },
 ]
 
 const AMP_RATIO = 0.11       
