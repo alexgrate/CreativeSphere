@@ -8,6 +8,7 @@ from .models import (
     Format,
     GalleryImage,
     Logo,
+    Milestone,
     Project,
     Shot,
     Stat,
@@ -257,6 +258,28 @@ class GalleryImageAdmin(admin.ModelAdmin):
                            "the images you add. Mix portrait and landscape freely; they "
                            "all share one height.",
             "fields": ("image", "preview", "alt", "order", "published"),
+        }),
+    )
+
+    @admin.display(description="Image")
+    def preview(self, obj):
+        return thumb(obj.image, 60, pad="#f4f4f4")
+
+
+@admin.register(Milestone)
+class MilestoneAdmin(admin.ModelAdmin):
+    list_display = ("preview", "year", "title", "published")
+    list_display_links = ("year", "title")
+    list_editable = ("published",)
+    readonly_fields = ("preview",)
+    ordering = ("year",)
+
+    fieldsets = (
+        (None, {
+            "description": "The story timeline on the About page. Milestones run oldest "
+                           "to newest by year, and the page scrolls sideways through them "
+                           "- so any number works, but keep at least two published.",
+            "fields": ("year", "title", "body", "image", "preview", "alt", "published"),
         }),
     )
 

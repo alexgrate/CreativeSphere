@@ -1,23 +1,4 @@
 
-export const TIMELINE = [
-  { year: 2019, title: 'One room in Lagos',
-    body: 'The Creative Sphere opens with a small team and a single idea: strategy, design and story in one room instead of three agencies.',
-    img: '/timeline/2019.webp',
-    alt: 'The studio floor in its first year' },
-  { year: 2021, title: 'Onto the shelf',
-    body: 'CHI Limited puts the work in front of a national audience. Chivita and Capri-Sonne campaigns are shot, cut and shipped in house.',
-    img: '/timeline/2021.webp',
-    alt: 'A campaign shoot in progress on set' },
-  { year: 2023, title: 'Into the app',
-    body: 'VFD Microfinance Bank and Dash MFB move the work onto screens, where a brand has to earn trust in the first ten seconds.',
-    img: '/timeline/2023.webp',
-    alt: 'Interface design being worked through on screen' },
-  { year: 2025, title: 'Eight industries in',
-    body: 'Insurance, clean energy, logistics, art. The studio moves between sectors now without changing how it works.',
-    img: '/timeline/2025.webp',
-    alt: 'The studio at work across several projects' },
-]
-
 export const SERVICES = [
   { id: 'strategy',  title: 'Brand strategy',     img: '/svc/1.webp' },
   { id: 'identity',  title: 'Identity & design',  img: '/svc/2.webp' },

@@ -4,7 +4,7 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework.throttling import ScopedRateThrottle
 
 from .mail import send_enquiry
-from .models import CtaChip, Faq, Format, GalleryImage, Logo, Project
+from .models import CtaChip, Faq, Format, GalleryImage, Logo, Milestone, Project
 from .serializers import (
     ContactMessageSerializer,
     CtaChipSerializer,
@@ -12,6 +12,7 @@ from .serializers import (
     FormatSerializer,
     GalleryImageSerializer,
     LogoSerializer,
+    MilestoneSerializer,
     ProjectSerializer,
 )
 
@@ -81,3 +82,9 @@ class GalleryImageViewSet(viewsets.ReadOnlyModelViewSet):
 
     serializer_class = GalleryImageSerializer
     queryset = GalleryImage.objects.filter(published=True)
+
+
+class MilestoneViewSet(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = MilestoneSerializer
+    queryset = Milestone.objects.filter(published=True)

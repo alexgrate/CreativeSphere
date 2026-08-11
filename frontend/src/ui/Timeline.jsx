@@ -2,18 +2,16 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { TIMELINE } from "../content/site"
+import { useTimeline } from "../lib/api"
 import { scrollToY } from "../hooks/useSmoothScroll"
 
 gsap.registerPlugin(ScrollTrigger)
 
-// tick heights as a fraction of full — a waveform, not an even comb
 const PULSE = [0.22, 0.30, 0.24, 0.42, 0.28, 0.72, 1, 0.55, 0.26, 0.34,
                0.24, 0.28, 0.46, 0.26, 0.32, 0.22, 0.38, 0.26, 0.30, 0.24]
 
-// how much vertical scroll each era gets while the panel is pinned
 const STEP_VH = 0.62
-const HEADER_H = 64        // the sticky header sits over the pinned panel
+const HEADER_H = 64        
 
 function Ticks({ active }) {
     return (
@@ -26,44 +24,37 @@ function Ticks({ active }) {
 }
 
 export default function Timeline() {
+    const { data: milestones } = useTimeline()
     const [active, setActive] = useState(0)
     const secRef = useRef(null)
     const railRef = useRef(null)
     const trackRef = useRef(null)
     const stRef = useRef(null)
 
-    const N = TIMELINE.length
+    const N = milestones.length
 
     useLayoutEffect(() => {
+
+        if (N < 2) return
+
         const ctx = gsap.context(() => {
             const mm = gsap.matchMedia()
 
-            // low gate — the runtime fit check below is what actually decides;
-            // the query is here so a rotation re-runs this block
             mm.add('(prefers-reduced-motion: no-preference) and (min-height: 480px)', () => {
                 const sec = secRef.current
                 const rail = railRef.current
                 const track = trackRef.current
 
-                // a pinned panel taller than the viewport would hide its own
-                // heading — leave those screens on the scrollable rail
                 if (sec.offsetHeight > window.innerHeight - HEADER_H) return
 
                 sec.classList.add('is-pinned')
                 const setX = gsap.quickSetter(track, 'x', 'px')
 
-                // the track may only travel until its tail meets the rail's
-                // right edge — past that we'd be scrolling into empty space.
-                // clientWidth includes the left gutter, so subtract it back out
-                // or the final era stays clipped by exactly that much.
                 const maxX = () => {
                     const pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0
                     return Math.max(0, track.scrollWidth - (rail.clientWidth - pad))
                 }
 
-                // where column i wants to sit: flush against the left gutter,
-                // clamped so wide screens (where every era already fits) simply
-                // stop moving rather than dragging blank space into view
                 const restFor = (i) => {
                     const cols = track.children
                     return Math.min(cols[i].offsetLeft - cols[0].offsetLeft, maxX())
@@ -71,20 +62,14 @@ export default function Timeline() {
 
                 const st = ScrollTrigger.create({
                     trigger: sec,
-                    // park it clear of the sticky header rather than centring,
-                    // which tucked the panel's top edge underneath it
                     start: `top ${HEADER_H}px`,
                     end: () => '+=' + Math.round((N - 1) * window.innerHeight * STEP_VH),
                     pin: true,
                     anticipatePin: 1,
                     invalidateOnRefresh: true,
-                    // deliberately no `snap` — it runs its own scroll tween, which
-                    // Lenis then fights, and the collision skips whole eras
                     onUpdate: (self) => {
-                        const p = self.progress * (N - 1)   // continuous 0..N-1
+                        const p = self.progress * (N - 1)   
                         const lo = Math.min(Math.floor(p), N - 2)
-                        // glide between the two neighbouring rest positions so the
-                        // ruler tracks the scroll instead of snapping era to era
                         setX(-gsap.utils.interpolate(restFor(lo), restFor(lo + 1), p - lo))
                         setActive(Math.round(p))
                     },
@@ -102,15 +87,12 @@ export default function Timeline() {
         return () => ctx.revert()
     }, [N])
 
-    // when the panel isn't pinned the rail scrolls on its own, so swiping it
-    // has to move the selection too — otherwise the open detail belongs to an
-    // era that has already left the screen
     useEffect(() => {
         const rail = railRef.current
         if (!rail) return
         let raf = 0
         const onScroll = () => {
-            if (stRef.current) return          // pinned — progress owns `active`
+            if (stRef.current) return        
             cancelAnimationFrame(raf)
             raf = requestAnimationFrame(() => {
                 const railRect = rail.getBoundingClientRect()
@@ -128,12 +110,12 @@ export default function Timeline() {
         return () => { cancelAnimationFrame(raf); rail.removeEventListener('scroll', onScroll) }
     }, [])
 
-    // arrows and column clicks move the *page*, since page scroll is what
-    // drives the ruler now
+
     const go = (i) => {
+        if (N < 2) return
         const next = Math.min(Math.max(i, 0), N - 1)
         const st = stRef.current
-        if (!st) {                       // reduced motion — no pin, scroll the rail
+        if (!st) {                       
             setActive(next)
             const col = railRef.current?.children[0]?.children[next]
             if (col) {
@@ -161,16 +143,14 @@ export default function Timeline() {
 
             <div className="tl-rail" ref={railRef}>
                 <div className="tl-track" ref={trackRef}>
-                    {TIMELINE.map((m, i) => (
+                    {milestones.map((m, i) => (
                         <article
                             className={`tl-item ${i === active ? 'is-active' : ''}`}
-                            key={m.year}
+                            key={m.id}
                             onClick={() => go(i)}
                             onFocus={() => go(i)}
                             tabIndex={0}
                         >
-                            {/* year, label and ruler share one block so the
-                                rule can run its full height down to the ticks */}
                             <div className="tl-top">
                                 <span className="tl-rule" aria-hidden="true" />
                                 <h3 className="tl-year">{m.year}</h3>
@@ -178,7 +158,6 @@ export default function Timeline() {
                                 <Ticks active={i === active} />
                             </div>
 
-                            {/* only the selected era opens its detail */}
                             <div className="tl-detail">
                                 <div className="tl-detail-in">
                                     <p className="tl-body">{m.body}</p>

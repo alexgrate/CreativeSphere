@@ -8,6 +8,7 @@ from .views import (
     FormatViewSet,
     GalleryImageViewSet,
     LogoViewSet,
+    MilestoneViewSet,
     ProjectViewSet,
 )
 
@@ -18,6 +19,7 @@ router.register("cta-logos", CtaChipViewSet, basename="cta-logo")
 router.register("faqs", FaqViewSet, basename="faq")
 router.register("formats", FormatViewSet, basename="format")
 router.register("gallery", GalleryImageViewSet, basename="gallery")
+router.register("timeline", MilestoneViewSet, basename="timeline")
 
 urlpatterns = [
     path("contact/", ContactView.as_view(), name="contact"),

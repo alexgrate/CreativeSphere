@@ -300,6 +300,48 @@ class GalleryImage(models.Model):
         super().save(*args, **kwargs)
 
 
+class Milestone(models.Model):
+    """One step in the story timeline on the About page. Listed oldest first,
+    so the year is what orders them — no separate ordering field to keep in
+    step."""
+
+    year = models.PositiveSmallIntegerField(
+        "Year",
+        help_text="The year this happened, for example 2019. Milestones run oldest "
+                  "to newest, so this is what sets their order.")
+    title = models.CharField(
+        "Headline", max_length=120,
+        help_text="A few words, for example \"One room in Lagos\". Shown under the year.")
+    body = models.TextField(
+        "What happened",
+        help_text="One or two sentences, revealed when this milestone is the active one.")
+    image = models.ImageField(
+        "Image", upload_to="timeline/",
+        help_text="Shown beside the text. A landscape shape works best. Upload the best "
+                  "quality you have; it is compressed for you.")
+    alt = models.CharField(
+        "Describe the image", max_length=160,
+        help_text="A short description for people using a screen reader. Not shown on "
+                  "the page.")
+    published = models.BooleanField(
+        "Published", default=True,
+        help_text="Untick to hide this milestone. Keep at least two published — the "
+                  "timeline scrolls between them and needs a start and an end.")
+
+    class Meta:
+        ordering = ["year", "id"]
+        verbose_name = "Timeline milestone"
+        verbose_name_plural = "About page timeline"
+
+    def __str__(self):
+        return f"{self.year} — {self.title}"
+
+    def save(self, *args, **kwargs):
+        # displayed at 280px wide; 900 covers that well beyond 2x
+        render_webp(self.image, 900)
+        super().save(*args, **kwargs)
+
+
 class ContactMessage(models.Model):
     """Every contact form submission, stored before the email is attempted — a
     Graph outage or an expired secret must not lose an enquiry."""

@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
-from .models import ContactMessage, CtaChip, Faq, Format, GalleryImage, Logo, Project
+from .models import (
+    ContactMessage,
+    CtaChip,
+    Faq,
+    Format,
+    GalleryImage,
+    Logo,
+    Milestone,
+    Project,
+)
 
 
 def split(text):
@@ -149,4 +158,17 @@ class GalleryImageSerializer(serializers.ModelSerializer):
         fields = ["id", "src", "alt"]
 
     def get_src(self, obj):
+        return file_url(obj.image, self.context.get("request"))
+
+
+class MilestoneSerializer(serializers.ModelSerializer):
+    """The About page timeline — {id, year, title, body, img, alt}."""
+
+    img = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Milestone
+        fields = ["id", "year", "title", "body", "img", "alt"]
+
+    def get_img(self, obj):
         return file_url(obj.image, self.context.get("request"))
